@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.5 DEV 2</title>
+<title>Arena Secreta — Beta 0.5 DEV 3</title>
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 <style>
 :root{--bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;--cell:#2a365d;--text:#f7f8ff;--muted:#aeb8d5;--accent:#62e2cf;--gold:#ffd166;--danger:#ff5f7c;--hit:#dd4d68;--miss:#53678f;--mana:#6cb7ff;--cell-size:clamp(19px,calc((100vw - 80px)/15),42px)}
@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-<section id="menuScreen" class="screen active"><div class="hero"><div class="hero-card"><h1 class="logo">ARENA<br>SECRETA</h1><div class="tag">THE ONLINE UPDATE</div><div class="identity"><strong id="menuName">Ghost0001</strong><div class="small" id="accountType">Conta temporária neste dispositivo</div></div><div class="menu"><button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button><button class="btn secondary" onclick="showScreen('accountScreen')">CONTA / REGISTO</button><button class="btn secondary" onclick="alert('O modo offline completo continua disponível na Beta 0.4.')">JOGAR OFFLINE</button></div><p class="small">Beta 0.5 DEV 2 — ligação online com diagnóstico</p></div></div></section>
+<section id="menuScreen" class="screen active"><div class="hero"><div class="hero-card"><h1 class="logo">ARENA<br>SECRETA</h1><div class="tag">THE ONLINE UPDATE</div><div class="identity"><strong id="menuName">Ghost0001</strong><div class="small" id="accountType">Conta temporária neste dispositivo</div></div><div class="menu"><button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button><button class="btn secondary" onclick="showScreen('accountScreen')">CONTA / REGISTO</button><button class="btn secondary" onclick="alert('O modo offline completo continua disponível na Beta 0.4.')">JOGAR OFFLINE</button></div><p class="small">Beta 0.5 DEV 3 — PeerJS Cloud corrigido</p></div></div></section>
 <section id="accountScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Conta</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="notice">Nesta versão de teste, o registo fica guardado apenas neste navegador. Não uses uma palavra-passe real.</div><div class="grid2" style="margin-top:12px"><div><h3>Registar conta local</h3><div class="form"><input id="registerName" class="input" maxlength="16" placeholder="Nome de utilizador"><input id="registerPassword" class="input" type="password" placeholder="Palavra-passe de teste"><button class="btn" onclick="registerLocal()">Registar</button></div></div><div><h3>Iniciar sessão local</h3><div class="form"><input id="loginName" class="input" maxlength="16" placeholder="Nome de utilizador"><input id="loginPassword" class="input" type="password" placeholder="Palavra-passe"><button class="btn secondary" onclick="loginLocal()">Entrar</button><button class="btn danger" onclick="logoutLocal()">Usar Ghost</button></div></div></div><p id="accountMessage" class="status"></p></div></div></section>
 <section id="onlineScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Jogar Online</h2><button class="btn secondary" onclick="closeNetwork();showScreen('menuScreen')">Voltar</button></div><div class="grid2"><button class="mode-card" onclick="createRoom()"><h3>Criar sala</h3><p>Cria um código e espera pelo segundo jogador.</p></button><button class="mode-card" onclick="showJoinForm()"><h3>Entrar por código</h3><p>Introduz o código enviado pelo anfitrião.</p></button><button class="mode-card" onclick="alert('A procura automática chega na Beta 0.5.1!')"><h3>Procurar partida</h3><p>Matchmaking automático — em desenvolvimento.</p></button><button class="mode-card" onclick="alert('As salas públicas chegam numa versão futura.')"><h3>Salas públicas</h3><p>Lista de salas abertas — em desenvolvimento.</p></button></div><div id="joinForm" class="form hidden" style="margin-top:14px"><input id="joinCode" class="input" maxlength="6" placeholder="Código da sala" style="text-transform:uppercase"><button class="btn" onclick="joinRoom()">Entrar na sala</button></div><p id="onlineStatus" class="status"></p></div></div></section>
 <section id="lobbyScreen" class="screen"><div class="wrap"><div class="panel" style="text-align:center"><div class="header"><h2>Sala Online</h2><button class="btn danger" onclick="closeNetwork();showScreen('menuScreen')">Sair</button></div><div class="small">CÓDIGO DA SALA</div><div id="roomCodeText" class="room-code">------</div><div id="lobbyPlayers" class="notice">A aguardar adversário...</div><p id="lobbyStatus" class="status"></p><button id="goDeckBtn" class="btn hidden" onclick="openDeckSelection()">Escolher baralho</button></div></div></section>
@@ -27,20 +27,11 @@ async function hashPassword(text){const data=new TextEncoder().encode(text);cons
 async function registerLocal(){const name=$('registerName').value.trim(),pass=$('registerPassword').value;if(!/^[A-Za-z0-9_]{3,16}$/.test(name)||pass.length<4){$('accountMessage').textContent='Usa um nome com 3–16 letras/números e uma palavra-passe com pelo menos 4 caracteres.';return}const account={name,passwordHash:await hashPassword(pass)};localStorage.setItem('arenaLocalAccount',JSON.stringify(account));localStorage.setItem('arenaActiveAccount',JSON.stringify({name}));$('accountMessage').textContent='Conta local criada com sucesso!';refreshIdentity()}
 async function loginLocal(){const account=JSON.parse(localStorage.getItem('arenaLocalAccount')||'null');if(!account){$('accountMessage').textContent='Não existe uma conta local neste dispositivo.';return}const name=$('loginName').value.trim(),hash=await hashPassword($('loginPassword').value);if(account.name===name&&account.passwordHash===hash){localStorage.setItem('arenaActiveAccount',JSON.stringify({name}));$('accountMessage').textContent='Sessão iniciada!';refreshIdentity()}else $('accountMessage').textContent='Nome ou palavra-passe incorretos.'}
 function logoutLocal(){localStorage.removeItem('arenaActiveAccount');refreshIdentity();$('accountMessage').textContent='Voltaste ao modo Ghost.'}
-function showJoinForm(){$('joinForm').classList.remove('hidden')}const PEER_CONFIG={
- host:'0.peerjs.com',
- port:443,
- path:'/',
- secure:true,
- debug:2,
- config:{
-  iceServers:[
-   {urls:'stun:stun.l.google.com:19302'},
-   {urls:'stun:stun1.l.google.com:19302'}
-  ]
- }
+function showJoinForm(){$('joinForm').classList.remove('hidden')}const PEER_OPTIONS={
+ debug:3
 };
 let connectionTimeout=null;
+
 
 function randomCode(){
  return Math.random().toString(36).slice(2,8).toUpperCase();
@@ -100,9 +91,10 @@ function createRoom(){
   return;
  }
 
- peer=new Peer(peerRoomId(roomCode),PEER_CONFIG);
+ peer=new Peer(peerRoomId(roomCode),PEER_OPTIONS);
 
  peer.on('open',id=>{
+  console.log('[HOST] Peer aberto com ID:',id);
   $('roomCodeText').textContent=roomCode;
   $('lobbyPlayers').textContent='A aguardar adversário...';
   $('lobbyStatus').textContent='Sala criada. Partilha este código com o outro jogador.';
@@ -148,14 +140,14 @@ function joinRoom(){
   return;
  }
 
- peer=new Peer(undefined,PEER_CONFIG);
+ peer=new Peer(undefined,PEER_OPTIONS);
 
- peer.on('open',()=>{
+ peer.on('open',guestId=>{
+  console.log('[GUEST] Peer aberto com ID:',guestId);
+  console.log('[GUEST] A ligar ao destino:',peerRoomId(roomCode));
   $('onlineStatus').textContent='Servidor contactado. A procurar a sala...';
 
   conn=peer.connect(peerRoomId(roomCode),{
-   reliable:true,
-   serialization:'json',
    metadata:{name:identity.name}
   });
 
@@ -183,7 +175,7 @@ function setupConnection(connection,side){
    type:'hello',
    name:identity.name,
    role:myRole,
-   version:'0.5-dev2'
+   version:'0.5-dev3'
   });
 
   $('roomCodeText').textContent=roomCode;
@@ -202,6 +194,7 @@ function setupConnection(connection,side){
  });
 
  connection.on('error',error=>{
+  console.error('[DATA CONNECTION ERROR]',error);
   clearConnectionTimeout();
   setOnlineStatus(describePeerError(error));
  });
