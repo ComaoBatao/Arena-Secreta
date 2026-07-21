@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.5 Firebase DEV</title>
+<title>Arena Secreta — Beta 0.5 Firebase DEV 2</title>
 <style>
 :root{
   --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -131,7 +131,7 @@ button,input{font:inherit}
       <button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
       <button class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
     </div>
-    <p class="small">Beta 0.5 Firebase DEV — sincronização pela Realtime Database</p>
+    <p class="small">Beta 0.5 Firebase DEV 2 — entrada em salas corrigida</p>
     <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
   </div></div>
 </section>
@@ -327,7 +327,7 @@ async function createRoom(){
       const result=await runTransaction(roomRef,current=>{
         if(current!==null)return;
         return {
-          version:"0.5-firebase-dev",
+          version:"0.5-firebase-dev2",
           status:"lobby",
           createdAt:Date.now(),
           updatedAt:Date.now(),
@@ -362,34 +362,55 @@ async function joinRoom(){
   }
 
   $("onlineStatus").textContent="A procurar sala no Firebase...";
-  leaveRoom(false);
+  await leaveRoom(false);
 
   try{
     const roomRef=ref(db,roomPath(code));
-    const result=await runTransaction(roomRef,current=>{
-      if(!current)return;
-      if(current.status!=="lobby")return;
-      if(current.players?.guest && current.players.guest.id!==clientId)return;
-      current.players=current.players||{};
-      current.players.guest={
-        id:clientId,name:identity.name,online:true,ready:false
-      };
-      current.updatedAt=Date.now();
-      return current;
-    },{applyLocally:false});
+    const snapshot=await get(roomRef);
 
-    if(!result.committed){
-      $("onlineStatus").textContent="Sala inexistente, já iniciada ou cheia.";
+    if(!snapshot.exists()){
+      $("onlineStatus").textContent="Essa sala não existe.";
       return;
     }
+
+    const existingRoom=snapshot.val();
+
+    if(existingRoom.status!=="lobby"){
+      $("onlineStatus").textContent="Essa partida já começou ou terminou.";
+      return;
+    }
+
+    const guestRef=ref(db,`${roomPath(code)}/players/guest`);
+    const guestResult=await runTransaction(guestRef,currentGuest=>{
+      if(currentGuest && currentGuest.id!==clientId){
+        return;
+      }
+
+      return {
+        id:clientId,
+        name:identity.name,
+        online:true,
+        ready:false,
+        joinedAt:Date.now()
+      };
+    },{applyLocally:false});
+
+    if(!guestResult.committed){
+      $("onlineStatus").textContent="A sala já tem dois jogadores.";
+      return;
+    }
+
+    await update(roomRef,{updatedAt:Date.now()});
 
     roomCode=code;
     role="guest";
     await setupPresence();
     listenRoom();
     $("roomCodeText").textContent=roomCode;
+    $("onlineStatus").textContent="Entrada confirmada!";
     showScreen("lobbyScreen");
   }catch(error){
+    console.error("Erro ao entrar na sala:",error);
     $("onlineStatus").textContent=firebaseErrorMessage(error);
   }
 }
