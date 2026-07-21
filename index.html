@@ -3,948 +3,369 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.5 Firebase DEV 2</title>
+<title>Arena Secreta — Beta 0.6 The Big Update</title>
 <style>
 :root{
-  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
-  --cell:#2a365d;--text:#f7f8ff;--muted:#aeb8d5;--accent:#62e2cf;
-  --gold:#ffd166;--danger:#ff5f7c;--hit:#dd4d68;--miss:#53678f;
-  --scan:#a875ff;--mana:#6cb7ff;
-  --cell-size:clamp(19px,calc((100vw - 80px)/15),42px)
+ --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
+ --cell:#2a365d;--text:#f7f8ff;--muted:#aeb8d5;--accent:#62e2cf;
+ --gold:#ffd166;--danger:#ff5f7c;--hit:#dd4d68;--miss:#53678f;
+ --scan:#a875ff;--mana:#6cb7ff;--move:#5ca9ff;
+ --cell-size:clamp(19px,calc((100vw - 88px)/15),42px)
 }
 *{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;color:var(--text);font-family:Arial,sans-serif;
-  background:radial-gradient(circle at top,#25366e 0%,#111735 35%,var(--bg) 75%)
-}
-button,input{font:inherit}
+body{margin:0;min-height:100vh;color:var(--text);font-family:Arial,sans-serif;background:radial-gradient(circle at top,#25366e 0%,#111735 35%,var(--bg) 75%)}
+button,input,select{font:inherit}
 .screen{display:none;min-height:100vh}.screen.active{display:block}
-.wrap{width:min(1180px,100%);margin:auto;padding:14px}
-.panel{
-  background:rgba(21,28,51,.97);border:1px solid rgba(255,255,255,.08);
-  border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 20px 55px rgba(0,0,0,.3)
-}
+.wrap{width:min(1220px,100%);margin:auto;padding:14px}
+.panel{background:rgba(21,28,51,.97);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 20px 55px rgba(0,0,0,.3)}
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
-.hero-card{
-  width:min(690px,100%);text-align:center;padding:32px;border-radius:26px;
-  background:rgba(15,21,42,.96);box-shadow:0 30px 90px rgba(0,0,0,.5)
-}
-.logo{font-size:clamp(42px,9vw,76px);line-height:.94;margin:0}
+.hero-card{width:min(720px,100%);text-align:center;padding:34px;border-radius:28px;background:rgba(15,21,42,.96);box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.logo{font-size:clamp(42px,9vw,78px);line-height:.94;margin:0}
 .tag{color:var(--gold);letter-spacing:4px;font-weight:900;margin:16px 0 22px}
-.identity{background:var(--panel3);border-radius:14px;padding:12px;margin:0 auto 18px;width:min(420px,100%)}
-.menu{display:grid;gap:10px;width:min(430px,100%);margin:auto}
-.btn{
-  border:0;border-radius:12px;padding:13px 16px;background:var(--accent);
-  color:#061814;font-weight:900;cursor:pointer
-}
+.version{display:inline-block;background:var(--panel2);color:var(--muted);border-radius:999px;padding:7px 12px;margin-bottom:18px;font-size:12px}
+.identity{background:var(--panel3);border-radius:14px;padding:12px;margin:0 auto 18px;width:min(440px,100%)}
+.menu{display:grid;gap:10px;width:min(440px,100%);margin:auto}
+.btn{border:0;border-radius:12px;padding:13px 16px;background:var(--accent);color:#061814;font-weight:900;cursor:pointer}
 .btn.secondary{background:#354169;color:white}.btn.danger{background:var(--danger);color:white}.btn:disabled{opacity:.4;cursor:not-allowed}
 .header{display:flex;justify-content:space-between;align-items:center;gap:10px}.header h2{margin:0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.mode-card{
-  background:var(--panel2);border:2px solid transparent;border-radius:15px;
-  padding:18px;color:white;cursor:pointer;text-align:left
-}
-.mode-card h3{margin:0 0 6px}.mode-card p{margin:0;color:var(--muted);font-size:13px}
-.form{display:grid;gap:10px}
-.input{
-  width:100%;background:var(--panel3);border:1px solid rgba(255,255,255,.13);
-  border-radius:10px;color:white;padding:12px
-}
-.notice{
-  padding:12px;border-radius:12px;background:rgba(255,209,102,.1);
-  color:var(--gold);border:1px solid rgba(255,209,102,.25)
-}
+.option-card,.mode-card{background:var(--panel2);border:2px solid transparent;border-radius:15px;padding:17px;color:white;cursor:pointer;text-align:left}
+.option-card.selected{border-color:var(--accent)}
+.option-card h3,.mode-card h3{margin:0 0 6px}.option-card p,.mode-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
+.form{display:grid;gap:10px}.input{width:100%;background:var(--panel3);border:1px solid rgba(255,255,255,.13);border-radius:10px;color:white;padding:12px}
+.notice{padding:12px;border-radius:12px;background:rgba(255,209,102,.1);color:var(--gold);border:1px solid rgba(255,209,102,.25)}
 .room-code{font-size:clamp(30px,8vw,58px);letter-spacing:6px;color:var(--accent);font-weight:900;margin:14px 0}
 .status{color:var(--muted);min-height:22px}.hidden{display:none!important}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.card{
-  background:var(--panel2);border:2px solid transparent;border-radius:13px;
-  padding:11px;color:white;text-align:left;cursor:pointer
-}
-.card.selected{border-color:var(--accent)}.card.disabled{opacity:.4}.card h3{margin:3px 0}
-.cost{float:right;color:var(--mana);font-weight:900}.rarity{font-size:11px;color:var(--gold);font-weight:900}
-.small{color:var(--muted);font-size:12px}
+.connection{display:flex;gap:8px;justify-content:center;align-items:center;color:var(--muted);font-size:12px}
+.light{width:9px;height:9px;border-radius:50%;background:var(--danger)}.light.ok{background:var(--accent)}
 .topbar{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
 .stat{background:var(--panel2);padding:10px 13px;border-radius:12px}.stat strong{display:block;font-size:21px}
 .turn{background:var(--accent);color:#061814;border-radius:999px;padding:11px 16px;font-weight:900;text-align:center}
 .message{text-align:center;color:var(--gold);font-weight:900;min-height:26px;margin-bottom:10px}
-.play{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:12px}
+.play{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:12px}
 .board-wrap{overflow:hidden;display:flex;justify-content:center;background:var(--panel3);border-radius:14px;padding:10px}
-.board{
-  display:grid;grid-template-columns:repeat(15,var(--cell-size));
-  grid-template-rows:repeat(5,var(--cell-size));gap:clamp(2px,.4vw,5px)
-}
-.cell{
-  width:var(--cell-size);height:var(--cell-size);padding:0;border:0;
-  border-radius:7px;background:var(--cell);color:white;font-weight:900;cursor:pointer
-}
-.cell.player{background:linear-gradient(135deg,#1fae9d,#66e7d5);color:#05201b}
-.cell.hit{background:var(--hit)}.cell.miss{background:var(--miss)}
-.cell.scan{box-shadow:inset 0 0 0 3px var(--scan)}
-.cell.preview{outline:3px solid var(--gold);outline-offset:-3px}
+.board{display:grid;grid-template-columns:repeat(15,var(--cell-size));grid-template-rows:repeat(5,var(--cell-size));gap:clamp(2px,.4vw,5px)}
+.cell{width:var(--cell-size);height:var(--cell-size);padding:0;border:0;border-radius:7px;background:var(--cell);color:white;font-weight:900;cursor:pointer}
+.cell.player{background:linear-gradient(135deg,#1fae9d,#66e7d5);color:#05201b}.cell.hit{background:var(--hit)}.cell.miss{background:var(--miss)}
+.cell.scan{box-shadow:inset 0 0 0 3px var(--scan)}.cell.preview{outline:3px solid var(--gold);outline-offset:-3px}.cell.move-preview{outline:3px solid var(--move);outline-offset:-3px}
 .cell.enemy-reveal{background:#875de7}.cell.dead::after{content:"✕"}
 .side{background:var(--panel3);border-radius:14px;padding:11px}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.action{
-  border:2px solid transparent;border-radius:10px;background:#303b65;
-  color:white;padding:10px 5px;font-weight:900;cursor:pointer
-}
+.action{border:2px solid transparent;border-radius:10px;background:#303b65;color:white;padding:10px 5px;font-weight:900;cursor:pointer}
 .action.selected{border-color:var(--accent)}
-.hand{display:flex;gap:8px;overflow-x:auto;padding:3px 0 9px}
-.hand-card{
-  flex:0 0 160px;background:var(--panel2);border:2px solid transparent;
-  border-radius:12px;color:white;text-align:left;padding:10px
-}
+.selected-info{margin-top:10px;background:var(--panel2);border-radius:11px;padding:10px;min-height:85px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.card{background:var(--panel2);border:2px solid transparent;border-radius:13px;padding:11px;color:white;text-align:left;cursor:pointer}
+.card.selected{border-color:var(--accent)}.card.disabled{opacity:.4}.card h3{margin:3px 0}
+.cost{float:right;color:var(--mana);font-weight:900}.rarity{font-size:11px;color:var(--gold);font-weight:900}
+.small{color:var(--muted);font-size:12px}.hand,.chips{display:flex;gap:8px;overflow-x:auto;padding:3px 0 9px}
+.hand-card{flex:0 0 160px;background:var(--panel2);border:2px solid transparent;border-radius:12px;color:white;text-align:left;padding:10px}
 .hand-card.selected{border-color:var(--accent)}.hand-card.disabled{opacity:.4}
-.chips{display:flex;gap:7px;overflow-x:auto}
-.chip{
-  flex:0 0 auto;border:2px solid transparent;border-radius:999px;
-  background:var(--panel2);color:white;padding:8px 10px
-}
+.chip{flex:0 0 auto;border:2px solid transparent;border-radius:999px;background:var(--panel2);color:white;padding:8px 10px}
 .chip.selected{border-color:var(--gold)}.chip.dead{opacity:.4;text-decoration:line-through}
-.log{max-height:150px;overflow:auto;color:var(--muted);font-size:13px}
-.connection{display:flex;gap:8px;justify-content:center;align-items:center;color:var(--muted);font-size:12px}
-.light{width:9px;height:9px;border-radius:50%;background:#ff5f7c}.light.ok{background:#62e2cf}
-@media(max-width:850px){
-  .cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}
-  .side{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-}
-@media(max-width:620px){
-  .wrap{padding:8px}.grid2{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}
-  .topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}
-  .side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}
-  .action{font-size:11px;padding:9px 2px}
-}
+.log{max-height:160px;overflow:auto;color:var(--muted);font-size:13px}
+.end-card{text-align:center;padding:25px}.end-card h2{font-size:32px;margin:0 0 10px}
+@media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+@media(max-width:620px){.wrap{padding:8px}.grid2{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
 </style>
 </head>
 <body>
 
 <section id="menuScreen" class="screen active">
-  <div class="hero"><div class="hero-card">
-    <h1 class="logo">ARENA<br>SECRETA</h1>
-    <div class="tag">THE FIREBASE ONLINE TEST</div>
-    <div class="identity">
-      <strong id="menuName">Ghost0001</strong>
-      <div class="small">Identidade temporária neste dispositivo</div>
-    </div>
-    <div class="menu">
-      <button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
-      <button class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
-    </div>
-    <p class="small">Beta 0.5 Firebase DEV 2 — entrada em salas corrigida</p>
-    <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
-  </div></div>
+<div class="hero"><div class="hero-card">
+ <h1 class="logo">ARENA<br>SECRETA</h1>
+ <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
+ <div class="version">BETA 0.6 — THE BIG UPDATE</div>
+ <div class="identity"><strong id="menuName">Ghost0001</strong><div class="small">Identidade temporária neste dispositivo</div></div>
+ <div class="menu">
+  <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button>
+  <button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
+  <button class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
+ </div>
+ <p class="small">Offline completo + Online Firebase + cancelamento por abandono</p>
+ <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
+</div></div>
 </section>
 
+<section id="offlineSetupScreen" class="screen"><div class="wrap">
+<div class="panel">
+ <div class="header"><h2>Jogar Offline</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <h3>Dificuldade</h3>
+ <div id="difficultyOptions" class="grid2">
+  <button class="option-card selected" data-value="easy"><h3>Fácil</h3><p>Ataca quase ao acaso e move-se pouco.</p></button>
+  <button class="option-card" data-value="normal"><h3>Normal</h3><p>Usa deteção, memória e decisões equilibradas.</p></button>
+  <button class="option-card" data-value="hard"><h3>Difícil</h3><p>Persegue pistas, protege cartas e gere recursos.</p></button>
+  <button class="option-card" data-value="impossible"><h3>Impossível</h3><p>Estratégia avançada sem saber posições secretas.</p></button>
+ </div>
+ <h3>Personalidade</h3>
+ <div id="personalityOptions" class="grid2">
+  <button class="option-card selected" data-value="balanced"><h3>Equilibrado</h3><p>Mistura todas as ações.</p></button>
+  <button class="option-card" data-value="aggressive"><h3>Agressivo</h3><p>Prefere dano e pressão.</p></button>
+  <button class="option-card" data-value="defensive"><h3>Defensivo</h3><p>Protege e move cartas atingidas.</p></button>
+  <button class="option-card" data-value="strategist"><h3>Estratega</h3><p>Poupa mana e usa Scanner.</p></button>
+ </div>
+ <button class="btn" style="width:100%;margin-top:14px" onclick="startOfflineDeck()">COMEÇAR</button>
+</div>
+</div></section>
+
 <section id="onlineScreen" class="screen"><div class="wrap">
-  <div class="panel">
-    <div class="header">
-      <h2>Jogar Online</h2>
-      <button class="btn secondary" onclick="leaveRoom();showScreen('menuScreen')">Voltar</button>
-    </div>
-    <div class="grid2">
-      <button class="mode-card" onclick="createRoom()">
-        <h3>Criar sala</h3><p>Cria um código e espera pelo segundo jogador.</p>
-      </button>
-      <button class="mode-card" onclick="showJoinForm()">
-        <h3>Entrar por código</h3><p>Introduz o código enviado pelo anfitrião.</p>
-      </button>
-      <button class="mode-card" onclick="alert('O matchmaking fica para a próxima fase.')">
-        <h3>Procurar partida</h3><p>Em desenvolvimento.</p>
-      </button>
-      <button class="mode-card" onclick="alert('As salas públicas ficam para uma versão futura.')">
-        <h3>Salas públicas</h3><p>Em desenvolvimento.</p>
-      </button>
-    </div>
-    <div id="joinForm" class="form hidden" style="margin-top:14px">
-      <input id="joinCode" class="input" maxlength="6" placeholder="Código da sala" style="text-transform:uppercase">
-      <button class="btn" onclick="joinRoom()">Entrar na sala</button>
-    </div>
-    <p id="onlineStatus" class="status"></p>
-  </div>
+<div class="panel">
+ <div class="header"><h2>Jogar Online</h2><button class="btn secondary" onclick="safeLeaveRoom();showScreen('menuScreen')">Voltar</button></div>
+ <div class="grid2">
+  <button class="mode-card" onclick="createRoom()"><h3>Criar sala</h3><p>Cria um código privado.</p></button>
+  <button class="mode-card" onclick="showJoinForm()"><h3>Entrar por código</h3><p>Entra na sala de outro jogador.</p></button>
+  <button class="mode-card" onclick="alert('O matchmaking chega numa versão futura.')"><h3>Procurar partida</h3><p>Em desenvolvimento.</p></button>
+  <button class="mode-card" onclick="alert('As salas públicas chegam numa versão futura.')"><h3>Salas públicas</h3><p>Em desenvolvimento.</p></button>
+ </div>
+ <div id="joinForm" class="form hidden" style="margin-top:14px">
+  <input id="joinCode" class="input" maxlength="6" placeholder="Código da sala" style="text-transform:uppercase">
+  <button class="btn" onclick="joinRoom()">Entrar na sala</button>
+ </div>
+ <p id="onlineStatus" class="status"></p>
+</div>
 </div></section>
 
 <section id="lobbyScreen" class="screen"><div class="wrap">
-  <div class="panel" style="text-align:center">
-    <div class="header">
-      <h2>Sala Online</h2>
-      <button class="btn danger" onclick="leaveRoom();showScreen('menuScreen')">Sair</button>
-    </div>
-    <div class="small">CÓDIGO DA SALA</div>
-    <div id="roomCodeText" class="room-code">------</div>
-    <div id="lobbyPlayers" class="notice">A aguardar adversário...</div>
-    <p id="lobbyStatus" class="status"></p>
-    <button id="goDeckBtn" class="btn hidden" onclick="openDeckSelection()">Escolher baralho</button>
-  </div>
+<div class="panel" style="text-align:center">
+ <div class="header"><h2>Sala Online</h2><button class="btn danger" onclick="safeLeaveRoom()">Sair</button></div>
+ <div class="small">CÓDIGO DA SALA</div><div id="roomCodeText" class="room-code">------</div>
+ <div id="lobbyPlayers" class="notice">A aguardar adversário...</div>
+ <p id="lobbyStatus" class="status"></p>
+ <button id="goDeckBtn" class="btn hidden" onclick="openDeckSelection('online')">Escolher baralho</button>
+</div>
 </div></section>
 
 <section id="gameScreen" class="screen"><div class="wrap">
-  <div class="panel topbar">
-    <div class="stat">Mana<strong id="manaText">3/3</strong></div>
-    <div id="turnBadge" class="turn">ESCOLHA DO BARALHO</div>
-    <div class="stat" style="text-align:right">
-      Cartas<strong><span id="myRemaining">5</span> / <span id="enemyRemaining">5</span></strong>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div id="message" class="message">Escolhe cinco cartas.</div>
-    <div class="play">
-      <div class="board-wrap"><div id="board" class="board"></div></div>
-      <aside id="sidePanel" class="side hidden">
-        <div class="actions">
-          <button class="action selected" data-action="summon">Invocar</button>
-          <button class="action" data-action="attack">Atacar</button>
-          <button class="action" data-action="move">Mover</button>
-          <button class="action" data-action="pass">Passar</button>
-        </div>
-        <p id="selectedInfo" class="small">Nenhuma carta selecionada.</p>
-      </aside>
-    </div>
-    <div style="margin-top:12px">
-      <button id="confirmDeckBtn" class="btn" disabled>Confirmar baralho</button>
-      <button class="btn danger" style="float:right" onclick="leaveRoom();showScreen('menuScreen')">Sair da partida</button>
-    </div>
-  </div>
-
-  <div id="deckPanel" class="panel">
-    <h3>Escolhe 5 cartas</h3>
-    <div id="deckCards" class="cards"></div>
-  </div>
-
-  <div id="playPanel" class="panel hidden">
-    <h3>Cartas na mão</h3><div id="hand" class="hand"></div>
-    <h3>Cartas na arena</h3><div id="chips" class="chips"></div>
-  </div>
-
-  <div class="panel"><h3>Histórico</h3><ol id="log" class="log"></ol></div>
+<div class="panel topbar">
+ <div class="stat">Mana<strong id="manaText">3/3</strong></div>
+ <div id="turnBadge" class="turn">ESCOLHA DO BARALHO</div>
+ <div class="stat" style="text-align:right">Cartas<strong><span id="myRemaining">5</span> / <span id="enemyRemaining">5</span></strong></div>
+</div>
+<div class="panel">
+ <div id="message" class="message">Escolhe cinco cartas.</div>
+ <div class="play">
+  <div class="board-wrap"><div id="board" class="board"></div></div>
+  <aside id="sidePanel" class="side hidden">
+   <div class="actions">
+    <button class="action selected" data-action="summon">Invocar</button>
+    <button class="action" data-action="attack">Atacar</button>
+    <button class="action" data-action="move">Mover</button>
+    <button class="action" data-action="pass">Passar</button>
+   </div>
+   <div id="selectedInfo" class="selected-info small">Nenhuma carta selecionada.</div>
+   <button class="btn danger" style="width:100%;margin-top:10px" onclick="quitCurrentMatch()">Sair da partida</button>
+  </aside>
+ </div>
+ <div style="margin-top:12px"><button id="confirmDeckBtn" class="btn" disabled>Confirmar baralho</button></div>
+</div>
+<div id="deckPanel" class="panel"><h3>Escolhe 5 cartas</h3><div id="deckCards" class="cards"></div></div>
+<div id="playPanel" class="panel hidden"><h3>Cartas na mão</h3><div id="hand" class="hand"></div><h3>Cartas na arena</h3><div id="chips" class="chips"></div></div>
+<div class="panel"><h3>Histórico</h3><ol id="log" class="log"></ol></div>
 </div></section>
+
+<section id="cancelledScreen" class="screen"><div class="hero">
+<div class="hero-card end-card">
+ <h2>PARTIDA CANCELADA</h2>
+ <p id="cancelReason" class="notice">O outro jogador abandonou a partida.</p>
+ <button class="btn" onclick="finishCancellation()">Voltar ao menu</button>
+</div></div></section>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import {
-  getDatabase, ref, set, get, update, onValue, off,
-  runTransaction, onDisconnect, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import {getDatabase,ref,set,get,update,onValue,off,runTransaction,onDisconnect,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDfwXW82rHL0kqikV5yG8D9AUMG-1G2Bvw",
-  authDomain: "arena-secreta.firebaseapp.com",
-  databaseURL: "https://arena-secreta-default-rtdb.europe-west1.firebasedatabase.app/",
-  projectId: "arena-secreta",
-  storageBucket: "arena-secreta.firebasestorage.app",
-  messagingSenderId: "510749788258",
-  appId: "1:510749788258:web:1ecd38657255066cafe93b",
-  measurementId: "G-MZ2H1EP75R"
+const firebaseConfig={
+ apiKey:"AIzaSyDfwXW82rHL0kqikV5yG8D9AUMG-1G2Bvw",
+ authDomain:"arena-secreta.firebaseapp.com",
+ databaseURL:"https://arena-secreta-default-rtdb.europe-west1.firebasedatabase.app/",
+ projectId:"arena-secreta",
+ storageBucket:"arena-secreta.firebasestorage.app",
+ messagingSenderId:"510749788258",
+ appId:"1:510749788258:web:1ecd38657255066cafe93b",
+ measurementId:"G-MZ2H1EP75R"
 };
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
+const app=initializeApp(firebaseConfig),db=getDatabase(app);
 const ROWS=5,COLS=15,DECK_SIZE=5,NORMAL_TURNS=15,REVEAL_TURN=20;
 const LIBRARY=[
-  {id:"squire",name:"Escudeiro",rarity:"Comum",hp:4,damage:1,moves:3,cost:1,pattern:"horizontal"},
-  {id:"archer",name:"Arqueiro",rarity:"Comum",hp:3,damage:2,moves:3,cost:2,pattern:"vertical"},
-  {id:"knight",name:"Cavaleiro",rarity:"Rara",hp:6,damage:2,moves:2,cost:3,pattern:"horizontal"},
-  {id:"assassin",name:"Assassino",rarity:"Rara",hp:2,damage:4,moves:2,cost:4,pattern:"diagonal"},
-  {id:"scout",name:"Batedor",rarity:"Rara",hp:4,damage:0,moves:3,cost:2,pattern:"scan"},
-  {id:"mage",name:"Mago",rarity:"Épica",hp:3,damage:2,moves:2,cost:5,pattern:"cross"},
-  {id:"paladin",name:"Paladino",rarity:"Épica",hp:8,damage:3,moves:1,cost:6,pattern:"vertical"},
-  {id:"warlock",name:"Bruxo",rarity:"Lendária",hp:5,damage:4,moves:2,cost:7,pattern:"cross"}
-];
-
+{id:"squire",name:"Escudeiro",rarity:"Comum",hp:4,damage:1,moves:3,cost:1,pattern:"horizontal"},
+{id:"archer",name:"Arqueiro",rarity:"Comum",hp:3,damage:2,moves:3,cost:2,pattern:"vertical"},
+{id:"knight",name:"Cavaleiro",rarity:"Rara",hp:6,damage:2,moves:2,cost:3,pattern:"horizontal"},
+{id:"assassin",name:"Assassino",rarity:"Rara",hp:2,damage:4,moves:2,cost:4,pattern:"diagonal"},
+{id:"scout",name:"Batedor",rarity:"Rara",hp:4,damage:0,moves:3,cost:2,pattern:"scan"},
+{id:"mage",name:"Mago",rarity:"Épica",hp:3,damage:2,moves:2,cost:5,pattern:"cross"},
+{id:"paladin",name:"Paladino",rarity:"Épica",hp:8,damage:3,moves:1,cost:6,pattern:"vertical"},
+{id:"warlock",name:"Bruxo",rarity:"Lendária",hp:5,damage:4,moves:2,cost:7,pattern:"cross"}];
 const $=id=>document.getElementById(id);
-const clientId=sessionStorage.getItem("arenaClientId")||crypto.randomUUID();
-sessionStorage.setItem("arenaClientId",clientId);
+const clientId=sessionStorage.getItem("arenaClientId")||crypto.randomUUID();sessionStorage.setItem("arenaClientId",clientId);
 
-let identity=getIdentity();
-let roomCode="";
-let role=null;
-let roomData=null;
-let roomListener=null;
-let connectedListener=null;
-let chosen=[];
-let selectedAction="summon";
-let selectedHand=null;
-let selectedArena=null;
+let identity=getIdentity(),gameMode=null,difficulty="easy",personality="balanced";
+let roomCode="",role=null,roomData=null,roomListener=null,presenceDisconnect=null,connected=true;
+let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
+let offlineState=null,offlineLocked=false,botKnown=[];
 
-function getIdentity(){
-  let ghost=localStorage.getItem("arenaGhost");
-  if(!ghost){
-    ghost="Ghost"+String(Math.floor(Math.random()*9999)+1).padStart(4,"0");
-    localStorage.setItem("arenaGhost",ghost);
-  }
-  return {name:ghost};
-}
-
-function newGhost(){
-  localStorage.removeItem("arenaGhost");
-  identity=getIdentity();
-  $("menuName").textContent=identity.name;
-}
-
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
-  $(id).classList.add("active");
-  window.scrollTo(0,0);
-}
-
-function showJoinForm(){
-  $("joinForm").classList.remove("hidden");
-  $("onlineStatus").textContent="";
-}
-
-function randomCode(){
-  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join("");
-}
-
-function roomPath(code=""){
-  return `rooms/${code}`;
-}
-
-function playerPath(which){
-  return `${roomPath(roomCode)}/players/${which}`;
-}
-
-function firebaseErrorMessage(error){
-  const code=error?.code||"erro-desconhecido";
-  if(code.includes("PERMISSION_DENIED")||code.includes("permission-denied")){
-    return "O Firebase bloqueou o acesso. Confirma se a Realtime Database está em modo de teste.";
-  }
-  return `Erro Firebase: ${code}`;
-}
+function getIdentity(){let g=localStorage.getItem("arenaGhost");if(!g){g="Ghost"+String(Math.floor(Math.random()*9999)+1).padStart(4,"0");localStorage.setItem("arenaGhost",g)}return{name:g}}
+function newGhost(){localStorage.removeItem("arenaGhost");identity=getIdentity();$("menuName").textContent=identity.name}
+function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
+function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
+setupOptionGroup("difficultyOptions",v=>difficulty=v);setupOptionGroup("personalityOptions",v=>personality=v);
+function randomCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join("")}
+function roomPath(code=""){return`rooms/${code}`}function playerPath(which){return`${roomPath(roomCode)}/players/${which}`}
+function firebaseErrorMessage(e){const c=e?.code||"erro-desconhecido";return c.includes("permission")?"O Firebase bloqueou o acesso. Confirma o modo de teste.":`Erro Firebase: ${c}`}
+function showJoinForm(){$("joinForm").classList.remove("hidden");$("onlineStatus").textContent=""}
 
 async function createRoom(){
-  $("onlineStatus").textContent="A criar sala no Firebase...";
-  leaveRoom(false);
-
-  for(let tries=0;tries<8;tries++){
-    const code=randomCode();
-    const roomRef=ref(db,roomPath(code));
-
-    try{
-      const result=await runTransaction(roomRef,current=>{
-        if(current!==null)return;
-        return {
-          version:"0.5-firebase-dev2",
-          status:"lobby",
-          createdAt:Date.now(),
-          updatedAt:Date.now(),
-          players:{
-            host:{id:clientId,name:identity.name,online:true,ready:false}
-          }
-        };
-      },{applyLocally:false});
-
-      if(result.committed){
-        roomCode=code;
-        role="host";
-        await setupPresence();
-        listenRoom();
-        $("roomCodeText").textContent=roomCode;
-        showScreen("lobbyScreen");
-        return;
-      }
-    }catch(error){
-      $("onlineStatus").textContent=firebaseErrorMessage(error);
-      return;
-    }
-  }
-  $("onlineStatus").textContent="Não consegui gerar um código livre. Tenta novamente.";
+ await leaveRoom(false);$("onlineStatus").textContent="A criar sala...";
+ for(let i=0;i<8;i++){const code=randomCode(),r=ref(db,roomPath(code));
+  try{const result=await runTransaction(r,current=>{if(current!==null)return;return{version:"0.6",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:clientId,name:identity.name,online:true,ready:false}}}},{applyLocally:false});
+   if(result.committed){roomCode=code;role="host";gameMode="online";await setupPresence();listenRoom();$("roomCodeText").textContent=code;showScreen("lobbyScreen");return}
+  }catch(e){$("onlineStatus").textContent=firebaseErrorMessage(e);return}
+ }
 }
-
 async function joinRoom(){
-  const code=$("joinCode").value.trim().toUpperCase();
-  if(!/^[A-Z0-9]{6}$/.test(code)){
-    $("onlineStatus").textContent="O código deve ter 6 letras ou números.";
-    return;
-  }
-
-  $("onlineStatus").textContent="A procurar sala no Firebase...";
-  await leaveRoom(false);
-
-  try{
-    const roomRef=ref(db,roomPath(code));
-    const snapshot=await get(roomRef);
-
-    if(!snapshot.exists()){
-      $("onlineStatus").textContent="Essa sala não existe.";
-      return;
-    }
-
-    const existingRoom=snapshot.val();
-
-    if(existingRoom.status!=="lobby"){
-      $("onlineStatus").textContent="Essa partida já começou ou terminou.";
-      return;
-    }
-
-    const guestRef=ref(db,`${roomPath(code)}/players/guest`);
-    const guestResult=await runTransaction(guestRef,currentGuest=>{
-      if(currentGuest && currentGuest.id!==clientId){
-        return;
-      }
-
-      return {
-        id:clientId,
-        name:identity.name,
-        online:true,
-        ready:false,
-        joinedAt:Date.now()
-      };
-    },{applyLocally:false});
-
-    if(!guestResult.committed){
-      $("onlineStatus").textContent="A sala já tem dois jogadores.";
-      return;
-    }
-
-    await update(roomRef,{updatedAt:Date.now()});
-
-    roomCode=code;
-    role="guest";
-    await setupPresence();
-    listenRoom();
-    $("roomCodeText").textContent=roomCode;
-    $("onlineStatus").textContent="Entrada confirmada!";
-    showScreen("lobbyScreen");
-  }catch(error){
-    console.error("Erro ao entrar na sala:",error);
-    $("onlineStatus").textContent=firebaseErrorMessage(error);
-  }
+ const code=$("joinCode").value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(code)){$("onlineStatus").textContent="Código inválido.";return}
+ await leaveRoom(false);$("onlineStatus").textContent="A procurar sala...";
+ try{const r=ref(db,roomPath(code)),snap=await get(r);if(!snap.exists()){$("onlineStatus").textContent="Essa sala não existe.";return}
+  const room=snap.val();if(room.status!=="lobby"){$("onlineStatus").textContent="Essa partida já começou ou terminou.";return}
+  const guestRef=ref(db,`${roomPath(code)}/players/guest`);
+  const result=await runTransaction(guestRef,current=>{if(current&&current.id!==clientId)return;return{id:clientId,name:identity.name,online:true,ready:false,joinedAt:Date.now()}},{applyLocally:false});
+  if(!result.committed){$("onlineStatus").textContent="A sala já está cheia.";return}
+  roomCode=code;role="guest";gameMode="online";await setupPresence();listenRoom();$("roomCodeText").textContent=code;showScreen("lobbyScreen")
+ }catch(e){$("onlineStatus").textContent=firebaseErrorMessage(e)}
 }
-
 async function setupPresence(){
-  if(!roomCode||!role)return;
-  const pRef=ref(db,playerPath(role));
-  await update(pRef,{online:true,lastSeen:Date.now()});
-  onDisconnect(pRef).update({online:false,lastSeen:serverTimestamp()});
+ const pRef=ref(db,playerPath(role));await update(pRef,{online:true,lastSeen:Date.now()});
+ presenceDisconnect=onDisconnect(pRef);await presenceDisconnect.update({online:false,lastSeen:serverTimestamp()})
 }
-
 function listenRoom(){
-  if(roomListener)off(roomListener);
-  const rRef=ref(db,roomPath(roomCode));
-  roomListener=rRef;
-
-  onValue(rRef,snapshot=>{
-    if(!snapshot.exists()){
-      roomData=null;
-      $("lobbyStatus").textContent="A sala foi eliminada.";
-      return;
-    }
-
-    roomData=snapshot.val();
-    renderRoom();
-
-    if(roomData.status==="game"&&roomData.state){
-      showScreen("gameScreen");
-      renderGame();
-    }
-    if(roomData.status==="finished"&&roomData.state){
-      showScreen("gameScreen");
-      renderGame();
-    }
-  },error=>{
-    $("lobbyStatus").textContent=firebaseErrorMessage(error);
-    $("message").textContent=firebaseErrorMessage(error);
-  });
+ if(roomListener)off(roomListener);const r=ref(db,roomPath(roomCode));roomListener=r;
+ onValue(r,s=>{if(!s.exists()){if(roomData)showCancelled("A sala foi encerrada.");return}
+  const previous=roomData;roomData=s.val();renderRoom();
+  if(roomData.status==="cancelled"){showCancelled(roomData.cancelReason||"O outro jogador abandonou a partida.");return}
+  const other=role==="host"?roomData.players?.guest:roomData.players?.host;
+  if(previous&&["lobby","game"].includes(previous.status)&&other&&other.online===false&&roomData.status!=="finished"){
+   requestCancelRoom(`${other.name||"O outro jogador"} abandonou a partida.`);return
+  }
+  if(["game","finished"].includes(roomData.status)&&roomData.state){showScreen("gameScreen");renderOnlineGame()}
+ },e=>{$("lobbyStatus").textContent=firebaseErrorMessage(e)})
 }
-
 function renderRoom(){
-  if(!roomData)return;
-  const host=roomData.players?.host;
-  const guest=roomData.players?.guest;
-
-  $("roomCodeText").textContent=roomCode;
-  $("lobbyPlayers").textContent=guest
-    ?`${host?.name||"Host"} VS ${guest.name}`
-    :"A aguardar adversário...";
-
-  if(!guest){
-    $("lobbyStatus").textContent="Sala criada. Partilha o código.";
-    $("goDeckBtn").classList.add("hidden");
-  }else{
-    const hostOnline=host?.online!==false;
-    const guestOnline=guest?.online!==false;
-    $("lobbyStatus").textContent=
-      hostOnline&&guestOnline?"Os dois jogadores estão ligados.":"Um jogador parece estar desligado.";
-    $("goDeckBtn").classList.remove("hidden");
-  }
+ if(!roomData)return;const h=roomData.players?.host,g=roomData.players?.guest;$("roomCodeText").textContent=roomCode;
+ $("lobbyPlayers").textContent=g?`${h?.name||"Host"} VS ${g.name}`:"A aguardar adversário...";
+ if(!g){$("lobbyStatus").textContent="Sala criada. Partilha o código.";$("goDeckBtn").classList.add("hidden")}
+ else{$("lobbyStatus").textContent=h?.online!==false&&g?.online!==false?"Os dois jogadores estão ligados.":"Um jogador está desligado.";$("goDeckBtn").classList.remove("hidden")}
 }
-
-async function openDeckSelection(){
-  chosen=[];
-  selectedHand=null;
-  selectedArena=null;
-  $("deckPanel").classList.remove("hidden");
-  $("playPanel").classList.add("hidden");
-  $("sidePanel").classList.add("hidden");
-  $("confirmDeckBtn").classList.remove("hidden");
-  $("confirmDeckBtn").disabled=true;
-  $("turnBadge").textContent="ESCOLHA DO BARALHO";
-  $("message").textContent="Escolhe cinco cartas.";
-  renderDeck();
-  createBoard();
-  showScreen("gameScreen");
+async function requestCancelRoom(reason){
+ if(!roomCode)return;try{await update(ref(db,roomPath(roomCode)),{status:"cancelled",cancelReason:reason,cancelledAt:Date.now(),cancelledBy:role})}catch(e){console.warn(e)}
 }
+async function safeLeaveRoom(){
+ if(roomCode&&roomData&&["lobby","game"].includes(roomData.status))await requestCancelRoom(`${identity.name} abandonou a partida.`);
+ await leaveRoom(false);showScreen("menuScreen")
+}
+async function leaveRoom(markOffline=true){
+ if(roomListener){off(roomListener);roomListener=null}
+ if(markOffline&&roomCode&&role){try{await update(ref(db,playerPath(role)),{online:false,lastSeen:Date.now()})}catch(e){}}
+ if(presenceDisconnect){try{await presenceDisconnect.cancel()}catch(e){}presenceDisconnect=null}
+ roomCode="";role=null;roomData=null
+}
+function showCancelled(reason){$("cancelReason").textContent=reason;showScreen("cancelledScreen")}
+async function finishCancellation(){await leaveRoom(false);gameMode=null;showScreen("menuScreen")}
+function quitCurrentMatch(){if(gameMode==="online")safeLeaveRoom();else{gameMode=null;offlineState=null;showScreen("menuScreen")}}
 
+function startOfflineDeck(){gameMode="offline";offlineState=null;openDeckSelection("offline")}
+function openDeckSelection(mode){
+ gameMode=mode;chosen=[];selectedHand=null;selectedArena=null;$("deckPanel").classList.remove("hidden");$("playPanel").classList.add("hidden");$("sidePanel").classList.add("hidden");
+ $("confirmDeckBtn").classList.remove("hidden");$("confirmDeckBtn").disabled=true;$("turnBadge").textContent="ESCOLHA DO BARALHO";$("message").textContent="Escolhe cinco cartas.";renderDeck();createBoard();showScreen("gameScreen")
+}
 function renderDeck(){
-  $("deckCards").innerHTML="";
-  LIBRARY.forEach(card=>{
-    const button=document.createElement("button");
-    button.className="card"+(chosen.includes(card.id)?" selected":"");
-    button.innerHTML=`
-      <span class="cost">◈${card.cost}</span>
-      <div class="rarity">${card.rarity}</div>
-      <h3>${card.name}</h3>
-      <div class="small">❤${card.hp} ⚔${card.damage} ↔${card.moves}</div>`;
-    button.onclick=()=>{
-      if(chosen.includes(card.id))chosen=chosen.filter(x=>x!==card.id);
-      else if(chosen.length<DECK_SIZE)chosen.push(card.id);
-      $("confirmDeckBtn").disabled=chosen.length!==DECK_SIZE;
-      renderDeck();
-    };
-    $("deckCards").appendChild(button);
-  });
+ $("deckCards").innerHTML="";LIBRARY.forEach(c=>{const b=document.createElement("button");b.className="card"+(chosen.includes(c.id)?" selected":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><div class="rarity">${c.rarity}</div><h3>${c.name}</h3><div class="small">❤${c.hp} ⚔${c.damage} ↔${c.moves}</div>`;
+ b.onclick=()=>{if(chosen.includes(c.id))chosen=chosen.filter(x=>x!==c.id);else if(chosen.length<5)chosen.push(c.id);$("confirmDeckBtn").disabled=chosen.length!==5;renderDeck()};$("deckCards").appendChild(b)})
 }
-
 $("confirmDeckBtn").onclick=async()=>{
-  if(chosen.length!==DECK_SIZE||!roomCode||!role)return;
-  $("confirmDeckBtn").disabled=true;
-  $("message").textContent="Baralho confirmado. A aguardar adversário...";
-
-  try{
-    await update(ref(db,playerPath(role)),{
-      ready:true,
-      deck:chosen,
-      online:true
-    });
-    if(role==="host")await tryStartGame();
-  }catch(error){
-    $("message").textContent=firebaseErrorMessage(error);
-    $("confirmDeckBtn").disabled=false;
-  }
+ if(chosen.length!==5)return;$("confirmDeckBtn").disabled=true;
+ if(gameMode==="online"){await update(ref(db,playerPath(role)),{ready:true,deck:chosen,online:true});$("message").textContent="Baralho confirmado. A aguardar adversário...";if(role==="host")await tryStartOnlineGame()}
+ else startOfflineGame()
 };
+async function tryStartOnlineGame(){
+ await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="lobby")return;const h=current.players?.host,g=current.players?.guest;if(!h?.ready||!g?.ready||!h.deck||!g.deck)return;
+ current.status="game";current.updatedAt=Date.now();current.state=createInitialState(h,g);return current})
+}
+function cloneCard(id){const c=LIBRARY.find(x=>x.id===id);return{...c,currentHp:c.hp,movesLeft:c.moves,alive:true,summoned:false,position:null,wasHit:false}}
+function createInitialState(h,g){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:["A partida online começou!"]}}
 
-async function tryStartGame(){
-  const roomRef=ref(db,roomPath(roomCode));
-  await runTransaction(roomRef,current=>{
-    if(!current||current.status!=="lobby")return;
-    const host=current.players?.host;
-    const guest=current.players?.guest;
-    if(!host?.ready||!guest?.ready||!host.deck||!guest.deck)return;
+function createBoard(){$("board").innerHTML="";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const b=document.createElement("button");b.className="cell";b.dataset.r=r;b.dataset.c=c;b.onclick=()=>cellClick(r,c);b.onmouseenter=()=>preview(r,c);b.onmouseleave=clearPreview;$("board").appendChild(b)}}
+function patternCells(r,c,p){const o=[],add=(a,b)=>{if(a>=0&&a<ROWS&&b>=0&&b<COLS)o.push(`${a}-${b}`)};if(p==="horizontal")[-1,0,1].forEach(x=>add(r,c+x));if(p==="vertical")[-1,0,1].forEach(x=>add(r+x,c));if(p==="diagonal")[-1,0,1].forEach(x=>add(r+x,c+x));if(p==="cross")[[0,0],[-1,0],[1,0],[0,-1],[0,1]].forEach(([a,b])=>add(r+a,c+b));if(p==="scan")for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)add(r+a,c+b);return[...new Set(o)]}
+function setAction(a){selectedAction=a;selectedHand=null;selectedArena=null;document.querySelectorAll(".action").forEach(x=>x.classList.toggle("selected",x.dataset.action===a));if(a==="pass")submitAction({kind:"pass"});else renderCurrentGame()}
+document.querySelectorAll(".action").forEach(b=>b.onclick=()=>setAction(b.dataset.action));
+function cellClick(r,c){const state=currentState();if(!state||state.winner)return;if(gameMode==="online"&&state.turn!==role)return;if(gameMode==="offline"&&offlineLocked)return;const pos=`${r}-${c}`;
+ if(selectedAction==="summon"&&selectedHand!==null)submitAction({kind:"summon",cardIndex:selectedHand,pos});
+ if(selectedAction==="attack"&&selectedArena!==null)submitAction({kind:"attack",cardIndex:selectedArena,r,c});
+ if(selectedAction==="move"&&selectedArena!==null)submitAction({kind:"move",cardIndex:selectedArena,pos})
+}
+function currentState(){return gameMode==="online"?roomData?.state:offlineState}
+function myRole(){return gameMode==="online"?role:"host"}function enemyRole(){return myRole()==="host"?"guest":"host"}
+function me(s=currentState()){return s?.players?.[myRole()]}function opponent(s=currentState()){return s?.players?.[enemyRole()]}
+function renderCurrentGame(){gameMode==="online"?renderOnlineGame():renderOfflineGame()}
+function renderOnlineGame(){renderGame(roomData.state,roomData.state.turn===role&&!roomData.state.winner)}
+function renderOfflineGame(){renderGame(offlineState,!offlineLocked&&!offlineState?.winner)}
+function renderGame(state,canAct){
+ if(!state)return;$("deckPanel").classList.add("hidden");$("playPanel").classList.remove("hidden");$("sidePanel").classList.remove("hidden");$("confirmDeckBtn").classList.add("hidden");
+ const mine=me(state),enemy=opponent(state);$("manaText").textContent=`${mine.mana}/${mine.maxMana}`;$("myRemaining").textContent=mine.deck.filter(c=>c.alive).length;$("enemyRemaining").textContent=enemy.deck.filter(c=>c.alive).length;
+ $("turnBadge").textContent=state.winner?(state.winner===myRole()?"VITÓRIA!":"DERROTA"):canAct?`TUA VEZ · TURNO ${state.round}`:`VEZ DE ${enemy.name}`;
+ $("message").textContent=state.winner?(state.winner===myRole()?"🏆 Venceste!":"💥 Perdeste."):canAct?"Escolhe uma ação.":"A aguardar a jogada do adversário...";
+ document.querySelectorAll(".action").forEach(x=>x.disabled=!canAct);renderBoard(state);renderHand(state);renderChips(state);renderLog(state);renderSelected(state)
+}
+function renderBoard(state){const mine=me(state),enemy=opponent(state);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const cell=$("board").querySelector(`[data-r="${r}"][data-c="${c}"]`),id=`${r}-${c}`;cell.className="cell";cell.textContent="";
+ const mc=mine.deck.find(x=>x.alive&&x.summoned&&x.position===id),ec=enemy.deck.find(x=>x.alive&&x.summoned&&x.position===id);if(mc){cell.classList.add("player");cell.textContent="◆"}
+ const mark=(state.marks||[]).find(x=>x.pos===id);if(mark){cell.classList.add(mark.hit?"hit":"miss");cell.textContent=mark.hit?"!":"·"}if((state.scanMarks||[]).includes(id))cell.classList.add("scan");
+ if(ec&&(state.reveal||!ec.alive)){cell.classList.add(ec.alive?"enemy-reveal":"hit");if(!ec.alive)cell.classList.add("dead");cell.textContent=ec.alive?"♟":""}
+ const dead=mine.deck.find(x=>!x.alive&&x.summoned&&x.position===id);if(dead)cell.classList.add("hit","dead")
+ }}
+function renderHand(state){const mine=me(state);$("hand").innerHTML="";mine.deck.forEach((c,i)=>{if(c.summoned||!c.alive)return;const b=document.createElement("button");b.className="hand-card"+(selectedHand===i?" selected":"")+(c.cost>mine.mana?" disabled":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><h3>${c.name}</h3><div class="small">❤${c.currentHp} ⚔${c.damage}</div>`;b.onclick=()=>{if(selectedAction!=="summon"||c.cost>mine.mana)return;selectedHand=i;selectedArena=null;renderCurrentGame()};$("hand").appendChild(b)})}
+function renderChips(state){const mine=me(state);$("chips").innerHTML="";mine.deck.forEach((c,i)=>{if(!c.summoned)return;const b=document.createElement("button");b.className="chip"+(selectedArena===i?" selected":"")+(!c.alive?" dead":"");b.textContent=`${c.name} ❤${c.currentHp}/${c.hp} ↔${c.movesLeft}`;b.onclick=()=>{if(!c.alive||!["attack","move"].includes(selectedAction))return;selectedArena=i;selectedHand=null;renderCurrentGame()};$("chips").appendChild(b)})}
+function renderLog(state){$("log").innerHTML="";[...(state.log||[])].reverse().forEach(t=>{const li=document.createElement("li");li.textContent=t;$("log").appendChild(li)})}
+function renderSelected(state){const c=selectedHand!==null?me(state).deck[selectedHand]:selectedArena!==null?me(state).deck[selectedArena]:null;$("selectedInfo").innerHTML=c?`<strong>${c.name}</strong><br>❤ ${c.currentHp}/${c.hp} · ⚔ ${c.damage} · ↔ ${c.movesLeft}`:"Nenhuma carta selecionada."}
 
-    current.status="game";
-    current.updatedAt=Date.now();
-    current.state=createInitialState(host,guest);
-    return current;
-  });
+async function submitAction(a){selectedHand=null;selectedArena=null;if(gameMode==="online")await submitOnlineAction(a);else submitOfflineAction(a)}
+async function submitOnlineAction(a){
+ try{const result=await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="game"||!current.state||current.state.turn!==role||current.state.winner)return;const applied=applyAction(current.state,role,a);if(!applied)return;current.state=applied;current.updatedAt=Date.now();if(applied.winner)current.status="finished";return current},{applyLocally:false});
+ if(!result.committed)$("message").textContent="Jogada inválida ou já não era o teu turno."}catch(e){$("message").textContent=firebaseErrorMessage(e)}
+}
+function submitOfflineAction(a){if(!offlineState||offlineLocked)return;const applied=applyAction(offlineState,"host",a);if(!applied){$("message").textContent="Jogada inválida.";return}offlineState=applied;if(offlineState.winner){renderOfflineGame();return}offlineLocked=true;renderOfflineGame();setTimeout(botTurn,600)}
+function applyAction(state,acting,a){
+ const n=structuredClone(state),p=n.players[acting],enemyRole=acting==="host"?"guest":"host",e=n.players[enemyRole];n.marks=[];n.scanMarks=[];
+ if(a.kind==="summon"){const c=p.deck[a.cardIndex];if(!c||c.summoned||!c.alive||c.cost>p.mana||p.deck.some(x=>x.alive&&x.summoned&&x.position===a.pos))return null;c.summoned=true;c.position=a.pos;p.mana-=c.cost;n.log.push(`${p.name} invocou ${c.name}.`)}
+ else if(a.kind==="attack"){const c=p.deck[a.cardIndex];if(!c||!c.alive||!c.summoned)return null;const cells=patternCells(a.r,a.c,c.pattern);if(c.pattern==="scan"){n.scanMarks=cells;const found=e.deck.some(x=>x.alive&&x.summoned&&cells.includes(x.position));n.log.push(`${p.name} usou Scanner: ${found?"atividade detetada":"zona vazia"}.`)}
+ else{let hits=0;cells.forEach(pos=>{const t=e.deck.find(x=>x.alive&&x.summoned&&x.position===pos);n.marks.push({pos,hit:!!t});if(t){t.currentHp-=c.damage+(n.round>NORMAL_TURNS?1:0);t.wasHit=true;hits++;if(t.currentHp<=0){t.currentHp=0;t.alive=false}}});n.log.push(`${p.name} atacou e ${hits?`acertou em ${hits} carta(s)`:"falhou"}.`)}}
+ else if(a.kind==="move"){const c=p.deck[a.cardIndex];if(!c||!c.alive||!c.summoned||!c.wasHit||c.movesLeft<=0||n.round>NORMAL_TURNS)return null;const[r1,c1]=c.position.split("-").map(Number),[r2,c2]=a.pos.split("-").map(Number);if(Math.abs(r1-r2)+Math.abs(c1-c2)!==1||p.deck.some(x=>x.alive&&x.summoned&&x.position===a.pos))return null;c.position=a.pos;c.movesLeft--;c.wasHit=false;n.log.push(`${p.name} moveu ${c.name}.`)}
+ else if(a.kind==="pass"){p.mana=Math.min(p.maxMana,p.mana+1);n.log.push(`${p.name} passou o turno.`)}else return null;
+ const ha=n.players.host.deck.filter(x=>x.alive).length,ga=n.players.guest.deck.filter(x=>x.alive).length;if(!ha)n.winner="guest";else if(!ga)n.winner="host";
+ if(!n.winner){if(acting==="guest"){n.round++;Object.values(n.players).forEach(x=>{x.maxMana=Math.min(10,3+n.round-1);x.mana=Math.min(x.maxMana,x.mana+1)});if(n.round>=REVEAL_TURN)n.reveal=true;n.marks=[];n.scanMarks=[]}n.turn=enemyRole}
+ return n
 }
 
-function cloneCard(id){
-  const card=LIBRARY.find(x=>x.id===id);
-  return {
-    ...card,currentHp:card.hp,movesLeft:card.moves,
-    alive:true,summoned:false,position:null,wasHit:false
-  };
+function startOfflineGame(){
+ const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
 }
-
-function createInitialState(host,guest){
-  return {
-    round:1,
-    turn:"host",
-    winner:null,
-    reveal:false,
-    marks:[],
-    scanMarks:[],
-    players:{
-      host:{name:host.name,mana:3,maxMana:3,deck:host.deck.map(cloneCard)},
-      guest:{name:guest.name,mana:3,maxMana:3,deck:guest.deck.map(cloneCard)}
-    },
-    log:["A partida online começou!"]
-  };
+function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
+function botData(){return{easy:{smart:.1,move:.1,scan:.1},normal:{smart:.5,move:.35,scan:.3},hard:{smart:.78,move:.6,scan:.5},impossible:{smart:.94,move:.8,scan:.7}}[difficulty]}
+function botTurn(){
+ if(!offlineState||offlineState.winner)return;const d=botData(),bot=offlineState.players.guest,alive=bot.deck.filter(c=>c.alive&&c.summoned),hand=bot.deck.filter(c=>c.alive&&!c.summoned&&c.cost<=bot.mana);
+ if(hand.length&&(!alive.length||Math.random()<(personality==="aggressive"?.5:.38))){let card=hand[Math.floor(Math.random()*hand.length)];if(difficulty!=="easy")card=[...hand].sort((a,b)=>(b.damage+b.hp*.4)-(a.damage+a.hp*.4))[0];const used=new Set(alive.map(x=>x.position));let pos;do{pos=`${Math.floor(Math.random()*ROWS)}-${Math.floor(Math.random()*COLS)}`}while(used.has(pos));offlineState=applyAction(offlineState,"guest",{kind:"summon",cardIndex:bot.deck.indexOf(card),pos});finishBotTurn();return}
+ const movable=alive.filter(c=>c.wasHit&&c.movesLeft>0&&offlineState.round<=NORMAL_TURNS);if(movable.length&&Math.random()<d.move){const c=movable[0],[r,col]=c.position.split("-").map(Number),opts=[[r-1,col],[r+1,col],[r,col-1],[r,col+1]].filter(([a,b])=>a>=0&&a<ROWS&&b>=0&&b<COLS&&!alive.some(x=>x.position===`${a}-${b}`));if(opts.length){const q=opts[Math.floor(Math.random()*opts.length)];offlineState=applyAction(offlineState,"guest",{kind:"move",cardIndex:bot.deck.indexOf(c),pos:`${q[0]}-${q[1]}`});finishBotTurn();return}}
+ if(alive.length){let attacker=alive[Math.floor(Math.random()*alive.length)];if(personality==="aggressive")attacker=[...alive].sort((a,b)=>b.damage-a.damage)[0];if(personality==="strategist"&&alive.some(c=>c.pattern==="scan")&&Math.random()<d.scan)attacker=alive.find(c=>c.pattern==="scan");
+ let target={r:Math.floor(Math.random()*ROWS),c:Math.floor(Math.random()*COLS)};if(Math.random()<d.smart){const known=offlineState.players.host.deck.filter(c=>c.alive&&c.summoned&&c.wasHit);if(known.length){const[r,c]=known[0].position.split("-").map(Number);target={r,c}}}
+ offlineState=applyAction(offlineState,"guest",{kind:"attack",cardIndex:bot.deck.indexOf(attacker),r:target.r,c:target.c})}else offlineState=applyAction(offlineState,"guest",{kind:"pass"});
+ finishBotTurn()
 }
+function finishBotTurn(){offlineLocked=false;renderOfflineGame()}
 
-function createBoard(){
-  $("board").innerHTML="";
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
-      const cell=document.createElement("button");
-      cell.className="cell";
-      cell.dataset.r=r;
-      cell.dataset.c=c;
-      cell.onclick=()=>cellClick(r,c);
-      cell.onmouseenter=()=>preview(r,c);
-      cell.onmouseleave=clearPreview;
-      $("board").appendChild(cell);
-    }
-  }
-}
+function preview(r,c){const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if(gameMode==="online"&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
+function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
 
-function currentState(){
-  return roomData?.state||null;
-}
-function me(state=currentState()){
-  return state?.players?.[role];
-}
-function opponentRole(){
-  return role==="host"?"guest":"host";
-}
-function opponent(state=currentState()){
-  return state?.players?.[opponentRole()];
-}
+onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
+$("menuName").textContent=identity.name;createBoard();
 
-function renderGame(){
-  const state=currentState();
-  if(!state)return;
-
-  $("deckPanel").classList.add("hidden");
-  $("playPanel").classList.remove("hidden");
-  $("sidePanel").classList.remove("hidden");
-  $("confirmDeckBtn").classList.add("hidden");
-
-  const mine=me(state);
-  const enemy=opponent(state);
-  const myTurn=state.turn===role&&!state.winner;
-
-  $("manaText").textContent=`${mine.mana}/${mine.maxMana}`;
-  $("myRemaining").textContent=mine.deck.filter(c=>c.alive).length;
-  $("enemyRemaining").textContent=enemy.deck.filter(c=>c.alive).length;
-
-  $("turnBadge").textContent=state.winner
-    ?state.winner===role?"VITÓRIA!":"DERROTA"
-    :myTurn?`TUA VEZ · TURNO ${state.round}`:`VEZ DE ${enemy.name}`;
-
-  $("message").textContent=state.winner
-    ?state.winner===role?"🏆 Venceste a partida!":"💥 Perdeste a partida."
-    :myTurn?"Escolhe uma ação.":"A aguardar a jogada do adversário...";
-
-  document.querySelectorAll(".action").forEach(x=>x.disabled=!myTurn);
-
-  renderBoard(state);
-  renderHand(state);
-  renderChips(state);
-  renderLog(state);
-}
-
-function renderBoard(state){
-  const mine=me(state);
-  const enemy=opponent(state);
-
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
-      const cell=$("board").querySelector(`[data-r="${r}"][data-c="${c}"]`);
-      const id=`${r}-${c}`;
-      cell.className="cell";
-      cell.textContent="";
-
-      const myCard=mine.deck.find(x=>x.alive&&x.summoned&&x.position===id);
-      const enemyCard=enemy.deck.find(x=>x.alive&&x.summoned&&x.position===id);
-
-      if(myCard){
-        cell.classList.add("player");
-        cell.textContent="◆";
-      }
-
-      const mark=(state.marks||[]).find(x=>x.pos===id);
-      if(mark){
-        cell.classList.add(mark.hit?"hit":"miss");
-        cell.textContent=mark.hit?"!":"·";
-      }
-
-      if((state.scanMarks||[]).includes(id)){
-        cell.classList.add("scan");
-      }
-
-      if(enemyCard&&(state.reveal||!enemyCard.alive)){
-        cell.classList.add(enemyCard.alive?"enemy-reveal":"hit");
-        if(!enemyCard.alive)cell.classList.add("dead");
-        cell.textContent=enemyCard.alive?"♟":"";
-      }
-
-      const deadMine=mine.deck.find(x=>!x.alive&&x.summoned&&x.position===id);
-      if(deadMine)cell.classList.add("hit","dead");
-    }
-  }
-}
-
-function renderHand(state){
-  const mine=me(state);
-  $("hand").innerHTML="";
-
-  mine.deck.forEach((card,index)=>{
-    if(card.summoned||!card.alive)return;
-    const button=document.createElement("button");
-    button.className="hand-card"+
-      (selectedHand===index?" selected":"")+
-      (card.cost>mine.mana?" disabled":"");
-    button.innerHTML=`
-      <span class="cost">◈${card.cost}</span>
-      <h3>${card.name}</h3>
-      <div class="small">❤${card.currentHp} ⚔${card.damage}</div>`;
-    button.onclick=()=>{
-      if(selectedAction!=="summon"||card.cost>mine.mana)return;
-      selectedHand=index;
-      selectedArena=null;
-      renderGame();
-    };
-    $("hand").appendChild(button);
-  });
-}
-
-function renderChips(state){
-  const mine=me(state);
-  $("chips").innerHTML="";
-
-  mine.deck.forEach((card,index)=>{
-    if(!card.summoned)return;
-    const button=document.createElement("button");
-    button.className="chip"+
-      (selectedArena===index?" selected":"")+
-      (!card.alive?" dead":"");
-    button.textContent=`${card.name} ❤${card.currentHp}/${card.hp} ↔${card.movesLeft}`;
-    button.onclick=()=>{
-      if(!card.alive||!["attack","move"].includes(selectedAction))return;
-      selectedArena=index;
-      selectedHand=null;
-      renderGame();
-    };
-    $("chips").appendChild(button);
-  });
-}
-
-function renderLog(state){
-  $("log").innerHTML="";
-  [...(state.log||[])].reverse().forEach(text=>{
-    const item=document.createElement("li");
-    item.textContent=text;
-    $("log").appendChild(item);
-  });
-}
-
-function setAction(action){
-  const state=currentState();
-  if(!state||state.turn!==role||state.winner)return;
-  selectedAction=action;
-  selectedHand=null;
-  selectedArena=null;
-  document.querySelectorAll(".action").forEach(x=>
-    x.classList.toggle("selected",x.dataset.action===action)
-  );
-  if(action==="pass")submitAction({kind:"pass"});
-  else renderGame();
-}
-
-document.querySelectorAll(".action").forEach(button=>{
-  button.onclick=()=>setAction(button.dataset.action);
-});
-
-function cellClick(r,c){
-  const state=currentState();
-  if(!state||state.turn!==role||state.winner)return;
-  const pos=`${r}-${c}`;
-
-  if(selectedAction==="summon"&&selectedHand!==null){
-    submitAction({kind:"summon",cardIndex:selectedHand,pos});
-  }
-  if(selectedAction==="attack"&&selectedArena!==null){
-    submitAction({kind:"attack",cardIndex:selectedArena,r,c});
-  }
-  if(selectedAction==="move"&&selectedArena!==null){
-    submitAction({kind:"move",cardIndex:selectedArena,pos});
-  }
-}
-
-function patternCells(r,c,pattern){
-  const cells=[];
-  const add=(rr,cc)=>{
-    if(rr>=0&&rr<ROWS&&cc>=0&&cc<COLS)cells.push(`${rr}-${cc}`);
-  };
-  if(pattern==="horizontal")[-1,0,1].forEach(o=>add(r,c+o));
-  if(pattern==="vertical")[-1,0,1].forEach(o=>add(r+o,c));
-  if(pattern==="diagonal")[-1,0,1].forEach(o=>add(r+o,c+o));
-  if(pattern==="cross")[[0,0],[-1,0],[1,0],[0,-1],[0,1]].forEach(([a,b])=>add(r+a,c+b));
-  if(pattern==="scan"){
-    for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)add(r+a,c+b);
-  }
-  return [...new Set(cells)];
-}
-
-async function submitAction(action){
-  selectedHand=null;
-  selectedArena=null;
-  const roomRef=ref(db,roomPath(roomCode));
-
-  try{
-    const result=await runTransaction(roomRef,current=>{
-      if(!current||current.status!=="game"||!current.state)return;
-      if(current.state.turn!==role||current.state.winner)return;
-
-      const applied=applyAction(current.state,role,action);
-      if(!applied)return;
-
-      current.state=applied;
-      current.updatedAt=Date.now();
-      if(applied.winner)current.status="finished";
-      return current;
-    },{applyLocally:false});
-
-    if(!result.committed){
-      $("message").textContent="A jogada não foi válida ou já não era o teu turno.";
-    }
-  }catch(error){
-    $("message").textContent=firebaseErrorMessage(error);
-  }
-}
-
-function applyAction(state,actingRole,action){
-  const next=structuredClone(state);
-  const player=next.players[actingRole];
-  const enemyRole=actingRole==="host"?"guest":"host";
-  const enemy=next.players[enemyRole];
-
-  next.marks=[];
-  next.scanMarks=[];
-
-  if(action.kind==="summon"){
-    const card=player.deck[action.cardIndex];
-    if(!card||card.summoned||!card.alive||card.cost>player.mana)return null;
-    if(player.deck.some(x=>x.alive&&x.summoned&&x.position===action.pos))return null;
-    card.summoned=true;
-    card.position=action.pos;
-    player.mana-=card.cost;
-    next.log.push(`${player.name} invocou ${card.name}.`);
-  }
-  else if(action.kind==="attack"){
-    const card=player.deck[action.cardIndex];
-    if(!card||!card.alive||!card.summoned)return null;
-    const cells=patternCells(action.r,action.c,card.pattern);
-
-    if(card.pattern==="scan"){
-      next.scanMarks=cells;
-      const found=enemy.deck.some(x=>x.alive&&x.summoned&&cells.includes(x.position));
-      next.log.push(`${player.name} usou Scanner: ${found?"atividade detetada":"zona vazia"}.`);
-    }else{
-      let hits=0;
-      cells.forEach(pos=>{
-        const target=enemy.deck.find(x=>x.alive&&x.summoned&&x.position===pos);
-        next.marks.push({pos,hit:!!target});
-        if(target){
-          target.currentHp-=card.damage+(next.round>NORMAL_TURNS?1:0);
-          target.wasHit=true;
-          hits++;
-          if(target.currentHp<=0){
-            target.currentHp=0;
-            target.alive=false;
-          }
-        }
-      });
-      next.log.push(`${player.name} atacou e ${hits?`acertou em ${hits} carta(s)`:"falhou"}.`);
-    }
-  }
-  else if(action.kind==="move"){
-    const card=player.deck[action.cardIndex];
-    if(!card||!card.alive||!card.summoned||!card.wasHit||card.movesLeft<=0||next.round>NORMAL_TURNS)return null;
-    const [r1,c1]=card.position.split("-").map(Number);
-    const [r2,c2]=action.pos.split("-").map(Number);
-    if(Math.abs(r1-r2)+Math.abs(c1-c2)!==1)return null;
-    if(player.deck.some(x=>x.alive&&x.summoned&&x.position===action.pos))return null;
-    card.position=action.pos;
-    card.movesLeft--;
-    card.wasHit=false;
-    next.log.push(`${player.name} moveu ${card.name}.`);
-  }
-  else if(action.kind==="pass"){
-    player.mana=Math.min(player.maxMana,player.mana+1);
-    next.log.push(`${player.name} passou o turno.`);
-  }
-  else return null;
-
-  const hostAlive=next.players.host.deck.filter(x=>x.alive).length;
-  const guestAlive=next.players.guest.deck.filter(x=>x.alive).length;
-
-  if(!hostAlive)next.winner="guest";
-  else if(!guestAlive)next.winner="host";
-
-  if(!next.winner){
-    if(actingRole==="guest"){
-      next.round++;
-      Object.values(next.players).forEach(p=>{
-        p.maxMana=Math.min(10,3+next.round-1);
-        p.mana=Math.min(p.maxMana,p.mana+1);
-      });
-      if(next.round>=REVEAL_TURN)next.reveal=true;
-    }
-    next.turn=enemyRole;
-  }
-
-  return next;
-}
-
-function preview(r,c){
-  const state=currentState();
-  if(!state||state.turn!==role||selectedAction!=="attack"||selectedArena===null)return;
-  clearPreview();
-  const card=me(state).deck[selectedArena];
-  patternCells(r,c,card.pattern).forEach(pos=>{
-    const [rr,cc]=pos.split("-");
-    $("board").querySelector(`[data-r="${rr}"][data-c="${cc}"]`)?.classList.add("preview");
-  });
-}
-
-function clearPreview(){
-  document.querySelectorAll(".cell.preview").forEach(x=>x.classList.remove("preview"));
-}
-
-async function leaveRoom(removeIfHost=true){
-  if(roomListener){
-    off(roomListener);
-    roomListener=null;
-  }
-
-  if(roomCode&&role){
-    try{
-      if(role==="host"&&removeIfHost&&roomData?.status==="lobby"){
-        await set(ref(db,roomPath(roomCode)),null);
-      }else{
-        await update(ref(db,playerPath(role)),{
-          online:false,lastSeen:Date.now()
-        });
-      }
-    }catch(error){
-      console.warn(error);
-    }
-  }
-
-  roomCode="";
-  role=null;
-  roomData=null;
-  chosen=[];
-  selectedHand=null;
-  selectedArena=null;
-}
-
-function watchFirebaseConnection(){
-  connectedListener=ref(db,".info/connected");
-  onValue(connectedListener,snapshot=>{
-    const online=snapshot.val()===true;
-    $("firebaseLight").classList.toggle("ok",online);
-    $("firebaseStatus").textContent=online?"Firebase ligado":"Firebase desligado";
-  });
-}
-
-$("menuName").textContent=identity.name;
-createBoard();
-watchFirebaseConnection();
-
-window.showScreen=showScreen;
-window.newGhost=newGhost;
-window.showJoinForm=showJoinForm;
-window.createRoom=createRoom;
-window.joinRoom=joinRoom;
-window.leaveRoom=leaveRoom;
-window.openDeckSelection=openDeckSelection;
+window.showScreen=showScreen;window.newGhost=newGhost;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
