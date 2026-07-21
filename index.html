@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.6 The Big Update</title>
+<title>Arena Secreta — Beta 0.7 The Login in Chaos</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -65,8 +65,22 @@ button,input,select{font:inherit}
 .chip.selected{border-color:var(--gold)}.chip.dead{opacity:.4;text-decoration:line-through}
 .log{max-height:160px;overflow:auto;color:var(--muted);font-size:13px}
 .end-card{text-align:center;padding:25px}.end-card h2{font-size:32px;margin:0 0 10px}
+
+.account-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.auth-card{background:var(--panel3);border-radius:15px;padding:16px}
+.auth-card h3{margin-top:0}
+.profile-card{background:var(--panel3);border-radius:17px;padding:18px}
+.profile-name{font-size:30px;font-weight:900;color:var(--accent);margin-bottom:4px}
+.profile-email{color:var(--muted);font-size:13px;margin-bottom:14px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.profile-stat{background:var(--panel2);border-radius:12px;padding:12px;text-align:center}
+.profile-stat strong{display:block;font-size:22px;color:var(--gold)}
+.auth-message{min-height:22px;color:var(--gold);margin-top:10px}
+.menu-user-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.google-btn{background:#fff;color:#222}
+
 @media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
-@media(max-width:620px){.wrap{padding:8px}.grid2{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
+@media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
 </style>
 </head>
 <body>
@@ -75,17 +89,73 @@ button,input,select{font:inherit}
 <div class="hero"><div class="hero-card">
  <h1 class="logo">ARENA<br>SECRETA</h1>
  <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.6 — THE BIG UPDATE</div>
- <div class="identity"><strong id="menuName">Ghost0001</strong><div class="small">Identidade temporária neste dispositivo</div></div>
+ <div class="version">BETA 0.7 — THE LOGIN IN CHAOS</div>
+ <div class="identity">
+  <strong id="menuName">Ghost0001</strong>
+  <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
+  <div class="menu-user-row">
+   <button id="profileMenuBtn" class="btn secondary hidden" onclick="showProfile()">PERFIL</button>
+   <button id="logoutMenuBtn" class="btn danger hidden" onclick="logoutAccount()">TERMINAR SESSÃO</button>
+  </div>
+ </div>
  <div class="menu">
   <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button>
   <button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
-  <button class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
+  <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button>
+  <button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Offline completo + Online Firebase + cancelamento por abandono</p>
+ <p class="small">Contas Firebase + perfil + offline + online</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
+
+
+<section id="accountScreen" class="screen"><div class="wrap">
+<div class="panel">
+ <div class="header"><h2>Conta</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <div class="account-grid">
+  <div class="auth-card">
+   <h3>Criar conta</h3>
+   <div class="form">
+    <input id="registerNickname" class="input" maxlength="16" placeholder="Nickname único">
+    <input id="registerEmail" class="input" type="email" placeholder="Email">
+    <input id="registerPassword" class="input" type="password" placeholder="Palavra-passe (mín. 6)">
+    <button class="btn" onclick="registerAccount()">REGISTAR</button>
+   </div>
+  </div>
+  <div class="auth-card">
+   <h3>Iniciar sessão</h3>
+   <div class="form">
+    <input id="loginEmail" class="input" type="email" placeholder="Email">
+    <input id="loginPassword" class="input" type="password" placeholder="Palavra-passe">
+    <button class="btn" onclick="loginAccount()">ENTRAR</button>
+    <button class="btn google-btn" onclick="loginGoogle()">ENTRAR COM GOOGLE</button>
+    <button class="btn secondary" onclick="resetPassword()">RECUPERAR PALAVRA-PASSE</button>
+   </div>
+  </div>
+ </div>
+ <p id="authMessage" class="auth-message"></p>
+</div>
+</div></section>
+
+<section id="profileScreen" class="screen"><div class="wrap">
+<div class="panel">
+ <div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <div class="profile-card">
+  <div id="profileName" class="profile-name">Jogador</div>
+  <div id="profileEmail" class="profile-email"></div>
+  <div class="profile-stats">
+   <div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div>
+   <div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div>
+   <div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div>
+  </div>
+  <div style="margin-top:14px">
+   <div class="small">Conta criada em:</div>
+   <strong id="profileCreatedAt">—</strong>
+  </div>
+ </div>
+</div>
+</div></section>
 
 <section id="offlineSetupScreen" class="screen"><div class="wrap">
 <div class="panel">
@@ -173,6 +243,11 @@ button,input,select{font:inherit}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import {getDatabase,ref,set,get,update,onValue,off,runTransaction,onDisconnect,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import {
+ getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
+ signOut,onAuthStateChanged,sendPasswordResetEmail,GoogleAuthProvider,
+ signInWithPopup,updateProfile,deleteUser
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyDfwXW82rHL0kqikV5yG8D9AUMG-1G2Bvw",
@@ -184,7 +259,7 @@ const firebaseConfig={
  appId:"1:510749788258:web:1ecd38657255066cafe93b",
  measurementId:"G-MZ2H1EP75R"
 };
-const app=initializeApp(firebaseConfig),db=getDatabase(app);
+const app=initializeApp(firebaseConfig),db=getDatabase(app),auth=getAuth(app);
 const ROWS=5,COLS=15,DECK_SIZE=5,NORMAL_TURNS=15,REVEAL_TURN=20;
 const LIBRARY=[
 {id:"squire",name:"Escudeiro",rarity:"Comum",hp:4,damage:1,moves:3,cost:1,pattern:"horizontal"},
@@ -198,13 +273,186 @@ const LIBRARY=[
 const $=id=>document.getElementById(id);
 const clientId=sessionStorage.getItem("arenaClientId")||crypto.randomUUID();sessionStorage.setItem("arenaClientId",clientId);
 
-let identity=getIdentity(),gameMode=null,difficulty="easy",personality="balanced";
+let identity=getGhostIdentity(),currentUser=null,currentProfile=null;
+let gameMode=null,difficulty="easy",personality="balanced";
 let roomCode="",role=null,roomData=null,roomListener=null,presenceDisconnect=null,connected=true;
 let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
-let offlineState=null,offlineLocked=false,botKnown=[];
+let offlineState=null,offlineLocked=false,botKnown=[],lastRecordedWinner=null;
 
-function getIdentity(){let g=localStorage.getItem("arenaGhost");if(!g){g="Ghost"+String(Math.floor(Math.random()*9999)+1).padStart(4,"0");localStorage.setItem("arenaGhost",g)}return{name:g}}
-function newGhost(){localStorage.removeItem("arenaGhost");identity=getIdentity();$("menuName").textContent=identity.name}
+function getGhostIdentity(){
+ let g=localStorage.getItem("arenaGhost");
+ if(!g){
+  g="Ghost"+String(Math.floor(Math.random()*9999)+1).padStart(4,"0");
+  localStorage.setItem("arenaGhost",g);
+ }
+ return{name:g,type:"ghost"};
+}
+function newGhost(){
+ if(currentUser)return;
+ localStorage.removeItem("arenaGhost");
+ identity=getGhostIdentity();
+ refreshAccountUI();
+}
+function normalizeNickname(value){
+ return value.trim().toLowerCase().replace(/[^a-z0-9_]/g,"");
+}
+function authErrorMessage(error){
+ const code=error?.code||"";
+ const map={
+  "auth/email-already-in-use":"Esse email já está registado.",
+  "auth/invalid-email":"Email inválido.",
+  "auth/weak-password":"A palavra-passe deve ter pelo menos 6 caracteres.",
+  "auth/invalid-credential":"Email ou palavra-passe incorretos.",
+  "auth/popup-closed-by-user":"A janela do Google foi fechada.",
+  "auth/too-many-requests":"Demasiadas tentativas. Tenta mais tarde."
+ };
+ return map[code]||("Erro de autenticação: "+code);
+}
+async function registerAccount(){
+ const nickname=$("registerNickname").value.trim();
+ const nicknameKey=normalizeNickname(nickname);
+ const email=$("registerEmail").value.trim();
+ const password=$("registerPassword").value;
+
+ if(!/^[A-Za-z0-9_]{3,16}$/.test(nickname)){
+  $("authMessage").textContent="O nickname deve ter 3–16 letras, números ou _.";
+  return;
+ }
+ if(password.length<6){
+  $("authMessage").textContent="A palavra-passe precisa de pelo menos 6 caracteres.";
+  return;
+ }
+
+ $("authMessage").textContent="A criar conta...";
+ let credential=null;
+ try{
+  const nameRef=ref(db,`usernames/${nicknameKey}`);
+  const reserved=await runTransaction(nameRef,current=>{
+   if(current!==null)return;
+   return{reserved:true,createdAt:Date.now()};
+  },{applyLocally:false});
+
+  if(!reserved.committed){
+   $("authMessage").textContent="Esse nickname já está a ser usado.";
+   return;
+  }
+
+  try{
+   credential=await createUserWithEmailAndPassword(auth,email,password);
+   await updateProfile(credential.user,{displayName:nickname});
+   await set(ref(db,`profiles/${credential.user.uid}`),{
+    uid:credential.user.uid,
+    username:nickname,
+    usernameKey:nicknameKey,
+    email,
+    wins:0,
+    losses:0,
+    createdAt:Date.now(),
+    lastMatch:null
+   });
+   await set(nameRef,{uid:credential.user.uid,username:nickname});
+   $("authMessage").textContent="Conta criada com sucesso!";
+   showScreen("menuScreen");
+  }catch(inner){
+   await set(nameRef,null);
+   if(credential?.user)try{await deleteUser(credential.user)}catch(e){}
+   throw inner;
+  }
+ }catch(error){
+  $("authMessage").textContent=authErrorMessage(error);
+ }
+}
+async function loginAccount(){
+ try{
+  $("authMessage").textContent="A iniciar sessão...";
+  await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value);
+  $("authMessage").textContent="Sessão iniciada!";
+  showScreen("menuScreen");
+ }catch(error){
+  $("authMessage").textContent=authErrorMessage(error);
+ }
+}
+async function loginGoogle(){
+ try{
+  $("authMessage").textContent="A abrir o Google...";
+  const result=await signInWithPopup(auth,new GoogleAuthProvider());
+  const profileRef=ref(db,`profiles/${result.user.uid}`);
+  const snap=await get(profileRef);
+
+  if(!snap.exists()){
+   const base=(result.user.displayName||result.user.email.split("@")[0]).replace(/[^A-Za-z0-9_]/g,"").slice(0,12)||"Player";
+   let nickname=base,nicknameKey=normalizeNickname(base),n=1;
+   while((await get(ref(db,`usernames/${nicknameKey}`))).exists()){
+    nickname=(base+String(n++)).slice(0,16);
+    nicknameKey=normalizeNickname(nickname);
+   }
+   await set(ref(db,`usernames/${nicknameKey}`),{uid:result.user.uid,username:nickname});
+   await set(profileRef,{
+    uid:result.user.uid,username:nickname,usernameKey:nicknameKey,
+    email:result.user.email||"",wins:0,losses:0,createdAt:Date.now(),lastMatch:null
+   });
+   await updateProfile(result.user,{displayName:nickname});
+  }
+  $("authMessage").textContent="Sessão Google iniciada!";
+  showScreen("menuScreen");
+ }catch(error){
+  $("authMessage").textContent=authErrorMessage(error);
+ }
+}
+async function resetPassword(){
+ const email=$("loginEmail").value.trim()||$("registerEmail").value.trim();
+ if(!email){$("authMessage").textContent="Escreve primeiro o teu email.";return}
+ try{
+  await sendPasswordResetEmail(auth,email);
+  $("authMessage").textContent="Email de recuperação enviado.";
+ }catch(error){
+  $("authMessage").textContent=authErrorMessage(error);
+ }
+}
+async function logoutAccount(){
+ await signOut(auth);
+ showScreen("menuScreen");
+}
+async function loadProfile(user){
+ if(!user){currentProfile=null;return}
+ const snap=await get(ref(db,`profiles/${user.uid}`));
+ currentProfile=snap.exists()?snap.val():null;
+}
+function refreshAccountUI(){
+ const registered=!!currentUser;
+ identity=registered?{name:currentProfile?.username||currentUser.displayName||"Player",type:"account"}:getGhostIdentity();
+ $("menuName").textContent=identity.name;
+ $("menuAccountType").textContent=registered?(currentUser.email||"Conta Firebase"):"Identidade temporária neste dispositivo";
+ $("profileMenuBtn").classList.toggle("hidden",!registered);
+ $("logoutMenuBtn").classList.toggle("hidden",!registered);
+ $("accountMenuBtn").classList.toggle("hidden",registered);
+ $("newGhostBtn").classList.toggle("hidden",registered);
+}
+async function showProfile(){
+ if(!currentUser||!currentProfile)return;
+ $("profileName").textContent=currentProfile.username;
+ $("profileEmail").textContent=currentProfile.email||currentUser.email||"";
+ const wins=currentProfile.wins||0,losses=currentProfile.losses||0,total=wins+losses;
+ $("profileWins").textContent=wins;
+ $("profileLosses").textContent=losses;
+ $("profileWinrate").textContent=total?Math.round(wins/total*100)+"%":"0%";
+ $("profileCreatedAt").textContent=currentProfile.createdAt?new Date(currentProfile.createdAt).toLocaleDateString("pt-PT"):"—";
+ showScreen("profileScreen");
+}
+async function recordMatchResult(win,opponentName,mode){
+ if(!currentUser)return;
+ const pRef=ref(db,`profiles/${currentUser.uid}`);
+ await runTransaction(pRef,current=>{
+  if(!current)return current;
+  current.wins=(current.wins||0)+(win?1:0);
+  current.losses=(current.losses||0)+(win?0:1);
+  current.lastMatch={result:win?"win":"loss",opponent:opponentName||"Desconhecido",mode,date:Date.now()};
+  return current;
+ });
+ await loadProfile(currentUser);
+ refreshAccountUI();
+}
+
 function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
 function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
 setupOptionGroup("difficultyOptions",v=>difficulty=v);setupOptionGroup("personalityOptions",v=>personality=v);
@@ -273,6 +521,7 @@ function quitCurrentMatch(){if(gameMode==="online")safeLeaveRoom();else{gameMode
 
 function startOfflineDeck(){gameMode="offline";offlineState=null;openDeckSelection("offline")}
 function openDeckSelection(mode){
+ lastRecordedWinner=null;
  gameMode=mode;chosen=[];selectedHand=null;selectedArena=null;$("deckPanel").classList.remove("hidden");$("playPanel").classList.add("hidden");$("sidePanel").classList.add("hidden");
  $("confirmDeckBtn").classList.remove("hidden");$("confirmDeckBtn").disabled=true;$("turnBadge").textContent="ESCOLHA DO BARALHO";$("message").textContent="Escolhe cinco cartas.";renderDeck();createBoard();showScreen("gameScreen")
 }
@@ -308,7 +557,12 @@ function renderCurrentGame(){gameMode==="online"?renderOnlineGame():renderOfflin
 function renderOnlineGame(){renderGame(roomData.state,roomData.state.turn===role&&!roomData.state.winner)}
 function renderOfflineGame(){renderGame(offlineState,!offlineLocked&&!offlineState?.winner)}
 function renderGame(state,canAct){
- if(!state)return;$("deckPanel").classList.add("hidden");$("playPanel").classList.remove("hidden");$("sidePanel").classList.remove("hidden");$("confirmDeckBtn").classList.add("hidden");
+ if(!state)return;
+ if(state.winner&&lastRecordedWinner!==state.winner){
+  lastRecordedWinner=state.winner;
+  const won=state.winner===myRole();
+  recordMatchResult(won,opponent(state)?.name,gameMode).catch(console.warn);
+ }$("deckPanel").classList.add("hidden");$("playPanel").classList.remove("hidden");$("sidePanel").classList.remove("hidden");$("confirmDeckBtn").classList.add("hidden");
  const mine=me(state),enemy=opponent(state);$("manaText").textContent=`${mine.mana}/${mine.maxMana}`;$("myRemaining").textContent=mine.deck.filter(c=>c.alive).length;$("enemyRemaining").textContent=enemy.deck.filter(c=>c.alive).length;
  $("turnBadge").textContent=state.winner?(state.winner===myRole()?"VITÓRIA!":"DERROTA"):canAct?`TUA VEZ · TURNO ${state.round}`:`VEZ DE ${enemy.name}`;
  $("message").textContent=state.winner?(state.winner===myRole()?"🏆 Venceste!":"💥 Perdeste."):canAct?"Escolhe uma ação.":"A aguardar a jogada do adversário...";
@@ -344,6 +598,7 @@ function applyAction(state,acting,a){
 }
 
 function startOfflineGame(){
+ lastRecordedWinner=null;
  const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
 }
 function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
@@ -362,10 +617,15 @@ function finishBotTurn(){offlineLocked=false;renderOfflineGame()}
 function preview(r,c){const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if(gameMode==="online"&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
 function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
 
+onAuthStateChanged(auth,async user=>{
+ currentUser=user;
+ await loadProfile(user);
+ refreshAccountUI();
+});
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
-$("menuName").textContent=identity.name;createBoard();
+refreshAccountUI();createBoard();
 
-window.showScreen=showScreen;window.newGhost=newGhost;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.showScreen=showScreen;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
