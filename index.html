@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.9.2 Medieval Arena</title>
+<title>Arena Secreta — Beta 0.9.4 Audio Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -136,6 +136,29 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
 .card.selected,.hand-card.selected,.chip.selected,.option-card.selected,.collection-category.selected{border-color:#e0b85f}.turn{background:linear-gradient(#d8ad58,#aa7931);color:#21160d;border:1px solid #f1d183}
 .card-symbol{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-right:7px;border-radius:50%;background:#17100c;border:1px solid #d8ad58;color:#f4d484;font-size:18px;vertical-align:middle}
 .board-symbol{font-size:clamp(12px,1.7vw,22px);line-height:1;text-shadow:0 1px 2px #000}.preparation-banner{margin-bottom:10px;padding:9px 12px;border-radius:10px;background:rgba(216,173,88,.12);border:1px solid rgba(216,173,88,.4);color:#e8c56f;text-align:center;font-weight:900}
+
+/* 0.9.3 — Battle Flow */
+.game-top-actions{display:flex;align-items:center;justify-content:center;gap:8px}
+.gear-btn{width:46px;height:46px;border-radius:50%;padding:0;font-size:23px;line-height:1}
+.settings-modal,.match-end-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,3,2,.78);backdrop-filter:blur(5px)}
+.settings-modal.hidden,.match-end-overlay.hidden{display:none!important}
+.settings-modal-card{width:min(620px,100%);max-height:90vh;overflow:auto;background:linear-gradient(145deg,#352519,#1b120d);border:2px ridge #8a6638;border-radius:20px;padding:18px;box-shadow:0 28px 90px #000}
+.end-result-card{width:min(620px,100%);text-align:center;background:linear-gradient(145deg,#352519,#17100c);border:2px ridge #b88b45;border-radius:24px;padding:26px;box-shadow:0 30px 100px #000;animation:endCardIn .65s cubic-bezier(.2,.8,.2,1)}
+.end-result-card.victory{box-shadow:0 0 45px rgba(216,173,88,.45),0 30px 100px #000}
+.end-result-card.defeat{border-color:#873943}
+.end-title{font-size:clamp(43px,9vw,80px);margin:0;letter-spacing:4px;text-shadow:0 4px #000}
+.end-title.victory{color:#efd079;animation:victoryGlow 1.3s infinite alternate}
+.end-title.defeat{color:#cf7077}
+.end-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.end-summary div{background:#21160f;border:1px solid rgba(216,173,88,.25);border-radius:12px;padding:12px}
+.end-summary strong{display:block;font-size:22px;color:#e6c271}
+.end-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.forfeit-note{color:#dca1a5;font-weight:900}
+@keyframes endCardIn{from{opacity:0;transform:scale(.72) translateY(30px)}to{opacity:1;transform:none}}
+@keyframes victoryGlow{from{text-shadow:0 4px #000,0 0 8px #d8ad58}to{text-shadow:0 4px #000,0 0 32px #ffe097}}
+@media(max-width:620px){.end-summary{grid-template-columns:1fr}.gear-btn{width:40px;height:40px}}
+
+.audio-status{position:fixed;left:12px;bottom:12px;z-index:1500;background:rgba(23,16,12,.92);border:1px solid rgba(216,173,88,.35);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px;display:none}.audio-status.show{display:block}
 </style>
 </head>
 <body>
@@ -144,7 +167,7 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
 <div class="hero"><div class="hero-card">
  <h1 class="logo">ARENA<br>SECRETA</h1>
  <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.9.2 — MEDIEVAL ARENA</div>
+ <div class="version">BETA 0.9.4 — AUDIO FIX</div>
  <div class="identity">
   <strong id="menuName">Ghost0001</strong>
   <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
@@ -158,7 +181,7 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
   <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
   <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Arena medieval + preparação automática + símbolos únicos</p>
+ <p class="small">Áudio desbloqueado + música de menu e batalha</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
@@ -299,7 +322,7 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
 <section id="gameScreen" class="screen"><div class="wrap">
 <div class="panel topbar">
  <div class="stat">Mana<strong id="manaText">3/3</strong></div>
- <div id="turnBadge" class="turn">ESCOLHA DO BARALHO</div>
+ <div class="game-top-actions"><div id="turnBadge" class="turn">ESCOLHA DO BARALHO</div><button class="btn secondary gear-btn" onclick="openGameplaySettings()" title="Definições">⚙</button></div>
  <div class="stat" style="text-align:right">Cartas<strong><span id="myRemaining">5</span> / <span id="enemyRemaining">5</span></strong></div>
 </div>
 <div class="panel">
@@ -314,7 +337,7 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
     <button class="action" data-action="pass">Passar</button>
    </div>
    <div id="selectedInfo" class="selected-info small">Nenhuma carta selecionada.</div>
-   <button class="btn danger" style="width:100%;margin-top:10px" onclick="quitCurrentMatch()">Sair da partida</button>
+   <button id="quitMatchBtn" class="btn danger" style="width:100%;margin-top:10px" onclick="quitCurrentMatch()">Sair da partida</button>
   </aside>
  </div>
  <div style="margin-top:12px"><button id="confirmDeckBtn" class="btn" disabled>Confirmar baralho</button></div>
@@ -323,6 +346,44 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
 <div id="playPanel" class="panel hidden"><h3>Cartas na mão</h3><div id="hand" class="hand"></div><h3>Cartas na arena</h3><div id="chips" class="chips"></div></div>
 <div class="panel"><h3>Histórico</h3><ol id="log" class="log"></ol></div>
 </div></section>
+
+
+<div id="gameSettingsModal" class="settings-modal hidden">
+ <div class="settings-modal-card">
+  <div class="header"><h2>Definições da partida</h2><button class="btn danger" onclick="closeGameplaySettings()">Fechar</button></div>
+  <div class="settings-list">
+   <div class="setting-row"><div><label>Animações</label></div><select id="gameSettingAnimations" class="setting-control"><option value="on">Ligadas</option><option value="reduced">Reduzidas</option><option value="off">Desligadas</option></select></div>
+   <div class="setting-row"><div><label>Som</label></div><input id="gameSettingSound" class="setting-check" type="checkbox"></div>
+   <div class="setting-row"><div><label>Volume dos efeitos</label></div><input id="gameSettingSoundVolume" class="setting-control" type="range" min="0" max="100" step="5"></div>
+   <div class="setting-row"><div><label>Música</label></div><input id="gameSettingMusic" class="setting-check" type="checkbox"></div>
+   <div class="setting-row"><div><label>Volume da música</label></div><input id="gameSettingMusicVolume" class="setting-control" type="range" min="0" max="100" step="5"></div>
+   <div class="setting-row"><div><label>Pré-visualização do ataque</label></div><input id="gameSettingAttackPreview" class="setting-check" type="checkbox"></div>
+   <div class="setting-row"><div><label>Vibração</label></div><input id="gameSettingVibration" class="setting-check" type="checkbox"></div>
+  </div>
+  <button class="btn" style="width:100%;margin-top:12px" onclick="saveGameplaySettings()">Guardar</button>
+ </div>
+</div>
+
+<div id="matchEndOverlay" class="match-end-overlay hidden">
+ <div id="endResultCard" class="end-result-card">
+  <h1 id="endTitle" class="end-title">VITÓRIA</h1>
+  <p id="endSubtitle" class="notice"></p>
+  <div class="end-summary">
+   <div><strong id="endTurns">0</strong>Turnos</div>
+   <div><strong id="endCards">0–0</strong>Cartas vivas</div>
+   <div><strong id="endReward">0</strong>Moedas</div>
+  </div>
+  <p id="endForfeitNote" class="forfeit-note hidden"></p>
+  <div class="end-buttons">
+   <button class="btn" onclick="returnAfterMatch('main')">Menu principal</button>
+   <button id="returnRankedBtn" class="btn ranked-btn hidden" onclick="returnAfterMatch('ranked')">Menu Ranked</button>
+  </div>
+ </div>
+</div>
+
+<div id="audioStatus" class="audio-status">Clica uma vez para ativar a música</div><audio id="menuMusic" loop preload="auto" src="./menu-theme.mp3"></audio>
+<audio id="battleMusic" loop preload="auto" src="./battle-theme.mp3"></audio>
+<audio id="victorySound" preload="auto" src="./victory.mp3"></audio>
 
 <section id="cancelledScreen" class="screen"><div class="hero">
 <div class="hero-card end-card">
@@ -406,6 +467,7 @@ let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
 let preparationOpenedForRoom=null,startingGame=false;
 let offlineState=null,offlineLocked=false,botKnown=[],lastRecordedWinner=null;
 let rankedQueueRef=null,rankedQueueRootRef=null,rankedSearchStartedAt=0,rankedSearchTimer=null,rankedDisconnect=null,rankedMatchId=null,pendingPromotion=null;
+let endOverlayShownFor=null,lastScreenId="menuScreen",rankedForfeitProcessing=false;
 
 function getGhostIdentity(){
  let g=localStorage.getItem("arenaGhost");
@@ -582,7 +644,7 @@ async function recordMatchResult(win,opponentName,mode){
  if(mode==="ranked"&&win&&oldRank&&newRank&&oldRank.name!==newRank.name){pendingPromotion={oldRank:oldRank.name,newRank:newRank.name,trophyDelta};setTimeout(showPromotion,700)}
 }
 
-function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
+function showScreen(id){lastScreenId=id;document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);updateBackgroundMusic(id)}
 function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
 setupOptionGroup("difficultyOptions",v=>difficulty=v);setupOptionGroup("personalityOptions",v=>personality=v);
 function randomCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join("")}
@@ -620,13 +682,16 @@ function listenRoom(){
   const previous=roomData;roomData=s.val();renderRoom();
   if(roomData.status==="cancelled"){showCancelled(roomData.cancelReason||"O outro jogador abandonou a partida.");return}
   const other=role==="host"?roomData.players?.guest:roomData.players?.host;
-  if(previous&&["lobby","game"].includes(previous.status)&&other&&other.online===false&&roomData.status!=="finished"){requestCancelRoom(`${other.name||"O outro jogador"} abandonou a partida.`);return}
+  if(previous&&["lobby","game"].includes(previous.status)&&other&&other.online===false&&!["finished","forfeit"].includes(roomData.status)){
+   if(gameMode==="ranked"){await settleRankedForfeit(enemyRole());return}
+   requestCancelRoom(`${other.name||"O outro jogador"} abandonou a partida.`);return
+  }
   const h=roomData.players?.host,g=roomData.players?.guest;
   if(roomData.status==="lobby"&&h&&g){
    if(preparationOpenedForRoom!==roomCode){preparationOpenedForRoom=roomCode;openDeckSelection(gameMode)}
    if(h.ready&&g.ready&&h.deck&&g.deck&&!startingGame){startingGame=true;try{await tryStartOnlineGame()}finally{startingGame=false}}
   }
-  if(["game","finished"].includes(roomData.status)&&roomData.state){preparationOpenedForRoom=roomCode;showScreen("gameScreen");renderOnlineGame()}
+  if(["game","finished","forfeit"].includes(roomData.status)&&roomData.state){preparationOpenedForRoom=roomCode;showScreen("gameScreen");renderOnlineGame()}
  },e=>{$("lobbyStatus").textContent=firebaseErrorMessage(e)})
 }
 function renderRoom(){
@@ -638,8 +703,74 @@ function renderRoom(){
 async function requestCancelRoom(reason){
  if(!roomCode)return;try{await update(ref(db,roomPath(roomCode)),{status:"cancelled",cancelReason:reason,cancelledAt:Date.now(),cancelledBy:role})}catch(e){console.warn(e)}
 }
+async function settleRankedForfeit(leaverRole){
+ if(rankedForfeitProcessing||!roomCode||gameMode!=="ranked")return;
+ rankedForfeitProcessing=true;
+ try{
+  const roomRef=ref(db,roomPath(roomCode));
+  const result=await runTransaction(roomRef,current=>{
+   if(!current||!["lobby","game"].includes(current.status)||current.forfeitSettled)return;
+   const winnerRole=leaverRole==="host"?"guest":"host";
+   current.status="forfeit";
+   current.forfeitSettled=true;
+   current.forfeitBy=leaverRole;
+   current.forfeitWinner=winnerRole;
+   current.forfeitAt=Date.now();
+   current.cancelReason=`${current.players?.[leaverRole]?.name||"O adversário"} abandonou a partida ranked.`;
+   if(!current.state){
+    const h=current.players?.host,g=current.players?.guest;
+    if(!h?.deck||!g?.deck)return;
+    current.state=createInitialState(h,g,true);
+   }
+   current.state.winner=winnerRole;
+   current.state.forfeit=true;
+   current.state.log=current.state.log||[];
+   current.state.log.push(`${current.players?.[leaverRole]?.name||"Um jogador"} abandonou. Vitória por desistência.`);
+   return current;
+  },{applyLocally:false});
+  if(!result.committed)return;
+  const room=result.snapshot.val(),winnerRole=room.forfeitWinner;
+  const leaver=room.players?.[leaverRole],winner=room.players?.[winnerRole];
+  await applyForfeitProfileResults(leaver,winner);
+  const claims={};
+  if(leaver?.id)claims[`matchResults/ranked/${roomCode}/${leaver.id}`]={claimedAt:Date.now(),type:"forfeit-loss"};
+  if(winner?.id)claims[`matchResults/ranked/${roomCode}/${winner.id}`]={claimedAt:Date.now(),type:"forfeit-win"};
+  if(Object.keys(claims).length)await update(ref(db),claims);
+ }finally{rankedForfeitProcessing=false}
+}
+async function applyForfeitProfileResults(leaver,winner){
+ if(leaver?.id){
+  await runTransaction(ref(db,`profiles/${leaver.id}`),p=>{
+   if(!p||p.lastForfeitRoom===roomCode)return p;
+   p.coins=Math.max(0,(p.coins||0)-100);
+   p.trophies=Math.max(0,(p.trophies||0)-10);
+   p.losses=(p.losses||0)+1;p.rankedLosses=(p.rankedLosses||0)+1;p.winStreak=0;
+   p.lastForfeitRoom=roomCode;
+   p.lastMatch={result:"forfeit-loss",opponent:winner?.name||"Desconhecido",mode:"ranked",reward:-100,trophyDelta:-10,date:Date.now()};
+   return p;
+  });
+ }
+ if(winner?.id){
+  await runTransaction(ref(db,`profiles/${winner.id}`),p=>{
+   if(!p||p.lastForfeitWinRoom===roomCode)return p;
+   p.coins=(p.coins||0)+630;
+   p.trophies=(p.trophies||0)+15;
+   p.wins=(p.wins||0)+1;p.rankedWins=(p.rankedWins||0)+1;
+   p.winStreak=(p.winStreak||0)+1;p.bestWinStreak=Math.max(p.bestWinStreak||0,p.winStreak||0);
+   p.lastForfeitWinRoom=roomCode;
+   p.lastMatch={result:"forfeit-win",opponent:leaver?.name||"Desconhecido",mode:"ranked",reward:630,trophyDelta:15,date:Date.now()};
+   return p;
+  });
+ }
+ if(currentUser){await loadProfile(currentUser);refreshAccountUI()}
+}
+
 async function safeLeaveRoom(){
  await cleanupRankedQueue();
+ if(gameMode==="ranked"&&roomCode&&roomData&&["lobby","game"].includes(roomData.status)){
+  await settleRankedForfeit(role);
+  await leaveRoom(true);gameMode=null;showScreen("menuScreen");return;
+ }
  if(roomCode&&roomData&&["lobby","game"].includes(roomData.status))await requestCancelRoom(`${identity.name} abandonou a partida.`);
  await leaveRoom(false);showScreen("menuScreen")
 }
@@ -651,11 +782,14 @@ async function leaveRoom(markOffline=true){
 }
 function showCancelled(reason){$("cancelReason").textContent=reason;showScreen("cancelledScreen")}
 async function finishCancellation(){await leaveRoom(false);gameMode=null;showScreen("menuScreen")}
-function quitCurrentMatch(){if(gameMode==="online"||gameMode==="ranked")safeLeaveRoom();else{gameMode=null;offlineState=null;showScreen("menuScreen")}}
+function quitCurrentMatch(){
+ if(gameMode==="offline")return;
+ if(gameMode==="online"||gameMode==="ranked")safeLeaveRoom()
+}
 
 function startOfflineDeck(){gameMode="offline";offlineState=null;openDeckSelection("offline")}
 function openDeckSelection(mode){
- lastRecordedWinner=null;gameMode=mode;chosen=[];selectedHand=null;selectedArena=null;
+ lastRecordedWinner=null;endOverlayShownFor=null;$("matchEndOverlay").classList.add("hidden");gameMode=mode;chosen=[];selectedHand=null;selectedArena=null;
  $("deckPanel").classList.remove("hidden");$("playPanel").classList.add("hidden");$("sidePanel").classList.add("hidden");
  $("confirmDeckBtn").classList.remove("hidden");$("confirmDeckBtn").disabled=true;
  $("turnBadge").textContent=mode==="ranked"?"PREPARAÇÃO RANKED":"PREPARAÇÃO";
@@ -694,17 +828,48 @@ function me(s=currentState()){return s?.players?.[myRole()]}function opponent(s=
 function renderCurrentGame(){gameMode==="online"||gameMode==="ranked"?renderOnlineGame():renderOfflineGame()}
 function renderOnlineGame(){renderGame(roomData.state,roomData.state.turn===role&&!roomData.state.winner)}
 function renderOfflineGame(){renderGame(offlineState,!offlineLocked&&!offlineState?.winner)}
+
+function showMatchEnd(state){
+ const key=`${gameMode}:${roomCode||"offline"}:${state.winner}:${state.forfeit?"forfeit":"normal"}`;
+ if(endOverlayShownFor===key)return;endOverlayShownFor=key;
+ const won=state.winner===myRole(),mine=me(state),enemy=opponent(state);
+ $("endResultCard").classList.toggle("victory",won);$("endResultCard").classList.toggle("defeat",!won);
+ $("endTitle").className=`end-title ${won?"victory":"defeat"}`;
+ $("endTitle").textContent=won?"VITÓRIA":"DERROTA";
+ $("endSubtitle").textContent=state.forfeit?(won?"O adversário abandonou a Ranked Arena.":"Abandonaste a Ranked Arena."):(won?"Dominaste a Arena!":"A tua estratégia foi derrotada.");
+ $("endTurns").textContent=state.round||0;
+ $("endCards").textContent=`${mine.deck.filter(c=>c.alive).length}–${enemy.deck.filter(c=>c.alive).length}`;
+ const reward=won?(gameMode==="ranked"?(state.forfeit?630:600):gameMode==="online"?500:rewardForMatch(true,"offline")):0;
+ $("endReward").textContent=reward;
+ $("endForfeitNote").classList.toggle("hidden",!state.forfeit);
+ $("endForfeitNote").textContent=state.forfeit?(won?"Bónus de desistência: +30 moedas.":"Penalização: −100 moedas e −10 troféus."):"";
+ $("returnRankedBtn").classList.toggle("hidden",gameMode!=="ranked");
+ $("matchEndOverlay").classList.remove("hidden");
+ if(won){playVictoryAudio();vibrate([80,40,120])}
+}
+async function returnAfterMatch(destination){
+ $("matchEndOverlay").classList.add("hidden");
+ endOverlayShownFor=null;
+ if(gameMode==="online"||gameMode==="ranked")await leaveRoom(true);
+ const wasRanked=gameMode==="ranked";gameMode=null;offlineState=null;
+ if(destination==="ranked"&&wasRanked){await loadProfile(currentUser);refreshAccountUI();showRankedArena()}
+ else showScreen("menuScreen")
+}
+
 function renderGame(state,canAct){
  if(!state)return;
  if(state.winner&&lastRecordedWinner!==state.winner){
   lastRecordedWinner=state.winner;
   const won=state.winner===myRole();
-  recordMatchResult(won,opponent(state)?.name,gameMode).catch(console.warn);
+  if(!state.forfeit)recordMatchResult(won,opponent(state)?.name,gameMode).catch(console.warn);
  }$("deckPanel").classList.add("hidden");$("playPanel").classList.remove("hidden");$("sidePanel").classList.remove("hidden");$("confirmDeckBtn").classList.add("hidden");
  const mine=me(state),enemy=opponent(state);$("manaText").textContent=`${mine.mana}/${mine.maxMana}`;$("myRemaining").textContent=mine.deck.filter(c=>c.alive).length;$("enemyRemaining").textContent=enemy.deck.filter(c=>c.alive).length;
  $("turnBadge").textContent=state.winner?(state.winner===myRole()?"VITÓRIA!":"DERROTA"):canAct?`TUA VEZ · TURNO ${state.round}`:`VEZ DE ${enemy.name}`;
  $("message").textContent=state.winner?(state.winner===myRole()?"🏆 Venceste!":"💥 Perdeste."):canAct?"Escolhe uma ação.":"A aguardar a jogada do adversário...";
- document.querySelectorAll(".action").forEach(x=>x.disabled=!canAct);renderBoard(state);renderHand(state);renderChips(state);renderLog(state);renderSelected(state)
+ document.querySelectorAll(".action").forEach(x=>x.disabled=!canAct);
+ $("quitMatchBtn").classList.toggle("hidden",gameMode==="offline"||!!state.winner);
+ renderBoard(state);renderHand(state);renderChips(state);renderLog(state);renderSelected(state);
+ if(state.winner)setTimeout(()=>showMatchEnd(state),350)
 }
 function renderBoard(state){const mine=me(state),enemy=opponent(state);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const cell=$("board").querySelector(`[data-r="${r}"][data-c="${c}"]`),id=`${r}-${c}`;cell.className="cell";cell.textContent="";
  const mc=mine.deck.find(x=>x.alive&&x.summoned&&x.position===id),ec=enemy.deck.find(x=>x.alive&&x.summoned&&x.position===id);if(mc){cell.classList.add("player");cell.innerHTML=`<span class="board-symbol">${cardSymbol(mc.id)}</span>`}
@@ -736,7 +901,7 @@ function applyAction(state,acting,a){
 }
 
 function startOfflineGame(){
- lastRecordedWinner=null;
+ lastRecordedWinner=null;endOverlayShownFor=null;$("matchEndOverlay").classList.add("hidden");
  const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
 }
 function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
@@ -826,7 +991,17 @@ const DEFAULT_SETTINGS={animations:"on",sound:true,soundVolume:70,music:false,mu
 let gameSettings=(()=>{try{return{...DEFAULT_SETTINGS,...JSON.parse(localStorage.getItem("arenaSettings")||"{}")}}catch{return{...DEFAULT_SETTINGS}}})();
 function applySettings(){document.documentElement.classList.toggle("animations-off",gameSettings.animations==="off");document.documentElement.classList.toggle("animations-reduced",gameSettings.animations==="reduced");document.body.classList.toggle("compact-mode",!!gameSettings.compact)}
 function openSettings(){["Animations","Sound","SoundVolume","Music","MusicVolume","ConfirmExit","AttackPreview","Vibration","Compact"].forEach(()=>{});$("settingAnimations").value=gameSettings.animations;$("settingSound").checked=gameSettings.sound;$("settingSoundVolume").value=gameSettings.soundVolume;$("settingMusic").checked=gameSettings.music;$("settingMusicVolume").value=gameSettings.musicVolume;$("settingConfirmExit").checked=gameSettings.confirmExit;$("settingAttackPreview").checked=gameSettings.attackPreview;$("settingVibration").checked=gameSettings.vibration;$("settingCompact").checked=gameSettings.compact;showScreen("settingsScreen")}
-function saveSettingsAndBack(){gameSettings={animations:$("settingAnimations").value,sound:$("settingSound").checked,soundVolume:Number($("settingSoundVolume").value),music:$("settingMusic").checked,musicVolume:Number($("settingMusicVolume").value),confirmExit:$("settingConfirmExit").checked,attackPreview:$("settingAttackPreview").checked,vibration:$("settingVibration").checked,compact:$("settingCompact").checked};localStorage.setItem("arenaSettings",JSON.stringify(gameSettings));applySettings();showScreen("menuScreen")}
+async function saveSettingsAndBack(){gameSettings={animations:$("settingAnimations").value,sound:$("settingSound").checked,soundVolume:Number($("settingSoundVolume").value),music:$("settingMusic").checked,musicVolume:Number($("settingMusicVolume").value),confirmExit:$("settingConfirmExit").checked,attackPreview:$("settingAttackPreview").checked,vibration:$("settingVibration").checked,compact:$("settingCompact").checked};localStorage.setItem("arenaSettings",JSON.stringify(gameSettings));applySettings();setAudioVolume();
+
+["menuMusic","battleMusic","victorySound"].forEach(id=>{
+ const audio=getAudio(id);
+ audio.addEventListener("error",()=>{
+  console.error(`Erro ao carregar ${id}:`,audio.currentSrc||audio.src,audio.error);
+  showAudioStatus(`Ficheiro em falta ou inválido: ${audio.getAttribute("src")}`);
+ });
+ audio.addEventListener("canplaythrough",()=>console.log(`${id} pronto:`,audio.currentSrc||audio.src),{once:true});
+});
+if(gameSettings.music&&!audioUnlocked)await unlockAudio();showScreen("menuScreen")}
 function resetSettings(){gameSettings={...DEFAULT_SETTINGS};localStorage.setItem("arenaSettings",JSON.stringify(gameSettings));applySettings();openSettings()}
 function vibrate(p=30){if(gameSettings.vibration&&navigator.vibrate)navigator.vibrate(p)}
 function playUiBeep(){if(!gameSettings.sound||gameSettings.soundVolume<=0)return;try{const C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator(),g=c.createGain();o.frequency.value=440;g.gain.value=.025*(gameSettings.soundVolume/100);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.04);o.onended=()=>c.close()}catch{}}
@@ -862,15 +1037,114 @@ function tutorialNext(){const s=TUTORIAL_STEPS[tutorialState.step];if(s.mode==="
 async function completeTutorial(){if(currentUser&&currentProfile&&!currentProfile.tutorialCompleted){await runTransaction(ref(db,`profiles/${currentUser.uid}`),p=>{if(!p||p.tutorialCompleted)return p;p.tutorialCompleted=true;p.tutorialCompletedAt=Date.now();p.coins=(p.coins||0)+300;return p});await loadProfile(currentUser);refreshAccountUI();alert("Tutorial concluído! Recebeste 300 moedas.")}else alert("Tutorial concluído!");tutorialState=null;showScreen("menuScreen")}
 function leaveTutorial(){tutorialState=null;showScreen("menuScreen")}
 applySettings();
+
+let audioUnlocked=false;
+let desiredMusicScreen="menuScreen";
+function getAudio(id){return $(id)}
+function setAudioVolume(){
+ const mv=Math.max(0,Math.min(1,(gameSettings.musicVolume||0)/100));
+ const sv=Math.max(0,Math.min(1,(gameSettings.soundVolume||0)/100));
+ getAudio("menuMusic").volume=mv;
+ getAudio("battleMusic").volume=mv;
+ getAudio("victorySound").volume=sv;
+}
+function stopAllMusic(reset=false){
+ ["menuMusic","battleMusic"].forEach(id=>{const a=getAudio(id);a.pause();if(reset)a.currentTime=0});
+}
+function showAudioStatus(message){
+ const s=$("audioStatus");s.textContent=message;s.classList.add("show");
+ clearTimeout(showAudioStatus.timer);
+ showAudioStatus.timer=setTimeout(()=>s.classList.remove("show"),3500);
+}
+async function tryPlayAudio(audio){
+ try{
+  await audio.play();
+  audioUnlocked=true;
+  $("audioStatus").classList.remove("show");
+  return true;
+ }catch(error){
+  if(error?.name==="NotAllowedError")showAudioStatus("Clica ou toca uma vez para ativar a música");
+  else{
+   console.warn("Falha ao tocar áudio:",audio.src,error);
+   showAudioStatus("Não consegui carregar o ficheiro de música");
+  }
+  return false;
+ }
+}
+async function updateBackgroundMusic(screenId=lastScreenId){
+ desiredMusicScreen=screenId;
+ setAudioVolume();
+ if(!gameSettings.music){stopAllMusic(false);return}
+ const menu=getAudio("menuMusic"),battle=getAudio("battleMusic");
+ const inBattle=screenId==="gameScreen";
+ const target=inBattle?battle:menu,other=inBattle?menu:battle;
+ other.pause();
+ if(audioUnlocked)await tryPlayAudio(target);
+ else showAudioStatus("Clica ou toca uma vez para ativar a música");
+}
+async function unlockAudio(){
+ if(audioUnlocked)return;
+ setAudioVolume();
+ const target=desiredMusicScreen==="gameScreen"?getAudio("battleMusic"):getAudio("menuMusic");
+ target.muted=true;
+ try{
+  await target.play();
+  target.pause();
+  target.currentTime=0;
+  target.muted=false;
+  audioUnlocked=true;
+  $("audioStatus").classList.remove("show");
+  await updateBackgroundMusic(desiredMusicScreen);
+ }catch(error){
+  target.muted=false;
+  console.warn("Áudio ainda bloqueado:",error);
+ }
+}
+["pointerdown","touchstart","keydown"].forEach(eventName=>{
+ document.addEventListener(eventName,unlockAudio,{once:true,capture:true});
+});
+function playVictoryAudio(){
+ if(!gameSettings.sound)return;
+ getAudio("battleMusic").pause();
+ const sound=getAudio("victorySound");
+ sound.currentTime=0;
+ tryPlayAudio(sound).then(ok=>{if(!ok)playUiBeep()});
+}
+function openGameplaySettings(){
+ $("gameSettingAnimations").value=gameSettings.animations;
+ $("gameSettingSound").checked=gameSettings.sound;
+ $("gameSettingSoundVolume").value=gameSettings.soundVolume;
+ $("gameSettingMusic").checked=gameSettings.music;
+ $("gameSettingMusicVolume").value=gameSettings.musicVolume;
+ $("gameSettingAttackPreview").checked=gameSettings.attackPreview;
+ $("gameSettingVibration").checked=gameSettings.vibration;
+ $("gameSettingsModal").classList.remove("hidden");
+}
+function closeGameplaySettings(){$("gameSettingsModal").classList.add("hidden")}
+async function saveGameplaySettings(){
+ gameSettings.animations=$("gameSettingAnimations").value;
+ gameSettings.sound=$("gameSettingSound").checked;
+ gameSettings.soundVolume=Number($("gameSettingSoundVolume").value);
+ gameSettings.music=$("gameSettingMusic").checked;
+ gameSettings.musicVolume=Number($("gameSettingMusicVolume").value);
+ gameSettings.attackPreview=$("gameSettingAttackPreview").checked;
+ gameSettings.vibration=$("gameSettingVibration").checked;
+ localStorage.setItem("arenaSettings",JSON.stringify(gameSettings));
+ applySettings();setAudioVolume();
+ if(gameSettings.music&&!audioUnlocked)await unlockAudio();
+ await updateBackgroundMusic("gameScreen");
+ closeGameplaySettings();
+}
+
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
  await loadProfile(user);
  refreshAccountUI();
 });
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
-refreshAccountUI();createBoard();
+refreshAccountUI();createBoard();if(gameSettings.music)showAudioStatus("Clica ou toca uma vez para ativar a música");
 
-window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
