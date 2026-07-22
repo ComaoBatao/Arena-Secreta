@@ -85,7 +85,21 @@ button,input,select{font:inherit}
 .shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.shop-item{background:var(--panel3);border-radius:15px;padding:15px}.shop-item h3{margin:0 0 7px}.shop-item .price{color:var(--gold);font-weight:900;margin:10px 0}.shop-item.owned{opacity:.65}
 .inventory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.inventory-item{background:var(--panel3);border-radius:13px;padding:12px}.inventory-item.locked{opacity:.45}.profile-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.name-change-box{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
 
-.coin-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:linear-gradient(145deg,#ffe184,#d79b16);border:2px solid #fff0a9;box-shadow:inset 0 0 0 2px rgba(92,53,0,.25);color:#5b3900;font-size:9px;font-weight:1000}.trophy-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:27px;position:relative;clip-path:polygon(50% 0,92% 18%,84% 72%,50% 100%,16% 72%,8% 18%);background:linear-gradient(145deg,#79f2df,#168f82);border:0;color:#fff6c9;font-size:11px;font-weight:1000;text-shadow:0 1px 1px rgba(0,0,0,.55);filter:drop-shadow(0 0 1px #ffd166) drop-shadow(0 2px 2px rgba(0,0,0,.35))}.trophy-icon::before{content:"";position:absolute;inset:3px;clip-path:inherit;border:1px solid #ffe08a}.trophy-icon::after{content:"";position:absolute;top:3px;width:10px;height:4px;background:#ffd166;clip-path:polygon(0 100%,15% 0,38% 55%,50% 0,62% 55%,85% 0,100% 100%)}.wallet-pill{display:inline-flex!important;align-items:center;gap:8px}.collection-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}.collection-category{background:var(--panel3);border:2px solid transparent;border-radius:16px;padding:17px;text-align:left;color:white;cursor:pointer}.collection-category.selected{border-color:var(--accent)}.collection-category h3{margin:0 0 5px}.collection-count{font-size:24px;font-weight:900;color:var(--gold);margin:6px 0}.collection-detail{background:rgba(10,15,31,.55);border-radius:16px;padding:14px}.collection-detail-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.collection-detail-header h3{margin:0}.inventory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.inventory-item{display:flex;flex-direction:column;gap:8px;min-height:108px;background:var(--panel3);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px}.inventory-item.locked{opacity:.42}.item-status{font-size:12px;font-weight:900}.item-status.obtained{color:var(--accent)}.item-status.locked{color:var(--muted)}.item-status.equipped{color:var(--gold)}.inventory-item .btn{margin-top:auto;width:100%;padding:9px}.theme-current{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.theme-current div{background:var(--panel2);border-radius:12px;padding:12px}@media(max-width:850px){.collection-summary{grid-template-columns:1fr 1fr}}@media(max-width:620px){.collection-summary,.inventory-grid,.theme-current{grid-template-columns:1fr}}
+.coin-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:linear-gradient(145deg,#ffe184,#d79b16);border:2px solid #fff0a9;box-shadow:inset 0 0 0 2px rgba(92,53,0,.25);color:#5b3900;font-size:9px;font-weight:1000}.trophy-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:27px;position:relative;clip-path:polygon(50% 0,92% 18%,84% 72%,50% 100%,16% 72%,8% 18%);background:linear-gradient(145deg,#79f2df,#168f82);border:0;color:#fff6c9;font-size:11px;font-weight:1000;text-shadow:0 1px 1px rgba(0,0,0,.55);filter:drop-shadow(0 0 1px #ffd166) drop-shadow(0 2px 2px rgba(0,0,0,.35))}.trophy-icon::before{content:"";position:absolute;inset:3px;clip-path:inherit;border:1px solid #ffe08a}.trophy-icon::after{content:"";position:absolute;top:3px;width:10px;height:4px;background:#ffd166;clip-path:polygon(0 100%,15% 0,38% 55%,50% 0,62% 55%,85% 0,100% 100%)}.wallet-pill{display:inline-flex!important;align-items:center;gap:8px}.collection-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}.collection-category{background:var(--panel3);border:2px solid transparent;border-radius:16px;padding:17px;text-align:left;color:white;cursor:pointer}.collection-category.selected{border-color:var(--accent)}.collection-category h3{margin:0 0 5px}.collection-count{font-size:24px;font-weight:900;color:var(--gold);margin:6px 0}.collection-detail{background:rgba(10,15,31,.55);border-radius:16px;padding:14px}.collection-detail-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.collection-detail-header h3{margin:0}.inventory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.inventory-item{display:flex;flex-direction:column;gap:8px;min-height:108px;background:var(--panel3);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px}.inventory-item.locked{opacity:.42}.item-status{font-size:12px;font-weight:900}.item-status.obtained{color:var(--accent)}.item-status.locked{color:var(--muted)}.item-status.equipped{color:var(--gold)}.inventory-item .btn{margin-top:auto;width:100%;padding:9px}.theme-current{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.theme-current div{background:var(--panel2);border-radius:12px;padding:12px}
+.ranked-btn{background:linear-gradient(135deg,#f0c75e,#62e2cf);color:#10162b}
+.rank-card{background:linear-gradient(145deg,rgba(32,42,73,.98),rgba(10,15,31,.98));border:1px solid rgba(255,209,102,.28);border-radius:18px;padding:20px;text-align:center}
+.rank-emblem{width:82px;height:92px;margin:0 auto 10px;clip-path:polygon(50% 0,92% 18%,85% 73%,50% 100%,15% 73%,8% 18%);display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#62e2cf,#1a7d75);box-shadow:inset 0 0 0 5px rgba(255,209,102,.75);color:#081a18;font-size:25px;font-weight:1000}
+.rank-title{font-size:28px;font-weight:1000;color:var(--gold)}
+.rank-progress{height:12px;background:var(--panel3);border-radius:999px;overflow:hidden;margin:12px 0}.rank-progress>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px}
+.ranked-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}.ranked-stat{background:var(--panel3);border-radius:12px;padding:11px}.ranked-stat strong{display:block;font-size:21px}
+.search-spinner{width:62px;height:62px;border:7px solid rgba(255,255,255,.12);border-top-color:var(--accent);border-radius:50%;margin:20px auto;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.search-range{color:var(--gold);font-weight:900}.leaderboard{display:grid;gap:8px}.leader-row{display:grid;grid-template-columns:55px 1fr auto auto;align-items:center;gap:10px;background:var(--panel3);border-radius:12px;padding:11px}.leader-row.me{outline:2px solid var(--accent)}.leader-pos{font-size:20px;font-weight:1000;color:var(--gold)}
+.promotion-burst{font-size:72px;animation:promotionPulse 1.2s ease-in-out infinite alternate}@keyframes promotionPulse{from{transform:scale(.9);filter:drop-shadow(0 0 5px var(--gold))}to{transform:scale(1.12);filter:drop-shadow(0 0 24px var(--accent))}}
+.promotion-old{color:var(--muted);text-decoration:line-through}.promotion-new{font-size:32px;color:var(--gold);font-weight:1000}
+.locked-note{background:rgba(255,95,124,.12);border:1px solid rgba(255,95,124,.35);color:#ff9caf;border-radius:12px;padding:12px}
+@media(max-width:620px){.ranked-stats{grid-template-columns:1fr}.leader-row{grid-template-columns:42px 1fr auto}.leader-row .leader-rank{display:none}}
+
+@media(max-width:850px){.collection-summary{grid-template-columns:1fr 1fr}}@media(max-width:620px){.collection-summary,.inventory-grid,.theme-current{grid-template-columns:1fr}}
 @media(max-width:850px){.shop-grid{grid-template-columns:1fr 1fr}.inventory-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
 @media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid,.shop-grid,.inventory-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
@@ -97,7 +111,7 @@ button,input,select{font:inherit}
 <div class="hero"><div class="hero-card">
  <h1 class="logo">ARENA<br>SECRETA</h1>
  <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.8.2 — RANKED EMBLEM</div>
+ <div class="version">BETA 0.9 — RANKED ARENA</div>
  <div class="identity">
   <strong id="menuName">Ghost0001</strong>
   <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
@@ -106,10 +120,12 @@ button,input,select{font:inherit}
  </div>
  <div class="menu">
   <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button><button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
+  <button id="rankedMenuBtn" class="btn ranked-btn hidden" onclick="showRankedArena()">RANKED ARENA</button>
+  <button id="leaderboardMenuBtn" class="btn secondary hidden" onclick="showLeaderboard()">TOP GLOBAL</button>
   <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
   <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Moedas + loja + coleção + troféus</p>
+ <p class="small">Ranked Arena + matchmaking + Top Global</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
@@ -143,12 +159,36 @@ button,input,select{font:inherit}
 </div>
 </div></section>
 
-<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="profile-card"><div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Coleção</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
+<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="profile-card"><div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><div class="ranked-stats"><div class="ranked-stat"><strong id="profileRank">BRONZE I</strong>Rank</div><div class="ranked-stat"><strong id="profileGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="profileWinStreak">0</strong>Win streak</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Coleção</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
 
 <section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Loja</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards">Cartas</button><button class="shop-tab" data-shop="backgrounds">Fundos</button><button class="shop-tab" data-shop="colors">Cores</button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
 
 <section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Coleção</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="inventoryTrophies">0</span></span></div><div class="collection-summary"><button class="collection-category selected" data-collection="cards"><h3>Cartas</h3><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver cartas</span></button><button class="collection-category" data-collection="backgrounds"><h3>Fundos</h3><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos</span></button><button class="collection-category" data-collection="colors"><h3>Cores</h3><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores</span></button></div><div class="collection-detail"><div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div><div id="collectionDetailGrid" class="inventory-grid"></div></div><div class="theme-current"><div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div><div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div></div></div></div></section>
 
+
+<section id="rankedScreen" class="screen"><div class="wrap"><div class="panel">
+ <div class="header"><h2>Ranked Arena</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <div id="rankedLocked" class="locked-note hidden">A Ranked Arena exige uma conta registada.</div>
+ <div id="rankedDashboard">
+  <div class="rank-card"><div id="rankEmblem" class="rank-emblem">BI</div><div id="rankName" class="rank-title">BRONZE I</div><div><span class="trophy-icon">R</span> <strong id="rankTrophies">0</strong> troféus</div><div class="rank-progress"><div id="rankProgressBar" style="width:0%"></div></div><div id="rankNextText" class="small">100 para Bronze II</div>
+   <div class="ranked-stats"><div class="ranked-stat"><strong id="rankGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="rankWinStreak">0</strong>Win streak</div><div class="ranked-stat"><strong id="rankBestStreak">0</strong>Melhor streak</div></div>
+  </div>
+  <button class="btn ranked-btn" style="width:100%;margin-top:14px" onclick="startRankedSearch()">PROCURAR PARTIDA RANKED</button>
+  <button class="btn secondary" style="width:100%;margin-top:9px" onclick="showLeaderboard()">VER TOP GLOBAL</button>
+ </div>
+</div></div></section>
+
+<section id="rankedSearchScreen" class="screen"><div class="hero"><div class="hero-card">
+ <h2>À PROCURA DE ADVERSÁRIO</h2><div class="search-spinner"></div><div id="searchRankName" class="rank-title">BRONZE I</div><p><span class="trophy-icon">R</span> <strong id="searchTrophies">0</strong></p><p class="search-range">Intervalo: ±<span id="searchRange">100</span> troféus</p><p id="searchStatus" class="small">A entrar na fila...</p><button class="btn danger" onclick="cancelRankedSearch()">CANCELAR</button>
+</div></div></section>
+
+<section id="leaderboardScreen" class="screen"><div class="wrap"><div class="panel">
+ <div class="header"><h2>Top Global</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div id="leaderboardList" class="leaderboard"></div><p id="leaderboardStatus" class="status"></p>
+</div></div></section>
+
+<section id="promotionScreen" class="screen"><div class="hero"><div class="hero-card">
+ <div class="promotion-burst">◆</div><h2>PROMOÇÃO!</h2><div id="promotionOldRank" class="promotion-old">BRONZE I</div><div>↓</div><div id="promotionNewRank" class="promotion-new">BRONZE II</div><p id="promotionTrophyText" class="notice">+15 troféus</p><button class="btn" onclick="closePromotion()">CONTINUAR</button>
+</div></div></section>
 <section id="offlineSetupScreen" class="screen"><div class="wrap">
 <div class="panel">
  <div class="header"><h2>Jogar Offline</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
@@ -234,7 +274,7 @@ button,input,select{font:inherit}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import {getDatabase,ref,set,get,update,onValue,off,runTransaction,onDisconnect,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import {getDatabase,ref,set,get,update,onValue,off,runTransaction,onDisconnect,serverTimestamp,query,orderByChild,limitToLast} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 import {
  getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
  signOut,onAuthStateChanged,sendPasswordResetEmail,GoogleAuthProvider,
@@ -272,6 +312,18 @@ const LIBRARY=[
 {id:"illusionist",name:"Ilusionista",rarity:"Épica",hp:3,damage:2,moves:4,cost:5,pattern:"scan"},
 {id:"alchemist",name:"Alquimista",rarity:"Rara",hp:5,damage:2,moves:3,cost:4,pattern:"diagonal"}];
 const STARTER_CARDS=["squire","archer","knight","assassin","scout","mage","paladin","warlock"];
+
+const RANK_TIERS=[
+ {base:"BRONZE",start:0,loss:5},{base:"SILVER",start:500,loss:7},{base:"GOLD",start:1000,loss:9},{base:"PLATINUM",start:1500,loss:10},{base:"DIAMOND",start:2000,loss:12},{base:"MASTER",start:2500,loss:13},{base:"GRANDMASTER",start:3000,loss:14},{base:"LEGEND",start:3500,loss:15}
+];
+const DIVISION_SIZE=100;
+function rankInfo(trophies){
+ const t=Math.max(0,Number(trophies)||0);let tier=RANK_TIERS[0];for(const x of RANK_TIERS)if(t>=x.start)tier=x;
+ if(tier.base==="LEGEND")return{name:"LEGEND",short:"L",floor:3500,next:null,progress:100,loss:tier.loss};
+ const div=Math.min(4,Math.floor((t-tier.start)/DIVISION_SIZE));const roman=["I","II","III","IV","V"][div];const floor=tier.start+div*DIVISION_SIZE;const next=floor+DIVISION_SIZE;
+ return{name:`${tier.base} ${roman}`,short:`${tier.base[0]}${div+1}`,floor,next,progress:Math.max(0,Math.min(100,(t-floor)/DIVISION_SIZE*100)),loss:tier.loss};
+}
+
 const SHOP_ITEMS=[
 {id:"offensive_pack",type:"cards",name:"Pacote Ofensivo",price:2000,items:["berserker","crossbowman","raider"],description:"Desbloqueia 3 cartas ofensivas futuras."},
 {id:"defensive_pack",type:"cards",name:"Pacote Defensivo",price:2000,items:["guardian","shieldbearer","healer"],description:"Desbloqueia 3 cartas defensivas futuras."},
@@ -289,6 +341,7 @@ let gameMode=null,difficulty="easy",personality="balanced";
 let roomCode="",role=null,roomData=null,roomListener=null,presenceDisconnect=null,connected=true;
 let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
 let offlineState=null,offlineLocked=false,botKnown=[],lastRecordedWinner=null;
+let rankedQueueRef=null,rankedQueueRootRef=null,rankedSearchStartedAt=0,rankedSearchTimer=null,rankedDisconnect=null,rankedMatchId=null,pendingPromotion=null;
 
 function getGhostIdentity(){
  let g=localStorage.getItem("arenaGhost");
@@ -358,7 +411,7 @@ async function registerAccount(){
     email,
     wins:0,
     losses:0,
-    coins:0,trophies:0,rankedWins:0,rankedLosses:0,
+    coins:0,trophies:0,rankedWins:0,rankedLosses:0,winStreak:0,bestWinStreak:0,
     ownedCards:STARTER_CARDS,ownedBackgrounds:["default"],ownedColors:["default"],activeBackground:"default",activeColor:"default",nicknameChanges:0,
     createdAt:Date.now(),
     lastMatch:null
@@ -402,7 +455,7 @@ async function loginGoogle(){
    await set(ref(db,`usernames/${nicknameKey}`),{uid:result.user.uid,username:nickname});
    await set(profileRef,{
     uid:result.user.uid,username:nickname,usernameKey:nicknameKey,
-    email:result.user.email||"",wins:0,losses:0,coins:0,trophies:0,rankedWins:0,rankedLosses:0,ownedCards:STARTER_CARDS,ownedBackgrounds:["default"],ownedColors:["default"],activeBackground:"default",activeColor:"default",nicknameChanges:0,createdAt:Date.now(),lastMatch:null
+    email:result.user.email||"",wins:0,losses:0,coins:0,trophies:0,rankedWins:0,rankedLosses:0,winStreak:0,bestWinStreak:0,ownedCards:STARTER_CARDS,ownedBackgrounds:["default"],ownedColors:["default"],activeBackground:"default",activeColor:"default",nicknameChanges:0,createdAt:Date.now(),lastMatch:null
    });
    await updateProfile(result.user,{displayName:nickname});
   }
@@ -436,7 +489,9 @@ function refreshAccountUI(){
  identity=registered?{name:currentProfile?.username||currentUser.displayName||"Player",type:"account"}:getGhostIdentity();
  $("menuName").textContent=identity.name;
  $("menuAccountType").textContent=registered?(currentUser.email||"Conta Firebase"):"Identidade temporária neste dispositivo";
- $("profileMenuBtn").classList.toggle("hidden",!registered);$("logoutMenuBtn").classList.toggle("hidden",!registered);$("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
+ $("profileMenuBtn").classList.toggle("hidden",!registered);$("logoutMenuBtn").classList.toggle("hidden",!registered);$("rankedMenuBtn").classList.toggle("hidden",!registered);
+ $("leaderboardMenuBtn").classList.toggle("hidden",!registered);
+ $("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
 }
 async function showProfile(){
  if(!currentUser||!currentProfile)return;
@@ -445,30 +500,44 @@ async function showProfile(){
  const wins=currentProfile.wins||0,losses=currentProfile.losses||0,total=wins+losses;
  $("profileWins").textContent=wins;
  $("profileLosses").textContent=losses;
- $("profileWinrate").textContent=total?Math.round(wins/total*100)+"%":"0%";$("profileCoins").textContent=currentProfile.coins||0;$("profileTrophies").textContent=currentProfile.trophies||0;$("profileCards").textContent=(currentProfile.ownedCards||STARTER_CARDS).length;$("profileCreatedAt").textContent=currentProfile.createdAt?new Date(currentProfile.createdAt).toLocaleDateString("pt-PT"):"—";const changes=currentProfile.nicknameChanges||0;$("nicknameCostText").textContent=changes===0?"Primeira alteração gratuita.":`Próxima alteração: ${changes*5000} moedas.`;showScreen("profileScreen");
+ $("profileWinrate").textContent=total?Math.round(wins/total*100)+"%":"0%";$("profileCoins").textContent=currentProfile.coins||0;$("profileTrophies").textContent=currentProfile.trophies||0;$("profileCards").textContent=(currentProfile.ownedCards||STARTER_CARDS).length;$("profileCreatedAt").textContent=currentProfile.createdAt?new Date(currentProfile.createdAt).toLocaleDateString("pt-PT"):"—";
+ const info=rankInfo(currentProfile.trophies||0);$("profileRank").textContent=info.name;$("profileWinStreak").textContent=currentProfile.winStreak||0;getGlobalPosition(currentUser.uid).then(p=>$("profileGlobalPosition").textContent=p?`#${p}`:"—");const changes=currentProfile.nicknameChanges||0;$("nicknameCostText").textContent=changes===0?"Primeira alteração gratuita.":`Próxima alteração: ${changes*5000} moedas.`;showScreen("profileScreen");
 }
 function rewardForMatch(win,mode){if(!win)return 0;if(mode==="online")return 500;if(mode==="ranked")return 600;if(mode==="offline")return{easy:50,normal:70,hard:90,impossible:100}[difficulty]||50;return 0}
-async function recordMatchResult(win,opponentName,mode){if(!currentUser)return;const pRef=ref(db,`profiles/${currentUser.uid}`),reward=rewardForMatch(win,mode);await runTransaction(pRef,current=>{if(!current)return current;current.wins=(current.wins||0)+(win?1:0);current.losses=(current.losses||0)+(win?0:1);current.coins=(current.coins||0)+reward;if(mode==="ranked"){current.trophies=Math.max(0,(current.trophies||0)+(win?15:-5));current.rankedWins=(current.rankedWins||0)+(win?1:0);current.rankedLosses=(current.rankedLosses||0)+(win?0:1)}current.lastMatch={result:win?"win":"loss",opponent:opponentName||"Desconhecido",mode,reward,date:Date.now()};return current});await loadProfile(currentUser);refreshAccountUI()}
+async function claimMatchResult(mode){
+ if(!currentUser||!roomCode||!["online","ranked"].includes(mode))return true;
+ const claimRef=ref(db,`matchResults/${mode}/${roomCode}/${currentUser.uid}`);const result=await runTransaction(claimRef,current=>current===null?{claimedAt:Date.now()}:undefined,{applyLocally:false});return result.committed;
+}
+async function recordMatchResult(win,opponentName,mode){
+ if(!currentUser)return;if(!(await claimMatchResult(mode)))return;
+ const pRef=ref(db,`profiles/${currentUser.uid}`),reward=rewardForMatch(win,mode);let oldRank=null,newRank=null,trophyDelta=0;
+ await runTransaction(pRef,current=>{if(!current)return current;current.wins=(current.wins||0)+(win?1:0);current.losses=(current.losses||0)+(win?0:1);current.coins=(current.coins||0)+reward;
+  if(mode==="ranked"){const before=current.trophies||0;oldRank=rankInfo(before);trophyDelta=win?15:-oldRank.loss;current.trophies=Math.max(0,before+trophyDelta);newRank=rankInfo(current.trophies);current.rankedWins=(current.rankedWins||0)+(win?1:0);current.rankedLosses=(current.rankedLosses||0)+(win?0:1);current.winStreak=win?(current.winStreak||0)+1:0;current.bestWinStreak=Math.max(current.bestWinStreak||0,current.winStreak||0)}
+  current.lastMatch={result:win?"win":"loss",opponent:opponentName||"Desconhecido",mode,reward,trophyDelta,date:Date.now()};return current});
+ await loadProfile(currentUser);refreshAccountUI();
+ if(mode==="ranked"&&win&&oldRank&&newRank&&oldRank.name!==newRank.name){pendingPromotion={oldRank:oldRank.name,newRank:newRank.name,trophyDelta};setTimeout(showPromotion,700)}
+}
 
 function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
 function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
 setupOptionGroup("difficultyOptions",v=>difficulty=v);setupOptionGroup("personalityOptions",v=>personality=v);
 function randomCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join("")}
-function roomPath(code=""){return`rooms/${code}`}function playerPath(which){return`${roomPath(roomCode)}/players/${which}`}
+function roomCollection(){return gameMode==="ranked"?"rankedRooms":"rooms"}function roomPath(code=""){return`${roomCollection()}/${code}`}function playerPath(which){return`${roomPath(roomCode)}/players/${which}`}
 function firebaseErrorMessage(e){const c=e?.code||"erro-desconhecido";return c.includes("permission")?"O Firebase bloqueou o acesso. Confirma o modo de teste.":`Erro Firebase: ${c}`}
 function showJoinForm(){$("joinForm").classList.remove("hidden");$("onlineStatus").textContent=""}
 
 async function createRoom(){
- await leaveRoom(false);$("onlineStatus").textContent="A criar sala...";
+ gameMode="online";await leaveRoom(false);gameMode="online";$("onlineStatus").textContent="A criar sala...";
  for(let i=0;i<8;i++){const code=randomCode(),r=ref(db,roomPath(code));
-  try{const result=await runTransaction(r,current=>{if(current!==null)return;return{version:"0.6",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:clientId,name:identity.name,online:true,ready:false}}}},{applyLocally:false});
+  try{const result=await runTransaction(r,current=>{if(current!==null)return;return{version:"0.9",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:clientId,name:identity.name,online:true,ready:false}}}},{applyLocally:false});
    if(result.committed){roomCode=code;role="host";gameMode="online";await setupPresence();listenRoom();$("roomCodeText").textContent=code;showScreen("lobbyScreen");return}
   }catch(e){$("onlineStatus").textContent=firebaseErrorMessage(e);return}
  }
 }
 async function joinRoom(){
+ gameMode="online";
  const code=$("joinCode").value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(code)){$("onlineStatus").textContent="Código inválido.";return}
- await leaveRoom(false);$("onlineStatus").textContent="A procurar sala...";
+ await leaveRoom(false);gameMode="online";$("onlineStatus").textContent="A procurar sala...";
  try{const r=ref(db,roomPath(code)),snap=await get(r);if(!snap.exists()){$("onlineStatus").textContent="Essa sala não existe.";return}
   const room=snap.val();if(room.status!=="lobby"){$("onlineStatus").textContent="Essa partida já começou ou terminou.";return}
   const guestRef=ref(db,`${roomPath(code)}/players/guest`);
@@ -495,14 +564,15 @@ function listenRoom(){
 }
 function renderRoom(){
  if(!roomData)return;const h=roomData.players?.host,g=roomData.players?.guest;$("roomCodeText").textContent=roomCode;
- $("lobbyPlayers").textContent=g?`${h?.name||"Host"} VS ${g.name}`:"A aguardar adversário...";
- if(!g){$("lobbyStatus").textContent="Sala criada. Partilha o código.";$("goDeckBtn").classList.add("hidden")}
+ $("lobbyPlayers").textContent=g?`${h?.name||"Host"}${gameMode==="ranked"?` (${h?.trophies||0})`:""} VS ${g.name}${gameMode==="ranked"?` (${g?.trophies||0})`:""}`:"A aguardar adversário...";
+ if(!g){$("lobbyStatus").textContent=gameMode==="ranked"?"A preparar adversário...":"Sala criada. Partilha o código.";$("goDeckBtn").classList.add("hidden")}
  else{$("lobbyStatus").textContent=h?.online!==false&&g?.online!==false?"Os dois jogadores estão ligados.":"Um jogador está desligado.";$("goDeckBtn").classList.remove("hidden")}
 }
 async function requestCancelRoom(reason){
  if(!roomCode)return;try{await update(ref(db,roomPath(roomCode)),{status:"cancelled",cancelReason:reason,cancelledAt:Date.now(),cancelledBy:role})}catch(e){console.warn(e)}
 }
 async function safeLeaveRoom(){
+ await cleanupRankedQueue();
  if(roomCode&&roomData&&["lobby","game"].includes(roomData.status))await requestCancelRoom(`${identity.name} abandonou a partida.`);
  await leaveRoom(false);showScreen("menuScreen")
 }
@@ -514,7 +584,7 @@ async function leaveRoom(markOffline=true){
 }
 function showCancelled(reason){$("cancelReason").textContent=reason;showScreen("cancelledScreen")}
 async function finishCancellation(){await leaveRoom(false);gameMode=null;showScreen("menuScreen")}
-function quitCurrentMatch(){if(gameMode==="online")safeLeaveRoom();else{gameMode=null;offlineState=null;showScreen("menuScreen")}}
+function quitCurrentMatch(){if(gameMode==="online"||gameMode==="ranked")safeLeaveRoom();else{gameMode=null;offlineState=null;showScreen("menuScreen")}}
 
 function startOfflineDeck(){gameMode="offline";offlineState=null;openDeckSelection("offline")}
 function openDeckSelection(mode){
@@ -529,7 +599,7 @@ function renderDeck(){
 }
 $("confirmDeckBtn").onclick=async()=>{
  if(chosen.length!==5)return;$("confirmDeckBtn").disabled=true;
- if(gameMode==="online"){await update(ref(db,playerPath(role)),{ready:true,deck:chosen,online:true});$("message").textContent="Baralho confirmado. A aguardar adversário...";if(role==="host")await tryStartOnlineGame()}
+ if(gameMode==="online"||gameMode==="ranked"){await update(ref(db,playerPath(role)),{ready:true,deck:chosen,online:true});$("message").textContent="Baralho confirmado. A aguardar adversário...";if(role==="host")await tryStartOnlineGame()}
  else startOfflineGame()
 };
 async function tryStartOnlineGame(){
@@ -537,21 +607,21 @@ async function tryStartOnlineGame(){
  current.status="game";current.updatedAt=Date.now();current.state=createInitialState(h,g);return current})
 }
 function cloneCard(id){const c=LIBRARY.find(x=>x.id===id);return{...c,currentHp:c.hp,movesLeft:c.moves,alive:true,summoned:false,position:null,wasHit:false}}
-function createInitialState(h,g){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:["A partida online começou!"]}}
+function createInitialState(h,g){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:[gameMode==="ranked"?"A partida ranked começou!":"A partida online começou!"]}}
 
 function createBoard(){$("board").innerHTML="";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const b=document.createElement("button");b.className="cell";b.dataset.r=r;b.dataset.c=c;b.onclick=()=>cellClick(r,c);b.onmouseenter=()=>preview(r,c);b.onmouseleave=clearPreview;$("board").appendChild(b)}}
 function patternCells(r,c,p){const o=[],add=(a,b)=>{if(a>=0&&a<ROWS&&b>=0&&b<COLS)o.push(`${a}-${b}`)};if(p==="horizontal")[-1,0,1].forEach(x=>add(r,c+x));if(p==="vertical")[-1,0,1].forEach(x=>add(r+x,c));if(p==="diagonal")[-1,0,1].forEach(x=>add(r+x,c+x));if(p==="cross")[[0,0],[-1,0],[1,0],[0,-1],[0,1]].forEach(([a,b])=>add(r+a,c+b));if(p==="scan")for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)add(r+a,c+b);return[...new Set(o)]}
 function setAction(a){selectedAction=a;selectedHand=null;selectedArena=null;document.querySelectorAll(".action").forEach(x=>x.classList.toggle("selected",x.dataset.action===a));if(a==="pass")submitAction({kind:"pass"});else renderCurrentGame()}
 document.querySelectorAll(".action").forEach(b=>b.onclick=()=>setAction(b.dataset.action));
-function cellClick(r,c){const state=currentState();if(!state||state.winner)return;if(gameMode==="online"&&state.turn!==role)return;if(gameMode==="offline"&&offlineLocked)return;const pos=`${r}-${c}`;
+function cellClick(r,c){const state=currentState();if(!state||state.winner)return;if((gameMode==="online"||gameMode==="ranked")&&state.turn!==role)return;if(gameMode==="offline"&&offlineLocked)return;const pos=`${r}-${c}`;
  if(selectedAction==="summon"&&selectedHand!==null)submitAction({kind:"summon",cardIndex:selectedHand,pos});
  if(selectedAction==="attack"&&selectedArena!==null)submitAction({kind:"attack",cardIndex:selectedArena,r,c});
  if(selectedAction==="move"&&selectedArena!==null)submitAction({kind:"move",cardIndex:selectedArena,pos})
 }
-function currentState(){return gameMode==="online"?roomData?.state:offlineState}
-function myRole(){return gameMode==="online"?role:"host"}function enemyRole(){return myRole()==="host"?"guest":"host"}
+function currentState(){return gameMode==="online"||gameMode==="ranked"?roomData?.state:offlineState}
+function myRole(){return gameMode==="online"||gameMode==="ranked"?role:"host"}function enemyRole(){return myRole()==="host"?"guest":"host"}
 function me(s=currentState()){return s?.players?.[myRole()]}function opponent(s=currentState()){return s?.players?.[enemyRole()]}
-function renderCurrentGame(){gameMode==="online"?renderOnlineGame():renderOfflineGame()}
+function renderCurrentGame(){gameMode==="online"||gameMode==="ranked"?renderOnlineGame():renderOfflineGame()}
 function renderOnlineGame(){renderGame(roomData.state,roomData.state.turn===role&&!roomData.state.winner)}
 function renderOfflineGame(){renderGame(offlineState,!offlineLocked&&!offlineState?.winner)}
 function renderGame(state,canAct){
@@ -577,7 +647,7 @@ function renderChips(state){const mine=me(state);$("chips").innerHTML="";mine.de
 function renderLog(state){$("log").innerHTML="";[...(state.log||[])].reverse().forEach(t=>{const li=document.createElement("li");li.textContent=t;$("log").appendChild(li)})}
 function renderSelected(state){const c=selectedHand!==null?me(state).deck[selectedHand]:selectedArena!==null?me(state).deck[selectedArena]:null;$("selectedInfo").innerHTML=c?`<strong>${c.name}</strong><br>❤ ${c.currentHp}/${c.hp} · ⚔ ${c.damage} · ↔ ${c.movesLeft}`:"Nenhuma carta selecionada."}
 
-async function submitAction(a){selectedHand=null;selectedArena=null;if(gameMode==="online")await submitOnlineAction(a);else submitOfflineAction(a)}
+async function submitAction(a){selectedHand=null;selectedArena=null;if(gameMode==="online"||gameMode==="ranked")await submitOnlineAction(a);else submitOfflineAction(a)}
 async function submitOnlineAction(a){
  try{const result=await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="game"||!current.state||current.state.turn!==role||current.state.winner)return;const applied=applyAction(current.state,role,a);if(!applied)return;current.state=applied;current.updatedAt=Date.now();if(applied.winner)current.status="finished";return current},{applyLocally:false});
  if(!result.committed)$("message").textContent="Jogada inválida ou já não era o teu turno."}catch(e){$("message").textContent=firebaseErrorMessage(e)}
@@ -612,7 +682,7 @@ function botTurn(){
 }
 function finishBotTurn(){offlineLocked=false;renderOfflineGame()}
 
-function preview(r,c){const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if(gameMode==="online"&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
+function preview(r,c){const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if((gameMode==="online"||gameMode==="ranked")&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
 function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
 
 
@@ -632,6 +702,55 @@ document.querySelectorAll(".collection-category").forEach(btn=>btn.onclick=()=>{
 function applyOwnedTheme(){if(!currentProfile)return;const bg=SHOP_ITEMS.find(x=>x.type==="backgrounds"&&x.id===currentProfile.activeBackground),color=SHOP_ITEMS.find(x=>x.type==="colors"&&x.id===currentProfile.activeColor);document.body.style.background=bg?.value||"";document.documentElement.style.setProperty("--accent",color?.value||"#62e2cf")}
 document.querySelectorAll(".shop-tab").forEach(b=>b.onclick=()=>{activeShopTab=b.dataset.shop;document.querySelectorAll(".shop-tab").forEach(x=>x.classList.toggle("selected",x===b));renderShop()});
 
+
+async function getSortedProfiles(){const snap=await get(ref(db,"profiles"));if(!snap.exists())return[];return Object.values(snap.val()).filter(p=>p&&p.username).sort((a,b)=>(b.trophies||0)-(a.trophies||0)||(b.rankedWins||0)-(a.rankedWins||0));}
+async function getGlobalPosition(uid){const list=await getSortedProfiles();const i=list.findIndex(p=>p.uid===uid);return i>=0?i+1:null;}
+async function showRankedArena(){
+ if(!currentUser||!currentProfile){showScreen("accountScreen");return}const info=rankInfo(currentProfile.trophies||0);$("rankName").textContent=info.name;$("rankEmblem").textContent=info.short;$("rankTrophies").textContent=currentProfile.trophies||0;$("rankProgressBar").style.width=info.progress+"%";$("rankNextText").textContent=info.next?`${info.next-(currentProfile.trophies||0)} para ${rankInfo(info.next).name}`:"Rank máximo";$("rankWinStreak").textContent=currentProfile.winStreak||0;$("rankBestStreak").textContent=currentProfile.bestWinStreak||0;$("rankGlobalPosition").textContent="...";getGlobalPosition(currentUser.uid).then(p=>$("rankGlobalPosition").textContent=p?`#${p}`:"—");showScreen("rankedScreen");
+}
+async function showLeaderboard(){
+ if(!currentUser){showScreen("accountScreen");return}showScreen("leaderboardScreen");$("leaderboardStatus").textContent="A carregar ranking...";const list=await getSortedProfiles();$("leaderboardList").innerHTML="";list.slice(0,100).forEach((p,i)=>{const row=document.createElement("div");row.className="leader-row"+(p.uid===currentUser.uid?" me":"");row.innerHTML=`<div class="leader-pos">#${i+1}</div><div><strong>${p.username}</strong><div class="small">${p.rankedWins||0} vitórias ranked</div></div><div><span class="trophy-icon">R</span> ${p.trophies||0}</div><div class="leader-rank">${rankInfo(p.trophies||0).name}</div>`;$("leaderboardList").appendChild(row)});$("leaderboardStatus").textContent=list.length?`${Math.min(100,list.length)} jogadores apresentados.`:"Ainda não existem jogadores no ranking.";
+}
+async function startRankedSearch(){
+ if(!currentUser||!currentProfile){showScreen("accountScreen");return}await cleanupRankedQueue();gameMode="ranked";rankedSearchStartedAt=Date.now();const info=rankInfo(currentProfile.trophies||0);$("searchRankName").textContent=info.name;$("searchTrophies").textContent=currentProfile.trophies||0;$("searchRange").textContent="100";$("searchStatus").textContent="A entrar na fila...";showScreen("rankedSearchScreen");
+ rankedQueueRef=ref(db,`rankedQueue/${currentUser.uid}`);await set(rankedQueueRef,{uid:currentUser.uid,name:identity.name,trophies:currentProfile.trophies||0,joinedAt:Date.now(),online:true,status:"searching"});rankedDisconnect=onDisconnect(rankedQueueRef);await rankedDisconnect.remove();
+ onValue(rankedQueueRef,s=>{if(!s.exists())return;const q=s.val();if(q.status==="matched"&&q.matchId)enterRankedMatch(q.matchId,q.role)});
+ rankedQueueRootRef=ref(db,"rankedQueue");onValue(rankedQueueRootRef,()=>attemptRankedMatch());rankedSearchTimer=setInterval(()=>{const range=Math.min(500,100+Math.floor((Date.now()-rankedSearchStartedAt)/10000)*100);$("searchRange").textContent=range;attemptRankedMatch()},3000);$("searchStatus").textContent="À procura de um jogador próximo dos teus troféus...";
+}
+async function attemptRankedMatch(){
+ if(!currentUser||!rankedQueueRef)return;
+ const queueRoot=ref(db,"rankedQueue"),snap=await get(queueRoot);if(!snap.exists())return;
+ const all=Object.values(snap.val()).filter(x=>x&&x.status==="searching"&&x.online&&x.uid!==currentUser.uid);
+ const range=Math.min(500,100+Math.floor((Date.now()-rankedSearchStartedAt)/10000)*100),mine=currentProfile.trophies||0;
+ const candidates=all.filter(x=>Math.abs((x.trophies||0)-mine)<=range).sort((a,b)=>Math.abs((a.trophies||0)-mine)-Math.abs((b.trophies||0)-mine)||a.joinedAt-b.joinedAt);
+ if(!candidates.length)return;const other=candidates[0];if(currentUser.uid>other.uid)return;
+ const matchId="R"+randomCode();
+ const claim=await runTransaction(queueRoot,current=>{
+  if(!current||current[currentUser.uid]?.status!=="searching"||current[other.uid]?.status!=="searching")return;
+  current[currentUser.uid]={...current[currentUser.uid],status:"reserving",matchId,role:"host"};
+  current[other.uid]={...current[other.uid],status:"reserving",matchId,role:"guest"};
+  return current;
+ },{applyLocally:false});
+ if(!claim.committed)return;
+ try{
+  const room={version:"0.9",mode:"ranked",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:currentUser.uid,name:identity.name,trophies:mine,online:true,ready:false},guest:{id:other.uid,name:other.name,trophies:other.trophies||0,online:true,ready:false}}};
+  await set(ref(db,`rankedRooms/${matchId}`),room);
+  await update(ref(db),{[`rankedQueue/${currentUser.uid}/status`]:"matched",[`rankedQueue/${other.uid}/status`]:"matched"});
+ }catch(error){
+  await update(ref(db),{[`rankedQueue/${currentUser.uid}/status`]:"searching",[`rankedQueue/${currentUser.uid}/matchId`]:null,[`rankedQueue/${currentUser.uid}/role`]:null,[`rankedQueue/${other.uid}/status`]:"searching",[`rankedQueue/${other.uid}/matchId`]:null,[`rankedQueue/${other.uid}/role`]:null});
+  console.error(error);
+ }
+}
+async function enterRankedMatch(matchId,assignedRole){
+ await cleanupRankedQueue(true);gameMode="ranked";rankedMatchId=matchId;roomCode=matchId;role=assignedRole;await setupPresence();listenRoom();$("roomCodeText").textContent="RANKED";$("lobbyStatus").textContent="Adversário encontrado!";showScreen("lobbyScreen");
+}
+async function cancelRankedSearch(){await cleanupRankedQueue();gameMode=null;showScreen("rankedScreen")}
+async function cleanupRankedQueue(removeEntry=true){
+ if(rankedSearchTimer){clearInterval(rankedSearchTimer);rankedSearchTimer=null}if(rankedQueueRootRef){off(rankedQueueRootRef);rankedQueueRootRef=null}if(rankedQueueRef){off(rankedQueueRef);if(removeEntry)try{await set(rankedQueueRef,null)}catch(e){}rankedQueueRef=null}if(rankedDisconnect){try{await rankedDisconnect.cancel()}catch(e){}rankedDisconnect=null}
+}
+async function showPromotion(){if(!pendingPromotion)return;await leaveRoom(true);$("promotionOldRank").textContent=pendingPromotion.oldRank;$("promotionNewRank").textContent=pendingPromotion.newRank;$("promotionTrophyText").textContent=`+${pendingPromotion.trophyDelta} troféus`;showScreen("promotionScreen")}
+function closePromotion(){pendingPromotion=null;showRankedArena()}
+
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
  await loadProfile(user);
@@ -640,7 +759,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();
 
-window.showScreen=showScreen;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
