@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.7 The Login in Chaos</title>
+<title>Arena Secreta — Beta 0.8 The Shop Update</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -79,8 +79,14 @@ button,input,select{font:inherit}
 .menu-user-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px}
 .google-btn{background:#fff;color:#222}
 
+
+.wallet{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0}.wallet-pill{background:var(--panel3);border-radius:999px;padding:8px 13px;font-weight:900}.wallet-pill.coins{color:var(--gold)}.wallet-pill.trophies{color:var(--accent)}
+.shop-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.shop-tab{border:2px solid transparent;border-radius:10px;padding:9px 13px;background:#303b65;color:white;font-weight:900;cursor:pointer}.shop-tab.selected{border-color:var(--accent)}
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.shop-item{background:var(--panel3);border-radius:15px;padding:15px}.shop-item h3{margin:0 0 7px}.shop-item .price{color:var(--gold);font-weight:900;margin:10px 0}.shop-item.owned{opacity:.65}
+.inventory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.inventory-item{background:var(--panel3);border-radius:13px;padding:12px}.inventory-item.locked{opacity:.45}.profile-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.name-change-box{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+@media(max-width:850px){.shop-grid{grid-template-columns:1fr 1fr}.inventory-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
-@media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
+@media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid,.shop-grid,.inventory-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
 </style>
 </head>
 <body>
@@ -89,22 +95,19 @@ button,input,select{font:inherit}
 <div class="hero"><div class="hero-card">
  <h1 class="logo">ARENA<br>SECRETA</h1>
  <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.7 — THE LOGIN IN CHAOS</div>
+ <div class="version">BETA 0.8 — THE SHOP UPDATE</div>
  <div class="identity">
   <strong id="menuName">Ghost0001</strong>
   <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
-  <div class="menu-user-row">
-   <button id="profileMenuBtn" class="btn secondary hidden" onclick="showProfile()">PERFIL</button>
-   <button id="logoutMenuBtn" class="btn danger hidden" onclick="logoutAccount()">TERMINAR SESSÃO</button>
-  </div>
+  <div id="menuWallet" class="wallet hidden"><span class="wallet-pill coins">🪙 <span id="menuCoins">0</span></span><span class="wallet-pill trophies">🏆 <span id="menuTrophies">0</span></span></div>
+  <div class="menu-user-row"><button id="profileMenuBtn" class="btn secondary hidden" onclick="showProfile()">PERFIL</button><button id="logoutMenuBtn" class="btn danger hidden" onclick="logoutAccount()">TERMINAR SESSÃO</button></div>
  </div>
  <div class="menu">
-  <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button>
-  <button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
-  <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button>
-  <button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
+  <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button><button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
+  <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">INVENTÁRIO</button>
+  <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Contas Firebase + perfil + offline + online</p>
+ <p class="small">Moedas + loja + inventário + troféus</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
@@ -138,24 +141,11 @@ button,input,select{font:inherit}
 </div>
 </div></section>
 
-<section id="profileScreen" class="screen"><div class="wrap">
-<div class="panel">
- <div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
- <div class="profile-card">
-  <div id="profileName" class="profile-name">Jogador</div>
-  <div id="profileEmail" class="profile-email"></div>
-  <div class="profile-stats">
-   <div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div>
-   <div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div>
-   <div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div>
-  </div>
-  <div style="margin-top:14px">
-   <div class="small">Conta criada em:</div>
-   <strong id="profileCreatedAt">—</strong>
-  </div>
- </div>
-</div>
-</div></section>
+<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="profile-card"><div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins">🪙 <span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies">🏆 <span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Inventário</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
+
+<section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Loja</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins">🪙 <span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards">Cartas</button><button class="shop-tab" data-shop="backgrounds">Fundos</button><button class="shop-tab" data-shop="colors">Cores</button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
+
+<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Inventário</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins">🪙 <span id="inventoryCoins">0</span></span><span class="wallet-pill trophies">🏆 <span id="inventoryTrophies">0</span></span></div><h3>Cartas</h3><div id="inventoryCards" class="inventory-grid"></div><h3>Fundos</h3><div id="inventoryBackgrounds" class="inventory-grid"></div><h3>Cores</h3><div id="inventoryColors" class="inventory-grid"></div></div></div></section>
 
 <section id="offlineSetupScreen" class="screen"><div class="wrap">
 <div class="panel">
@@ -269,7 +259,26 @@ const LIBRARY=[
 {id:"scout",name:"Batedor",rarity:"Rara",hp:4,damage:0,moves:3,cost:2,pattern:"scan"},
 {id:"mage",name:"Mago",rarity:"Épica",hp:3,damage:2,moves:2,cost:5,pattern:"cross"},
 {id:"paladin",name:"Paladino",rarity:"Épica",hp:8,damage:3,moves:1,cost:6,pattern:"vertical"},
-{id:"warlock",name:"Bruxo",rarity:"Lendária",hp:5,damage:4,moves:2,cost:7,pattern:"cross"}];
+{id:"warlock",name:"Bruxo",rarity:"Lendária",hp:5,damage:4,moves:2,cost:7,pattern:"cross"},
+{id:"berserker",name:"Berserker",rarity:"Rara",hp:4,damage:4,moves:2,cost:5,pattern:"horizontal"},
+{id:"crossbowman",name:"Besteiro",rarity:"Rara",hp:3,damage:3,moves:2,cost:4,pattern:"vertical"},
+{id:"raider",name:"Saqueador",rarity:"Comum",hp:4,damage:2,moves:4,cost:3,pattern:"diagonal"},
+{id:"guardian",name:"Guardião",rarity:"Épica",hp:9,damage:1,moves:1,cost:6,pattern:"cross"},
+{id:"shieldbearer",name:"Portador do Escudo",rarity:"Rara",hp:7,damage:1,moves:2,cost:4,pattern:"horizontal"},
+{id:"healer",name:"Curandeira",rarity:"Épica",hp:4,damage:1,moves:3,cost:5,pattern:"scan"},
+{id:"necromancer",name:"Necromante",rarity:"Lendária",hp:4,damage:3,moves:2,cost:7,pattern:"cross"},
+{id:"illusionist",name:"Ilusionista",rarity:"Épica",hp:3,damage:2,moves:4,cost:5,pattern:"scan"},
+{id:"alchemist",name:"Alquimista",rarity:"Rara",hp:5,damage:2,moves:3,cost:4,pattern:"diagonal"}];
+const STARTER_CARDS=["squire","archer","knight","assassin","scout","mage","paladin","warlock"];
+const SHOP_ITEMS=[
+{id:"offensive_pack",type:"cards",name:"Pacote Ofensivo",price:2000,items:["berserker","crossbowman","raider"],description:"Desbloqueia 3 cartas ofensivas futuras."},
+{id:"defensive_pack",type:"cards",name:"Pacote Defensivo",price:2000,items:["guardian","shieldbearer","healer"],description:"Desbloqueia 3 cartas defensivas futuras."},
+{id:"magic_pack",type:"cards",name:"Pacote Mágico",price:2000,items:["necromancer","illusionist","alchemist"],description:"Desbloqueia 3 cartas mágicas futuras."},
+{id:"bg_castle",type:"backgrounds",name:"Castelo Noturno",price:1200,value:"radial-gradient(circle at top,#3a2d64 0%,#111735 42%,#070b17 78%)"},
+{id:"bg_forest",type:"backgrounds",name:"Floresta Sombria",price:1200,value:"radial-gradient(circle at top,#244f45 0%,#102720 42%,#070b17 78%)"},
+{id:"bg_crimson",type:"backgrounds",name:"Reino Carmesim",price:1200,value:"radial-gradient(circle at top,#6a2836 0%,#31141c 42%,#070b17 78%)"},
+{id:"color_gold",type:"colors",name:"Dourado Real",price:700,value:"#ffd166"},{id:"color_purple",type:"colors",name:"Roxo Arcano",price:700,value:"#a875ff"},{id:"color_blue",type:"colors",name:"Azul Glacial",price:700,value:"#6cb7ff"}
+];
 const $=id=>document.getElementById(id);
 const clientId=sessionStorage.getItem("arenaClientId")||crypto.randomUUID();sessionStorage.setItem("arenaClientId",clientId);
 
@@ -347,6 +356,8 @@ async function registerAccount(){
     email,
     wins:0,
     losses:0,
+    coins:0,trophies:0,rankedWins:0,rankedLosses:0,
+    ownedCards:STARTER_CARDS,ownedBackgrounds:["default"],ownedColors:["default"],activeBackground:"default",activeColor:"default",nicknameChanges:0,
     createdAt:Date.now(),
     lastMatch:null
    });
@@ -389,7 +400,7 @@ async function loginGoogle(){
    await set(ref(db,`usernames/${nicknameKey}`),{uid:result.user.uid,username:nickname});
    await set(profileRef,{
     uid:result.user.uid,username:nickname,usernameKey:nicknameKey,
-    email:result.user.email||"",wins:0,losses:0,createdAt:Date.now(),lastMatch:null
+    email:result.user.email||"",wins:0,losses:0,coins:0,trophies:0,rankedWins:0,rankedLosses:0,ownedCards:STARTER_CARDS,ownedBackgrounds:["default"],ownedColors:["default"],activeBackground:"default",activeColor:"default",nicknameChanges:0,createdAt:Date.now(),lastMatch:null
    });
    await updateProfile(result.user,{displayName:nickname});
   }
@@ -415,18 +426,15 @@ async function logoutAccount(){
 }
 async function loadProfile(user){
  if(!user){currentProfile=null;return}
- const snap=await get(ref(db,`profiles/${user.uid}`));
- currentProfile=snap.exists()?snap.val():null;
+ const pRef=ref(db,`profiles/${user.uid}`),snap=await get(pRef);currentProfile=snap.exists()?snap.val():null;
+ if(currentProfile){const patch={};if(currentProfile.coins==null)patch.coins=0;if(currentProfile.trophies==null)patch.trophies=0;if(!Array.isArray(currentProfile.ownedCards))patch.ownedCards=STARTER_CARDS;if(!Array.isArray(currentProfile.ownedBackgrounds))patch.ownedBackgrounds=["default"];if(!Array.isArray(currentProfile.ownedColors))patch.ownedColors=["default"];if(!currentProfile.activeBackground)patch.activeBackground="default";if(!currentProfile.activeColor)patch.activeColor="default";if(currentProfile.nicknameChanges==null)patch.nicknameChanges=0;if(Object.keys(patch).length){await update(pRef,patch);currentProfile={...currentProfile,...patch}}applyOwnedTheme()}
 }
 function refreshAccountUI(){
  const registered=!!currentUser;
  identity=registered?{name:currentProfile?.username||currentUser.displayName||"Player",type:"account"}:getGhostIdentity();
  $("menuName").textContent=identity.name;
  $("menuAccountType").textContent=registered?(currentUser.email||"Conta Firebase"):"Identidade temporária neste dispositivo";
- $("profileMenuBtn").classList.toggle("hidden",!registered);
- $("logoutMenuBtn").classList.toggle("hidden",!registered);
- $("accountMenuBtn").classList.toggle("hidden",registered);
- $("newGhostBtn").classList.toggle("hidden",registered);
+ $("profileMenuBtn").classList.toggle("hidden",!registered);$("logoutMenuBtn").classList.toggle("hidden",!registered);$("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
 }
 async function showProfile(){
  if(!currentUser||!currentProfile)return;
@@ -435,23 +443,10 @@ async function showProfile(){
  const wins=currentProfile.wins||0,losses=currentProfile.losses||0,total=wins+losses;
  $("profileWins").textContent=wins;
  $("profileLosses").textContent=losses;
- $("profileWinrate").textContent=total?Math.round(wins/total*100)+"%":"0%";
- $("profileCreatedAt").textContent=currentProfile.createdAt?new Date(currentProfile.createdAt).toLocaleDateString("pt-PT"):"—";
- showScreen("profileScreen");
+ $("profileWinrate").textContent=total?Math.round(wins/total*100)+"%":"0%";$("profileCoins").textContent=currentProfile.coins||0;$("profileTrophies").textContent=currentProfile.trophies||0;$("profileCards").textContent=(currentProfile.ownedCards||STARTER_CARDS).length;$("profileCreatedAt").textContent=currentProfile.createdAt?new Date(currentProfile.createdAt).toLocaleDateString("pt-PT"):"—";const changes=currentProfile.nicknameChanges||0;$("nicknameCostText").textContent=changes===0?"Primeira alteração gratuita.":`Próxima alteração: ${changes*5000} moedas.`;showScreen("profileScreen");
 }
-async function recordMatchResult(win,opponentName,mode){
- if(!currentUser)return;
- const pRef=ref(db,`profiles/${currentUser.uid}`);
- await runTransaction(pRef,current=>{
-  if(!current)return current;
-  current.wins=(current.wins||0)+(win?1:0);
-  current.losses=(current.losses||0)+(win?0:1);
-  current.lastMatch={result:win?"win":"loss",opponent:opponentName||"Desconhecido",mode,date:Date.now()};
-  return current;
- });
- await loadProfile(currentUser);
- refreshAccountUI();
-}
+function rewardForMatch(win,mode){if(!win)return 0;if(mode==="online")return 500;if(mode==="ranked")return 600;if(mode==="offline")return{easy:50,normal:70,hard:90,impossible:100}[difficulty]||50;return 0}
+async function recordMatchResult(win,opponentName,mode){if(!currentUser)return;const pRef=ref(db,`profiles/${currentUser.uid}`),reward=rewardForMatch(win,mode);await runTransaction(pRef,current=>{if(!current)return current;current.wins=(current.wins||0)+(win?1:0);current.losses=(current.losses||0)+(win?0:1);current.coins=(current.coins||0)+reward;if(mode==="ranked"){current.trophies=Math.max(0,(current.trophies||0)+(win?15:-5));current.rankedWins=(current.rankedWins||0)+(win?1:0);current.rankedLosses=(current.rankedLosses||0)+(win?0:1)}current.lastMatch={result:win?"win":"loss",opponent:opponentName||"Desconhecido",mode,reward,date:Date.now()};return current});await loadProfile(currentUser);refreshAccountUI()}
 
 function showScreen(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
 function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
@@ -526,7 +521,8 @@ function openDeckSelection(mode){
  $("confirmDeckBtn").classList.remove("hidden");$("confirmDeckBtn").disabled=true;$("turnBadge").textContent="ESCOLHA DO BARALHO";$("message").textContent="Escolhe cinco cartas.";renderDeck();createBoard();showScreen("gameScreen")
 }
 function renderDeck(){
- $("deckCards").innerHTML="";LIBRARY.forEach(c=>{const b=document.createElement("button");b.className="card"+(chosen.includes(c.id)?" selected":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><div class="rarity">${c.rarity}</div><h3>${c.name}</h3><div class="small">❤${c.hp} ⚔${c.damage} ↔${c.moves}</div>`;
+ const allowed=currentUser?(currentProfile?.ownedCards||STARTER_CARDS):STARTER_CARDS;
+ $("deckCards").innerHTML="";LIBRARY.filter(c=>allowed.includes(c.id)).forEach(c=>{const b=document.createElement("button");b.className="card"+(chosen.includes(c.id)?" selected":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><div class="rarity">${c.rarity}</div><h3>${c.name}</h3><div class="small">❤${c.hp} ⚔${c.damage} ↔${c.moves}</div>`;
  b.onclick=()=>{if(chosen.includes(c.id))chosen=chosen.filter(x=>x!==c.id);else if(chosen.length<5)chosen.push(c.id);$("confirmDeckBtn").disabled=chosen.length!==5;renderDeck()};$("deckCards").appendChild(b)})
 }
 $("confirmDeckBtn").onclick=async()=>{
@@ -617,6 +613,19 @@ function finishBotTurn(){offlineLocked=false;renderOfflineGame()}
 function preview(r,c){const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if(gameMode==="online"&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
 function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
 
+
+let activeShopTab="cards";
+async function changeNickname(){if(!currentUser||!currentProfile)return;const nickname=$("newNicknameInput").value.trim(),key=normalizeNickname(nickname);if(!/^[A-Za-z0-9_]{3,16}$/.test(nickname)){$("nicknameCostText").textContent="Nickname inválido.";return}const changes=currentProfile.nicknameChanges||0,cost=changes===0?0:changes*5000;if((currentProfile.coins||0)<cost){$("nicknameCostText").textContent=`Precisas de ${cost} moedas.`;return}const nr=ref(db,`usernames/${key}`),reserved=await runTransaction(nr,c=>{if(c!==null)return;return{uid:currentUser.uid,username:nickname}},{applyLocally:false});if(!reserved.committed){$("nicknameCostText").textContent="Nome ocupado.";return}const old=currentProfile.usernameKey;await updateProfile(currentUser,{displayName:nickname});await update(ref(db,`profiles/${currentUser.uid}`),{username:nickname,usernameKey:key,coins:(currentProfile.coins||0)-cost,nicknameChanges:changes+1});if(old)await set(ref(db,`usernames/${old}`),null);await loadProfile(currentUser);refreshAccountUI();showProfile()}
+function showShop(){if(!currentUser)return;$("shopMessage").textContent="";renderShop();showScreen("shopScreen")}
+function renderShop(){$("shopCoins").textContent=currentProfile?.coins||0;$("shopContent").innerHTML="";SHOP_ITEMS.filter(x=>x.type===activeShopTab).forEach(item=>{const owned=item.type==="cards"?item.items.every(x=>(currentProfile.ownedCards||[]).includes(x)):item.type==="backgrounds"?(currentProfile.ownedBackgrounds||[]).includes(item.id):(currentProfile.ownedColors||[]).includes(item.id);const d=document.createElement("div");d.className="shop-item"+(owned?" owned":"");d.innerHTML=`<h3>${item.name}</h3><p class="small">${item.description||"Personalização cosmética."}</p><div class="price">🪙 ${item.price}</div><button class="btn" ${owned?"disabled":""}>${owned?"OBTIDO":"COMPRAR"}</button>`;d.querySelector("button").onclick=()=>buyItem(item);$("shopContent").appendChild(d)})}
+async function buyItem(item){if((currentProfile.coins||0)<item.price){$("shopMessage").textContent="Não tens moedas suficientes.";return}const res=await runTransaction(ref(db,`profiles/${currentUser.uid}`),p=>{if(!p||(p.coins||0)<item.price)return;p.coins-=item.price;if(item.type==="cards")p.ownedCards=[...new Set([...(p.ownedCards||STARTER_CARDS),...item.items])];if(item.type==="backgrounds")p.ownedBackgrounds=[...new Set([...(p.ownedBackgrounds||["default"]),item.id])];if(item.type==="colors")p.ownedColors=[...new Set([...(p.ownedColors||["default"]),item.id])];return p},{applyLocally:false});if(!res.committed)return;await loadProfile(currentUser);refreshAccountUI();$("shopMessage").textContent=`Compraste ${item.name}!`;renderShop()}
+function showInventory(){if(!currentUser)return;renderInventory();showScreen("inventoryScreen")}
+function renderInventory(){$("inventoryCoins").textContent=currentProfile.coins||0;$("inventoryTrophies").textContent=currentProfile.trophies||0;const names={squire:"Escudeiro",archer:"Arqueiro",knight:"Cavaleiro",assassin:"Assassino",scout:"Batedor",mage:"Mago",paladin:"Paladino",warlock:"Bruxo",berserker:"Berserker",crossbowman:"Besteiro",raider:"Saqueador",guardian:"Guardião",shieldbearer:"Portador do Escudo",healer:"Curandeira",necromancer:"Necromante",illusionist:"Ilusionista",alchemist:"Alquimista"};$("inventoryCards").innerHTML="";Object.entries(names).forEach(([id,n])=>{const own=(currentProfile.ownedCards||STARTER_CARDS).includes(id),d=document.createElement("div");d.className="inventory-item"+(own?"":" locked");d.innerHTML=`<strong>${n}</strong><span class="small">${own?"Obtida":"Bloqueada"}</span>`;$("inventoryCards").appendChild(d)});renderCos("backgrounds","inventoryBackgrounds");renderCos("colors","inventoryColors")}
+function renderCos(type,target){const owned=type==="backgrounds"?(currentProfile.ownedBackgrounds||["default"]):(currentProfile.ownedColors||["default"]);$(target).innerHTML="";[{id:"default",type,name:"Padrão"},...SHOP_ITEMS.filter(x=>x.type===type)].forEach(item=>{const own=owned.includes(item.id),d=document.createElement("div");d.className="inventory-item"+(own?"":" locked");d.innerHTML=`<strong>${item.name}</strong><span class="small">${own?"Obtido":"Bloqueado"}</span>`;if(own){const b=document.createElement("button");b.className="btn secondary";b.textContent="Usar";b.onclick=()=>equip(item);d.appendChild(b)}$(target).appendChild(d)})}
+async function equip(item){const field=item.type==="backgrounds"?"activeBackground":"activeColor";await update(ref(db,`profiles/${currentUser.uid}`),{[field]:item.id});await loadProfile(currentUser);renderInventory()}
+function applyOwnedTheme(){if(!currentProfile)return;const bg=SHOP_ITEMS.find(x=>x.type==="backgrounds"&&x.id===currentProfile.activeBackground),color=SHOP_ITEMS.find(x=>x.type==="colors"&&x.id===currentProfile.activeColor);document.body.style.background=bg?.value||"";document.documentElement.style.setProperty("--accent",color?.value||"#62e2cf")}
+document.querySelectorAll(".shop-tab").forEach(b=>b.onclick=()=>{activeShopTab=b.dataset.shop;document.querySelectorAll(".shop-tab").forEach(x=>x.classList.toggle("selected",x===b));renderShop()});
+
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
  await loadProfile(user);
@@ -625,7 +634,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();
 
-window.showScreen=showScreen;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.showScreen=showScreen;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
