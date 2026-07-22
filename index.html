@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.9.1 Tutorial & Settings</title>
+<title>Arena Secreta — Beta 0.9.2 Medieval Arena</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -120,6 +120,22 @@ body.compact-mode .panel{padding:11px;margin-bottom:9px}body.compact-mode .hero-
 .tutorial-hand{display:flex;gap:8px;overflow-x:auto;margin-top:12px}.tutorial-card-button{flex:0 0 145px;background:var(--panel2);border:2px solid transparent;border-radius:11px;padding:10px;color:white;text-align:left;cursor:pointer}.tutorial-card-button.selected{border-color:var(--gold)}
 .tutorial-reward{background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.35);border-radius:12px;padding:11px;color:var(--gold);margin-top:12px}.tutorial-toast{min-height:22px;color:var(--gold);font-weight:900;margin-top:10px}
 @media(max-width:800px){.tutorial-card{grid-template-columns:1fr}.tutorial-guide{order:-1}.tutorial-top{grid-template-columns:1fr}.setting-row{align-items:flex-start}.setting-control{min-width:120px}}
+
+:root{--bg:#100b08;--panel:#241a13;--panel2:#38291d;--panel3:#17100c;--cell:#514232;--text:#f5ead3;--muted:#c0ab8d;--accent:#75c9a3;--gold:#d8ad58;--danger:#9f3440;--hit:#a93f43;--miss:#66594a;--scan:#8d6db1;--mana:#6aaac5;--move:#5e9abb}
+body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transparent 35%),linear-gradient(rgba(7,5,4,.36),rgba(7,5,4,.58)),repeating-linear-gradient(90deg,#160f0b 0 46px,#1c130e 46px 48px);font-family:Georgia,"Times New Roman",serif}
+.panel,.hero-card,.profile-card,.shop-item,.collection-detail,.tutorial-guide{border:1px solid rgba(216,173,88,.38);box-shadow:inset 0 0 0 2px rgba(50,29,14,.55),0 18px 45px rgba(0,0,0,.36)}
+.panel{background:linear-gradient(145deg,rgba(44,31,22,.98),rgba(29,20,15,.98))}.hero-card{background:linear-gradient(145deg,#2c1e15,#17100c)}
+.logo,.header h2,.panel h3,.profile-name{font-family:Georgia,"Times New Roman",serif;text-shadow:0 2px 0 #000,0 0 18px rgba(216,173,88,.16)}
+.tag{color:#e4be67}.btn{border:1px solid rgba(245,225,174,.28);background:linear-gradient(#7abf9e,#4b9173);box-shadow:inset 0 1px rgba(255,255,255,.24),0 3px 0 #214d3a;font-family:Georgia,"Times New Roman",serif}
+.btn.secondary,.action,.shop-tab{background:linear-gradient(#604a34,#3c2c20);box-shadow:inset 0 1px rgba(255,255,255,.12),0 3px 0 #21160f}.btn.danger{background:linear-gradient(#b34a53,#762b34);box-shadow:0 3px 0 #48161d}.ranked-btn{background:linear-gradient(135deg,#d8ad58,#699a77);color:#20150d}
+.input,.setting-control{background:#17100c;border-color:rgba(216,173,88,.36);color:#f5ead3}
+.board-wrap,.tutorial-board-wrap{background:linear-gradient(rgba(20,13,9,.58),rgba(20,13,9,.58)),repeating-linear-gradient(0deg,#493c2e 0 40px,#413528 40px 42px),repeating-linear-gradient(90deg,transparent 0 40px,rgba(0,0,0,.18) 40px 42px);border:2px ridge #7b5b33}
+.cell,.tutorial-cell{background:linear-gradient(145deg,#665542,#44382b);border:1px solid #2b2119;box-shadow:inset 0 1px rgba(255,255,255,.1),inset 0 -2px rgba(0,0,0,.25)}
+.cell.player,.tutorial-cell.player{background:linear-gradient(145deg,#69c5a0,#387f64);color:#14251e}.cell.enemy-reveal,.tutorial-cell.enemy{background:linear-gradient(145deg,#9068b2,#5f407a)}
+.card,.hand-card,.chip,.option-card,.mode-card,.inventory-item,.collection-category,.ranked-stat,.profile-stat,.stat,.identity{background:linear-gradient(145deg,#493625,#2c2017);border-color:rgba(216,173,88,.25)}
+.card.selected,.hand-card.selected,.chip.selected,.option-card.selected,.collection-category.selected{border-color:#e0b85f}.turn{background:linear-gradient(#d8ad58,#aa7931);color:#21160d;border:1px solid #f1d183}
+.card-symbol{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-right:7px;border-radius:50%;background:#17100c;border:1px solid #d8ad58;color:#f4d484;font-size:18px;vertical-align:middle}
+.board-symbol{font-size:clamp(12px,1.7vw,22px);line-height:1;text-shadow:0 1px 2px #000}.preparation-banner{margin-bottom:10px;padding:9px 12px;border-radius:10px;background:rgba(216,173,88,.12);border:1px solid rgba(216,173,88,.4);color:#e8c56f;text-align:center;font-weight:900}
 </style>
 </head>
 <body>
@@ -128,7 +144,7 @@ body.compact-mode .panel{padding:11px;margin-bottom:9px}body.compact-mode .hero-
 <div class="hero"><div class="hero-card">
  <h1 class="logo">ARENA<br>SECRETA</h1>
  <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.9.1 — TUTORIAL & SETTINGS</div>
+ <div class="version">BETA 0.9.2 — MEDIEVAL ARENA</div>
  <div class="identity">
   <strong id="menuName">Ghost0001</strong>
   <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
@@ -142,7 +158,7 @@ body.compact-mode .panel{padding:11px;margin-bottom:9px}body.compact-mode .hero-
   <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
   <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Ranked Arena + Tutorial guiado + Definições</p>
+ <p class="small">Arena medieval + preparação automática + símbolos únicos</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
@@ -354,6 +370,10 @@ const LIBRARY=[
 {id:"necromancer",name:"Necromante",rarity:"Lendária",hp:4,damage:3,moves:2,cost:7,pattern:"cross"},
 {id:"illusionist",name:"Ilusionista",rarity:"Épica",hp:3,damage:2,moves:4,cost:5,pattern:"scan"},
 {id:"alchemist",name:"Alquimista",rarity:"Rara",hp:5,damage:2,moves:3,cost:4,pattern:"diagonal"}];
+
+const CARD_SYMBOLS={squire:"⛨",archer:"➶",knight:"♞",assassin:"†",scout:"◉",mage:"✦",paladin:"✠",warlock:"☾",berserker:"⚔",crossbowman:"⌁",raider:"☠",guardian:"⬟",shieldbearer:"◈",healer:"✚",necromancer:"☠",illusionist:"◇",alchemist:"⚗"};
+function cardSymbol(id){return CARD_SYMBOLS[id]||"◆"}
+
 const STARTER_CARDS=["squire","archer","knight","assassin","scout","mage","paladin","warlock"];
 
 const RANK_TIERS=[
@@ -383,6 +403,7 @@ let identity=getGhostIdentity(),currentUser=null,currentProfile=null;
 let gameMode=null,difficulty="easy",personality="balanced";
 let roomCode="",role=null,roomData=null,roomListener=null,presenceDisconnect=null,connected=true;
 let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
+let preparationOpenedForRoom=null,startingGame=false;
 let offlineState=null,offlineLocked=false,botKnown=[],lastRecordedWinner=null;
 let rankedQueueRef=null,rankedQueueRootRef=null,rankedSearchStartedAt=0,rankedSearchTimer=null,rankedDisconnect=null,rankedMatchId=null,pendingPromotion=null;
 
@@ -586,7 +607,7 @@ async function joinRoom(){
   const guestRef=ref(db,`${roomPath(code)}/players/guest`);
   const result=await runTransaction(guestRef,current=>{if(current&&current.id!==clientId)return;return{id:clientId,name:identity.name,online:true,ready:false,joinedAt:Date.now()}},{applyLocally:false});
   if(!result.committed){$("onlineStatus").textContent="A sala já está cheia.";return}
-  roomCode=code;role="guest";gameMode="online";await setupPresence();listenRoom();$("roomCodeText").textContent=code;showScreen("lobbyScreen")
+  roomCode=code;role="guest";gameMode="online";preparationOpenedForRoom=null;await setupPresence();listenRoom();$("roomCodeText").textContent=code;openDeckSelection("online");preparationOpenedForRoom=roomCode
  }catch(e){$("onlineStatus").textContent=firebaseErrorMessage(e)}
 }
 async function setupPresence(){
@@ -595,21 +616,24 @@ async function setupPresence(){
 }
 function listenRoom(){
  if(roomListener)off(roomListener);const r=ref(db,roomPath(roomCode));roomListener=r;
- onValue(r,s=>{if(!s.exists()){if(roomData)showCancelled("A sala foi encerrada.");return}
+ onValue(r,async s=>{if(!s.exists()){if(roomData)showCancelled("A sala foi encerrada.");return}
   const previous=roomData;roomData=s.val();renderRoom();
   if(roomData.status==="cancelled"){showCancelled(roomData.cancelReason||"O outro jogador abandonou a partida.");return}
   const other=role==="host"?roomData.players?.guest:roomData.players?.host;
-  if(previous&&["lobby","game"].includes(previous.status)&&other&&other.online===false&&roomData.status!=="finished"){
-   requestCancelRoom(`${other.name||"O outro jogador"} abandonou a partida.`);return
+  if(previous&&["lobby","game"].includes(previous.status)&&other&&other.online===false&&roomData.status!=="finished"){requestCancelRoom(`${other.name||"O outro jogador"} abandonou a partida.`);return}
+  const h=roomData.players?.host,g=roomData.players?.guest;
+  if(roomData.status==="lobby"&&h&&g){
+   if(preparationOpenedForRoom!==roomCode){preparationOpenedForRoom=roomCode;openDeckSelection(gameMode)}
+   if(h.ready&&g.ready&&h.deck&&g.deck&&!startingGame){startingGame=true;try{await tryStartOnlineGame()}finally{startingGame=false}}
   }
-  if(["game","finished"].includes(roomData.status)&&roomData.state){showScreen("gameScreen");renderOnlineGame()}
+  if(["game","finished"].includes(roomData.status)&&roomData.state){preparationOpenedForRoom=roomCode;showScreen("gameScreen");renderOnlineGame()}
  },e=>{$("lobbyStatus").textContent=firebaseErrorMessage(e)})
 }
 function renderRoom(){
  if(!roomData)return;const h=roomData.players?.host,g=roomData.players?.guest;$("roomCodeText").textContent=roomCode;
  $("lobbyPlayers").textContent=g?`${h?.name||"Host"}${gameMode==="ranked"?` (${h?.trophies||0})`:""} VS ${g.name}${gameMode==="ranked"?` (${g?.trophies||0})`:""}`:"A aguardar adversário...";
  if(!g){$("lobbyStatus").textContent=gameMode==="ranked"?"A preparar adversário...":"Sala criada. Partilha o código.";$("goDeckBtn").classList.add("hidden")}
- else{$("lobbyStatus").textContent=h?.online!==false&&g?.online!==false?"Os dois jogadores estão ligados.":"Um jogador está desligado.";$("goDeckBtn").classList.remove("hidden")}
+ else{$("lobbyStatus").textContent="Adversário encontrado. A entrar na Arena...";$("goDeckBtn").classList.add("hidden")}
 }
 async function requestCancelRoom(reason){
  if(!roomCode)return;try{await update(ref(db,roomPath(roomCode)),{status:"cancelled",cancelReason:reason,cancelledAt:Date.now(),cancelledBy:role})}catch(e){console.warn(e)}
@@ -623,7 +647,7 @@ async function leaveRoom(markOffline=true){
  if(roomListener){off(roomListener);roomListener=null}
  if(markOffline&&roomCode&&role){try{await update(ref(db,playerPath(role)),{online:false,lastSeen:Date.now()})}catch(e){}}
  if(presenceDisconnect){try{await presenceDisconnect.cancel()}catch(e){}presenceDisconnect=null}
- roomCode="";role=null;roomData=null
+ roomCode="";role=null;roomData=null;preparationOpenedForRoom=null;startingGame=false
 }
 function showCancelled(reason){$("cancelReason").textContent=reason;showScreen("cancelledScreen")}
 async function finishCancellation(){await leaveRoom(false);gameMode=null;showScreen("menuScreen")}
@@ -631,26 +655,29 @@ function quitCurrentMatch(){if(gameMode==="online"||gameMode==="ranked")safeLeav
 
 function startOfflineDeck(){gameMode="offline";offlineState=null;openDeckSelection("offline")}
 function openDeckSelection(mode){
- lastRecordedWinner=null;
- gameMode=mode;chosen=[];selectedHand=null;selectedArena=null;$("deckPanel").classList.remove("hidden");$("playPanel").classList.add("hidden");$("sidePanel").classList.add("hidden");
- $("confirmDeckBtn").classList.remove("hidden");$("confirmDeckBtn").disabled=true;$("turnBadge").textContent="ESCOLHA DO BARALHO";$("message").textContent="Escolhe cinco cartas.";renderDeck();createBoard();showScreen("gameScreen")
+ lastRecordedWinner=null;gameMode=mode;chosen=[];selectedHand=null;selectedArena=null;
+ $("deckPanel").classList.remove("hidden");$("playPanel").classList.add("hidden");$("sidePanel").classList.add("hidden");
+ $("confirmDeckBtn").classList.remove("hidden");$("confirmDeckBtn").disabled=true;
+ $("turnBadge").textContent=mode==="ranked"?"PREPARAÇÃO RANKED":"PREPARAÇÃO";
+ $("message").innerHTML=`<div class="preparation-banner">${mode==="ranked"?"⚜ PARTIDA RANKED ENCONTRADA":"⚜ ADVERSÁRIO ENCONTRADO"}</div>Escolhe cinco cartas para o teu baralho.`;
+ renderDeck();createBoard();showScreen("gameScreen")
 }
 function renderDeck(){
  const allowed=currentUser?(currentProfile?.ownedCards||STARTER_CARDS):STARTER_CARDS;
- $("deckCards").innerHTML="";LIBRARY.filter(c=>allowed.includes(c.id)).forEach(c=>{const b=document.createElement("button");b.className="card"+(chosen.includes(c.id)?" selected":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><div class="rarity">${c.rarity}</div><h3>${c.name}</h3><div class="small">❤${c.hp} ⚔${c.damage} ↔${c.moves}</div>`;
+ $("deckCards").innerHTML="";LIBRARY.filter(c=>allowed.includes(c.id)).forEach(c=>{const b=document.createElement("button");b.className="card"+(chosen.includes(c.id)?" selected":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><div class="rarity">${c.rarity}</div><h3><span class="card-symbol">${cardSymbol(c.id)}</span>${c.name}</h3><div class="small">❤${c.hp} ⚔${c.damage} ↔${c.moves}</div>`;
  b.onclick=()=>{if(chosen.includes(c.id))chosen=chosen.filter(x=>x!==c.id);else if(chosen.length<5)chosen.push(c.id);$("confirmDeckBtn").disabled=chosen.length!==5;renderDeck()};$("deckCards").appendChild(b)})
 }
 $("confirmDeckBtn").onclick=async()=>{
  if(chosen.length!==5)return;$("confirmDeckBtn").disabled=true;
- if(gameMode==="online"||gameMode==="ranked"){await update(ref(db,playerPath(role)),{ready:true,deck:chosen,online:true});$("message").textContent="Baralho confirmado. A aguardar adversário...";if(role==="host")await tryStartOnlineGame()}
+ if(gameMode==="online"||gameMode==="ranked"){await update(ref(db,playerPath(role)),{ready:true,deck:chosen,online:true});$("message").innerHTML='<div class="preparation-banner">✓ BARALHO SELADO</div>A aguardar o adversário confirmar o baralho...';await tryStartOnlineGame()}
  else startOfflineGame()
 };
 async function tryStartOnlineGame(){
- await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="lobby")return;const h=current.players?.host,g=current.players?.guest;if(!h?.ready||!g?.ready||!h.deck||!g.deck)return;
- current.status="game";current.updatedAt=Date.now();current.state=createInitialState(h,g);return current})
+ if(!roomCode)return;
+ await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="lobby")return;const h=current.players?.host,g=current.players?.guest;if(!h?.ready||!g?.ready||!Array.isArray(h.deck)||!Array.isArray(g.deck)||h.deck.length!==5||g.deck.length!==5)return;current.status="game";current.updatedAt=Date.now();current.state=createInitialState(h,g,current.mode==="ranked"||gameMode==="ranked");return current},{applyLocally:false})
 }
 function cloneCard(id){const c=LIBRARY.find(x=>x.id===id);return{...c,currentHp:c.hp,movesLeft:c.moves,alive:true,summoned:false,position:null,wasHit:false}}
-function createInitialState(h,g){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:[gameMode==="ranked"?"A partida ranked começou!":"A partida online começou!"]}}
+function createInitialState(h,g,isRanked=false){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:[isRanked?"A partida ranked começou!":"A partida online começou!"]}}
 
 function createBoard(){$("board").innerHTML="";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const b=document.createElement("button");b.className="cell";b.dataset.r=r;b.dataset.c=c;b.onclick=()=>cellClick(r,c);b.onmouseenter=()=>preview(r,c);b.onmouseleave=clearPreview;$("board").appendChild(b)}}
 function patternCells(r,c,p){const o=[],add=(a,b)=>{if(a>=0&&a<ROWS&&b>=0&&b<COLS)o.push(`${a}-${b}`)};if(p==="horizontal")[-1,0,1].forEach(x=>add(r,c+x));if(p==="vertical")[-1,0,1].forEach(x=>add(r+x,c));if(p==="diagonal")[-1,0,1].forEach(x=>add(r+x,c+x));if(p==="cross")[[0,0],[-1,0],[1,0],[0,-1],[0,1]].forEach(([a,b])=>add(r+a,c+b));if(p==="scan")for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)add(r+a,c+b);return[...new Set(o)]}
@@ -680,13 +707,13 @@ function renderGame(state,canAct){
  document.querySelectorAll(".action").forEach(x=>x.disabled=!canAct);renderBoard(state);renderHand(state);renderChips(state);renderLog(state);renderSelected(state)
 }
 function renderBoard(state){const mine=me(state),enemy=opponent(state);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const cell=$("board").querySelector(`[data-r="${r}"][data-c="${c}"]`),id=`${r}-${c}`;cell.className="cell";cell.textContent="";
- const mc=mine.deck.find(x=>x.alive&&x.summoned&&x.position===id),ec=enemy.deck.find(x=>x.alive&&x.summoned&&x.position===id);if(mc){cell.classList.add("player");cell.textContent="◆"}
+ const mc=mine.deck.find(x=>x.alive&&x.summoned&&x.position===id),ec=enemy.deck.find(x=>x.alive&&x.summoned&&x.position===id);if(mc){cell.classList.add("player");cell.innerHTML=`<span class="board-symbol">${cardSymbol(mc.id)}</span>`}
  const mark=(state.marks||[]).find(x=>x.pos===id);if(mark){cell.classList.add(mark.hit?"hit":"miss");cell.textContent=mark.hit?"!":"·"}if((state.scanMarks||[]).includes(id))cell.classList.add("scan");
- if(ec&&(state.reveal||!ec.alive)){cell.classList.add(ec.alive?"enemy-reveal":"hit");if(!ec.alive)cell.classList.add("dead");cell.textContent=ec.alive?"♟":""}
+ if(ec&&(state.reveal||!ec.alive)){cell.classList.add(ec.alive?"enemy-reveal":"hit");if(!ec.alive)cell.classList.add("dead");cell.innerHTML=ec.alive?`<span class="board-symbol">${cardSymbol(ec.id)}</span>`:""}
  const dead=mine.deck.find(x=>!x.alive&&x.summoned&&x.position===id);if(dead)cell.classList.add("hit","dead")
  }}
-function renderHand(state){const mine=me(state);$("hand").innerHTML="";mine.deck.forEach((c,i)=>{if(c.summoned||!c.alive)return;const b=document.createElement("button");b.className="hand-card"+(selectedHand===i?" selected":"")+(c.cost>mine.mana?" disabled":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><h3>${c.name}</h3><div class="small">❤${c.currentHp} ⚔${c.damage}</div>`;b.onclick=()=>{if(selectedAction!=="summon"||c.cost>mine.mana)return;selectedHand=i;selectedArena=null;renderCurrentGame()};$("hand").appendChild(b)})}
-function renderChips(state){const mine=me(state);$("chips").innerHTML="";mine.deck.forEach((c,i)=>{if(!c.summoned)return;const b=document.createElement("button");b.className="chip"+(selectedArena===i?" selected":"")+(!c.alive?" dead":"");b.textContent=`${c.name} ❤${c.currentHp}/${c.hp} ↔${c.movesLeft}`;b.onclick=()=>{if(!c.alive||!["attack","move"].includes(selectedAction))return;selectedArena=i;selectedHand=null;renderCurrentGame()};$("chips").appendChild(b)})}
+function renderHand(state){const mine=me(state);$("hand").innerHTML="";mine.deck.forEach((c,i)=>{if(c.summoned||!c.alive)return;const b=document.createElement("button");b.className="hand-card"+(selectedHand===i?" selected":"")+(c.cost>mine.mana?" disabled":"");b.innerHTML=`<span class="cost">◈${c.cost}</span><h3><span class="card-symbol">${cardSymbol(c.id)}</span>${c.name}</h3><div class="small">❤${c.currentHp} ⚔${c.damage}</div>`;b.onclick=()=>{if(selectedAction!=="summon"||c.cost>mine.mana)return;selectedHand=i;selectedArena=null;renderCurrentGame()};$("hand").appendChild(b)})}
+function renderChips(state){const mine=me(state);$("chips").innerHTML="";mine.deck.forEach((c,i)=>{if(!c.summoned)return;const b=document.createElement("button");b.className="chip"+(selectedArena===i?" selected":"")+(!c.alive?" dead":"");b.innerHTML=`<span class="card-symbol">${cardSymbol(c.id)}</span>${c.name} ❤${c.currentHp}/${c.hp} ↔${c.movesLeft}`;b.onclick=()=>{if(!c.alive||!["attack","move"].includes(selectedAction))return;selectedArena=i;selectedHand=null;renderCurrentGame()};$("chips").appendChild(b)})}
 function renderLog(state){$("log").innerHTML="";[...(state.log||[])].reverse().forEach(t=>{const li=document.createElement("li");li.textContent=t;$("log").appendChild(li)})}
 function renderSelected(state){const c=selectedHand!==null?me(state).deck[selectedHand]:selectedArena!==null?me(state).deck[selectedArena]:null;$("selectedInfo").innerHTML=c?`<strong>${c.name}</strong><br>❤ ${c.currentHp}/${c.hp} · ⚔ ${c.damage} · ↔ ${c.movesLeft}`:"Nenhuma carta selecionada."}
 
@@ -776,7 +803,7 @@ async function attemptRankedMatch(){
  },{applyLocally:false});
  if(!claim.committed)return;
  try{
-  const room={version:"0.9",mode:"ranked",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:currentUser.uid,name:identity.name,trophies:mine,online:true,ready:false},guest:{id:other.uid,name:other.name,trophies:other.trophies||0,online:true,ready:false}}};
+  const room={version:"0.9.2",mode:"ranked",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:currentUser.uid,name:identity.name,trophies:mine,online:true,ready:false},guest:{id:other.uid,name:other.name,trophies:other.trophies||0,online:true,ready:false}}};
   await set(ref(db,`rankedRooms/${matchId}`),room);
   await update(ref(db),{[`rankedQueue/${currentUser.uid}/status`]:"matched",[`rankedQueue/${other.uid}/status`]:"matched"});
  }catch(error){
@@ -785,7 +812,7 @@ async function attemptRankedMatch(){
  }
 }
 async function enterRankedMatch(matchId,assignedRole){
- await cleanupRankedQueue(true);gameMode="ranked";rankedMatchId=matchId;roomCode=matchId;role=assignedRole;await setupPresence();listenRoom();$("roomCodeText").textContent="RANKED";$("lobbyStatus").textContent="Adversário encontrado!";showScreen("lobbyScreen");
+ await cleanupRankedQueue(true);gameMode="ranked";rankedMatchId=matchId;roomCode=matchId;role=assignedRole;preparationOpenedForRoom=null;await setupPresence();listenRoom();$("roomCodeText").textContent="RANKED";$("lobbyStatus").textContent="Adversário encontrado!";openDeckSelection("ranked");preparationOpenedForRoom=roomCode;
 }
 async function cancelRankedSearch(){await cleanupRankedQueue();gameMode=null;showScreen("rankedScreen")}
 async function cleanupRankedQueue(removeEntry=true){
