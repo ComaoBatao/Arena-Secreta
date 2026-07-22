@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.8.1 Collection Polish FIX</title>
+<title>Arena Secreta — Beta 0.9.1 Tutorial & Settings</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -103,6 +103,23 @@ button,input,select{font:inherit}
 @media(max-width:850px){.shop-grid{grid-template-columns:1fr 1fr}.inventory-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
 @media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid,.shop-grid,.inventory-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
+
+html.animations-off *,html.animations-off *::before,html.animations-off *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+html.animations-reduced *,html.animations-reduced *::before,html.animations-reduced *::after{animation-duration:.08s!important;transition-duration:.08s!important}
+body.compact-mode .panel{padding:11px;margin-bottom:9px}body.compact-mode .hero-card{padding:22px}body.compact-mode .btn{padding:10px 13px}
+.settings-list{display:grid;gap:10px}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;background:var(--panel3);border-radius:13px;padding:13px}
+.setting-row label{font-weight:900}.setting-control{min-width:150px;background:var(--panel2);color:white;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:9px}.setting-check{width:22px;height:22px;accent-color:var(--accent)}
+.tutorial-shell{width:min(1000px,100%);margin:auto}.tutorial-top{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.tutorial-progress{height:13px;border-radius:999px;background:var(--panel3);overflow:hidden}.tutorial-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));width:0%;transition:.25s}
+.tutorial-card{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:14px;margin-top:14px}.tutorial-board-wrap{background:var(--panel3);border-radius:15px;padding:12px;overflow:hidden}
+.tutorial-board{display:grid;grid-template-columns:repeat(15,var(--cell-size));grid-template-rows:repeat(5,var(--cell-size));gap:clamp(2px,.4vw,5px);width:max-content;margin:auto}
+.tutorial-cell{width:var(--cell-size);height:var(--cell-size);border:0;border-radius:7px;background:var(--cell);color:#fff;font-weight:900;cursor:pointer}
+.tutorial-cell.highlight{outline:3px solid var(--gold);outline-offset:-3px;animation:tutorialPulse 1.1s infinite}.tutorial-cell.player{background:linear-gradient(135deg,#1fae9d,#66e7d5);color:#05201b}.tutorial-cell.enemy{background:#875de7}.tutorial-cell.hit{background:var(--hit)}.tutorial-cell.scan{box-shadow:inset 0 0 0 3px var(--scan)}
+@keyframes tutorialPulse{50%{filter:brightness(1.5);transform:scale(.92)}}.tutorial-guide{background:var(--panel3);border-radius:15px;padding:16px}.tutorial-step{color:var(--gold);font-size:12px;font-weight:900;letter-spacing:1.5px}.tutorial-guide h2{margin:7px 0 10px}.tutorial-guide p{color:var(--muted);line-height:1.5}
+.tutorial-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.tutorial-action{border:2px solid transparent;border-radius:10px;background:#303b65;color:white;padding:10px;font-weight:900;cursor:pointer}.tutorial-action.active{border-color:var(--accent)}
+.tutorial-hand{display:flex;gap:8px;overflow-x:auto;margin-top:12px}.tutorial-card-button{flex:0 0 145px;background:var(--panel2);border:2px solid transparent;border-radius:11px;padding:10px;color:white;text-align:left;cursor:pointer}.tutorial-card-button.selected{border-color:var(--gold)}
+.tutorial-reward{background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.35);border-radius:12px;padding:11px;color:var(--gold);margin-top:12px}.tutorial-toast{min-height:22px;color:var(--gold);font-weight:900;margin-top:10px}
+@media(max-width:800px){.tutorial-card{grid-template-columns:1fr}.tutorial-guide{order:-1}.tutorial-top{grid-template-columns:1fr}.setting-row{align-items:flex-start}.setting-control{min-width:120px}}
 </style>
 </head>
 <body>
@@ -111,7 +128,7 @@ button,input,select{font:inherit}
 <div class="hero"><div class="hero-card">
  <h1 class="logo">ARENA<br>SECRETA</h1>
  <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.9 — RANKED ARENA</div>
+ <div class="version">BETA 0.9.1 — TUTORIAL & SETTINGS</div>
  <div class="identity">
   <strong id="menuName">Ghost0001</strong>
   <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
@@ -120,17 +137,43 @@ button,input,select{font:inherit}
  </div>
  <div class="menu">
   <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button><button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
-  <button id="rankedMenuBtn" class="btn ranked-btn hidden" onclick="showRankedArena()">RANKED ARENA</button>
+  <button id="rankedMenuBtn" class="btn ranked-btn hidden" onclick="showRankedArena()">RANKED ARENA</button><button class="btn secondary" onclick="startTutorial()">TUTORIAL</button><button class="btn secondary" onclick="openSettings()">DEFINIÇÕES</button>
   <button id="leaderboardMenuBtn" class="btn secondary hidden" onclick="showLeaderboard()">TOP GLOBAL</button>
   <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
   <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Ranked Arena + matchmaking + Top Global</p>
+ <p class="small">Ranked Arena + Tutorial guiado + Definições</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
 
 
+
+<section id="settingsScreen" class="screen"><div class="wrap"><div class="panel">
+<div class="header"><h2>Definições</h2><button class="btn secondary" onclick="saveSettingsAndBack()">Voltar</button></div>
+<div class="settings-list">
+<div class="setting-row"><div><label>Animações</label><div class="small">Transições e efeitos visuais.</div></div><select id="settingAnimations" class="setting-control"><option value="on">Ligadas</option><option value="reduced">Reduzidas</option><option value="off">Desligadas</option></select></div>
+<div class="setting-row"><div><label>Som</label><div class="small">Efeitos dos botões e resultados.</div></div><input id="settingSound" class="setting-check" type="checkbox"></div>
+<div class="setting-row"><div><label>Volume dos efeitos</label></div><input id="settingSoundVolume" class="setting-control" type="range" min="0" max="100" step="5"></div>
+<div class="setting-row"><div><label>Música</label><div class="small">Preparado para músicas futuras.</div></div><input id="settingMusic" class="setting-check" type="checkbox"></div>
+<div class="setting-row"><div><label>Volume da música</label></div><input id="settingMusicVolume" class="setting-control" type="range" min="0" max="100" step="5"></div>
+<div class="setting-row"><div><label>Confirmar antes de sair</label></div><input id="settingConfirmExit" class="setting-check" type="checkbox"></div>
+<div class="setting-row"><div><label>Pré-visualização do ataque</label></div><input id="settingAttackPreview" class="setting-check" type="checkbox"></div>
+<div class="setting-row"><div><label>Vibração no telemóvel</label></div><input id="settingVibration" class="setting-check" type="checkbox"></div>
+<div class="setting-row"><div><label>Modo compacto</label></div><input id="settingCompact" class="setting-check" type="checkbox"></div>
+</div>
+<div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
+</div></div></section>
+
+<section id="tutorialScreen" class="screen"><div class="wrap tutorial-shell"><div class="panel">
+<div class="tutorial-top"><div><h2 style="margin:0">Tutorial da Arena</h2><div class="small">Aprende as regras passo a passo.</div></div><button class="btn danger" onclick="leaveTutorial()">Sair</button></div>
+<div class="tutorial-progress" style="margin-top:13px"><div id="tutorialProgressFill" class="tutorial-progress-fill"></div></div>
+<div class="tutorial-card"><div><div class="tutorial-board-wrap"><div id="tutorialBoard" class="tutorial-board"></div></div><div id="tutorialHand" class="tutorial-hand"></div></div>
+<aside class="tutorial-guide"><div id="tutorialStepLabel" class="tutorial-step"></div><h2 id="tutorialTitle"></h2><p id="tutorialText"></p>
+<div id="tutorialActions" class="tutorial-actions"><button class="tutorial-action" data-tutorial-action="summon">Invocar</button><button class="tutorial-action" data-tutorial-action="attack">Atacar</button><button class="tutorial-action" data-tutorial-action="move">Mover</button><button class="tutorial-action" data-tutorial-action="pass">Passar</button></div>
+<div class="tutorial-reward"><span class="coin-icon">AS</span> Recompensa única: <strong>300 moedas</strong></div><div id="tutorialToast" class="tutorial-toast"></div>
+<button id="tutorialNextBtn" class="btn hidden" style="width:100%;margin-top:10px" onclick="tutorialNext()">Continuar</button></aside></div>
+</div></div></section>
 <section id="accountScreen" class="screen"><div class="wrap">
 <div class="panel">
  <div class="header"><h2>Conta</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
@@ -682,7 +725,7 @@ function botTurn(){
 }
 function finishBotTurn(){offlineLocked=false;renderOfflineGame()}
 
-function preview(r,c){const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if((gameMode==="online"||gameMode==="ranked")&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
+function preview(r,c){if(!gameSettings.attackPreview)return;const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if((gameMode==="online"||gameMode==="ranked")&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
 function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
 
 
@@ -751,6 +794,47 @@ async function cleanupRankedQueue(removeEntry=true){
 async function showPromotion(){if(!pendingPromotion)return;await leaveRoom(true);$("promotionOldRank").textContent=pendingPromotion.oldRank;$("promotionNewRank").textContent=pendingPromotion.newRank;$("promotionTrophyText").textContent=`+${pendingPromotion.trophyDelta} troféus`;showScreen("promotionScreen")}
 function closePromotion(){pendingPromotion=null;showRankedArena()}
 
+
+const DEFAULT_SETTINGS={animations:"on",sound:true,soundVolume:70,music:false,musicVolume:40,confirmExit:true,attackPreview:true,vibration:true,compact:false};
+let gameSettings=(()=>{try{return{...DEFAULT_SETTINGS,...JSON.parse(localStorage.getItem("arenaSettings")||"{}")}}catch{return{...DEFAULT_SETTINGS}}})();
+function applySettings(){document.documentElement.classList.toggle("animations-off",gameSettings.animations==="off");document.documentElement.classList.toggle("animations-reduced",gameSettings.animations==="reduced");document.body.classList.toggle("compact-mode",!!gameSettings.compact)}
+function openSettings(){["Animations","Sound","SoundVolume","Music","MusicVolume","ConfirmExit","AttackPreview","Vibration","Compact"].forEach(()=>{});$("settingAnimations").value=gameSettings.animations;$("settingSound").checked=gameSettings.sound;$("settingSoundVolume").value=gameSettings.soundVolume;$("settingMusic").checked=gameSettings.music;$("settingMusicVolume").value=gameSettings.musicVolume;$("settingConfirmExit").checked=gameSettings.confirmExit;$("settingAttackPreview").checked=gameSettings.attackPreview;$("settingVibration").checked=gameSettings.vibration;$("settingCompact").checked=gameSettings.compact;showScreen("settingsScreen")}
+function saveSettingsAndBack(){gameSettings={animations:$("settingAnimations").value,sound:$("settingSound").checked,soundVolume:Number($("settingSoundVolume").value),music:$("settingMusic").checked,musicVolume:Number($("settingMusicVolume").value),confirmExit:$("settingConfirmExit").checked,attackPreview:$("settingAttackPreview").checked,vibration:$("settingVibration").checked,compact:$("settingCompact").checked};localStorage.setItem("arenaSettings",JSON.stringify(gameSettings));applySettings();showScreen("menuScreen")}
+function resetSettings(){gameSettings={...DEFAULT_SETTINGS};localStorage.setItem("arenaSettings",JSON.stringify(gameSettings));applySettings();openSettings()}
+function vibrate(p=30){if(gameSettings.vibration&&navigator.vibrate)navigator.vibrate(p)}
+function playUiBeep(){if(!gameSettings.sound||gameSettings.soundVolume<=0)return;try{const C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator(),g=c.createGain();o.frequency.value=440;g.gain.value=.025*(gameSettings.soundVolume/100);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.04);o.onended=()=>c.close()}catch{}}
+document.addEventListener("click",e=>{if(e.target.closest("button"))playUiBeep()},true);
+
+const TUTORIAL_STEPS=[
+{title:"Bem-vindo à Arena",text:"O objetivo é encontrar e destruir as cartas escondidas do adversário.",mode:"next"},
+{title:"Escolhe uma carta",text:"Seleciona o Escudeiro na tua mão.",mode:"select",card:"squire"},
+{title:"Invoca na arena",text:"Seleciona Invocar e coloca o Escudeiro na casa dourada.",mode:"cell",action:"summon",cell:"2-3"},
+{title:"Ataque horizontal",text:"Seleciona Atacar e carrega na zona dourada.",mode:"cell",action:"attack",cell:"2-8"},
+{title:"Ataque vertical",text:"Usa o Arqueiro para atacar a coluna marcada.",mode:"cell",action:"attackArcher",cell:"2-11"},
+{title:"Move uma carta",text:"Seleciona Mover e muda o Escudeiro para a casa dourada.",mode:"cell",action:"move",cell:"1-3"},
+{title:"Usa o Scanner",text:"O Batedor examina uma zona 3×3 sem causar dano.",mode:"cell",action:"scan",cell:"3-6"},
+{title:"Passa o turno",text:"Passar recupera mana adicional.",mode:"pass"},
+{title:"Tutorial concluído",text:"Já sabes invocar, atacar, mover, usar Scanner e gerir mana.",mode:"finish"}];
+let tutorialState=null;
+function startTutorial(){tutorialState={step:0,selectedCard:null,selectedAction:null,player:{squire:null,archer:"3-11",scout:"4-5"},enemy:{"2-8":1,"1-11":1,"3-6":1},hits:new Set(),scans:new Set()};buildTutorialBoard();renderTutorial();showScreen("tutorialScreen")}
+function buildTutorialBoard(){const b=$("tutorialBoard");b.innerHTML="";for(let r=0;r<5;r++)for(let c=0;c<15;c++){const x=document.createElement("button");x.className="tutorial-cell";x.dataset.pos=`${r}-${c}`;x.onclick=()=>tutorialCellClick(x.dataset.pos);b.appendChild(x)}document.querySelectorAll("[data-tutorial-action]").forEach(x=>x.onclick=()=>tutorialActionClick(x.dataset.tutorialAction))}
+function renderTutorial(){const s=TUTORIAL_STEPS[tutorialState.step];$("tutorialStepLabel").textContent=`PASSO ${tutorialState.step+1} DE ${TUTORIAL_STEPS.length}`;$("tutorialTitle").textContent=s.title;$("tutorialText").textContent=s.text;$("tutorialProgressFill").style.width=`${tutorialState.step/(TUTORIAL_STEPS.length-1)*100}%`;$("tutorialToast").textContent="";$("tutorialNextBtn").classList.toggle("hidden",!["next","finish"].includes(s.mode));$("tutorialNextBtn").textContent=s.mode==="finish"?"Concluir tutorial":"Continuar";document.querySelectorAll(".tutorial-action").forEach(x=>x.classList.toggle("active",x.dataset.tutorialAction===tutorialState.selectedAction));renderTutorialBoard();renderTutorialHand()}
+function renderTutorialBoard(){const s=TUTORIAL_STEPS[tutorialState.step];document.querySelectorAll(".tutorial-cell").forEach(x=>{const p=x.dataset.pos;x.className="tutorial-cell";x.textContent="";const own=Object.entries(tutorialState.player).find(([,v])=>v===p);if(own){x.classList.add("player");x.textContent=own[0]==="squire"?"E":own[0]==="archer"?"A":"B"}if(tutorialState.enemy[p]){x.classList.add("enemy");x.textContent="?"}if(tutorialState.hits.has(p)){x.classList.add("hit");x.textContent="!"}if(tutorialState.scans.has(p))x.classList.add("scan");if(s.cell===p)x.classList.add("highlight")})}
+function renderTutorialHand(){const cards=[["squire","Escudeiro","◈1 · Horizontal"],["archer","Arqueiro","◈2 · Vertical"],["scout","Batedor","◈2 · Scanner"]];$("tutorialHand").innerHTML="";cards.forEach(([id,n,d])=>{const b=document.createElement("button");b.className="tutorial-card-button"+(tutorialState.selectedCard===id?" selected":"");b.innerHTML=`<strong>${n}</strong><div class="small">${d}</div>`;b.onclick=()=>tutorialSelectCard(id);$("tutorialHand").appendChild(b)})}
+function tutorialSelectCard(id){tutorialState.selectedCard=id;const s=TUTORIAL_STEPS[tutorialState.step];if(s.mode==="select"&&s.card===id){tutorialSuccess("Carta selecionada!");return}renderTutorial()}
+function tutorialActionClick(a){tutorialState.selectedAction=a;const s=TUTORIAL_STEPS[tutorialState.step];if(s.mode==="pass"&&a==="pass"){tutorialSuccess("Recuperaste mana!");return}renderTutorial()}
+function tutorialCellClick(p){const s=TUTORIAL_STEPS[tutorialState.step];if(s.mode!=="cell"||p!==s.cell){$("tutorialToast").textContent="Usa a casa marcada a dourado.";return}
+if(s.action==="summon"){if(tutorialState.selectedCard!=="squire"||tutorialState.selectedAction!=="summon")return tutorialError("Seleciona o Escudeiro e Invocar.");tutorialState.player.squire=p;tutorialSuccess("Escudeiro invocado!")}
+if(s.action==="attack"){if(tutorialState.selectedCard!=="squire"||tutorialState.selectedAction!=="attack")return tutorialError("Seleciona o Escudeiro e Atacar.");["2-7","2-8","2-9"].forEach(x=>tutorialState.hits.add(x));delete tutorialState.enemy["2-8"];vibrate([40,30,40]);tutorialSuccess("Acertaste!")}
+if(s.action==="attackArcher"){if(tutorialState.selectedCard!=="archer"||tutorialState.selectedAction!=="attack")return tutorialError("Seleciona o Arqueiro e Atacar.");["1-11","2-11","3-11"].forEach(x=>tutorialState.hits.add(x));delete tutorialState.enemy["1-11"];tutorialSuccess("Ataque vertical concluído!")}
+if(s.action==="move"){if(tutorialState.selectedAction!=="move")return tutorialError("Seleciona Mover.");tutorialState.player.squire=p;tutorialSuccess("Carta movida!")}
+if(s.action==="scan"){if(tutorialState.selectedCard!=="scout"||tutorialState.selectedAction!=="attack")return tutorialError("Seleciona o Batedor e Atacar.");for(let r=2;r<=4;r++)for(let c=5;c<=7;c++)tutorialState.scans.add(`${r}-${c}`);tutorialSuccess("Existe uma carta nesta zona!")}}
+function tutorialError(t){$("tutorialToast").textContent=t}
+function tutorialSuccess(t){$("tutorialToast").textContent=t;setTimeout(()=>{tutorialState.step++;tutorialState.selectedAction=null;if(tutorialState.step===4)tutorialState.selectedCard="archer";if(tutorialState.step===6)tutorialState.selectedCard="scout";renderTutorial()},500)}
+function tutorialNext(){const s=TUTORIAL_STEPS[tutorialState.step];if(s.mode==="finish"){completeTutorial();return}tutorialState.step++;renderTutorial()}
+async function completeTutorial(){if(currentUser&&currentProfile&&!currentProfile.tutorialCompleted){await runTransaction(ref(db,`profiles/${currentUser.uid}`),p=>{if(!p||p.tutorialCompleted)return p;p.tutorialCompleted=true;p.tutorialCompletedAt=Date.now();p.coins=(p.coins||0)+300;return p});await loadProfile(currentUser);refreshAccountUI();alert("Tutorial concluído! Recebeste 300 moedas.")}else alert("Tutorial concluído!");tutorialState=null;showScreen("menuScreen")}
+function leaveTutorial(){tutorialState=null;showScreen("menuScreen")}
+applySettings();
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
  await loadProfile(user);
@@ -759,7 +843,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();
 
-window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
