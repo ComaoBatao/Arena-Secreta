@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.8.1 Collection Polish</title>
+<title>Arena Secreta — Beta 0.8.1 Collection Polish FIX</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -85,28 +85,10 @@ button,input,select{font:inherit}
 .shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.shop-item{background:var(--panel3);border-radius:15px;padding:15px}.shop-item h3{margin:0 0 7px}.shop-item .price{color:var(--gold);font-weight:900;margin:10px 0}.shop-item.owned{opacity:.65}
 .inventory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.inventory-item{background:var(--panel3);border-radius:13px;padding:12px}.inventory-item.locked{opacity:.45}.profile-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.name-change-box{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
 
-.wallet{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0}
-.wallet-pill{display:inline-flex;align-items:center;gap:8px;background:var(--panel3);border-radius:999px;padding:8px 13px;font-weight:900}
-.wallet-pill.coins{color:var(--gold)}.wallet-pill.trophies{color:var(--accent)}
-.coin-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:linear-gradient(145deg,#ffe184,#d79b16);border:2px solid #fff0a9;box-shadow:inset 0 0 0 2px rgba(92,53,0,.25);color:#5b3900;font-size:9px;font-weight:1000;letter-spacing:-.5px}
-.trophy-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;font-size:20px;line-height:1}
-.shop-item .price{display:flex;align-items:center;gap:7px}
-.collection-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}
-.collection-category{background:var(--panel3);border:2px solid transparent;border-radius:16px;padding:17px;text-align:left;color:white;cursor:pointer}
-.collection-category.selected{border-color:var(--accent)}.collection-category h3{margin:0 0 5px}.collection-count{font-size:24px;font-weight:900;color:var(--gold);margin:6px 0}
-.collection-detail{background:rgba(10,15,31,.55);border-radius:16px;padding:14px}
-.collection-detail-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.collection-detail-header h3{margin:0}
-.inventory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.inventory-item{display:flex;flex-direction:column;gap:8px;min-height:108px;background:var(--panel3);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px}
-.inventory-item.locked{opacity:.42}.inventory-item strong{font-size:16px}
-.item-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:900}
-.item-status.obtained{color:var(--accent)}.item-status.locked{color:var(--muted)}.item-status.equipped{color:var(--gold)}
-.inventory-item .btn{margin-top:auto;width:100%;padding:9px}
-.theme-current{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.theme-current div{background:var(--panel2);border-radius:12px;padding:12px}
-
-@media(max-width:850px){.shop-grid,.collection-summary{grid-template-columns:1fr 1fr}.inventory-grid{grid-template-columns:1fr 1fr}}
+.coin-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:linear-gradient(145deg,#ffe184,#d79b16);border:2px solid #fff0a9;box-shadow:inset 0 0 0 2px rgba(92,53,0,.25);color:#5b3900;font-size:9px;font-weight:1000}.trophy-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;font-size:20px}.wallet-pill{display:inline-flex!important;align-items:center;gap:8px}.collection-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}.collection-category{background:var(--panel3);border:2px solid transparent;border-radius:16px;padding:17px;text-align:left;color:white;cursor:pointer}.collection-category.selected{border-color:var(--accent)}.collection-category h3{margin:0 0 5px}.collection-count{font-size:24px;font-weight:900;color:var(--gold);margin:6px 0}.collection-detail{background:rgba(10,15,31,.55);border-radius:16px;padding:14px}.collection-detail-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.collection-detail-header h3{margin:0}.inventory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.inventory-item{display:flex;flex-direction:column;gap:8px;min-height:108px;background:var(--panel3);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px}.inventory-item.locked{opacity:.42}.item-status{font-size:12px;font-weight:900}.item-status.obtained{color:var(--accent)}.item-status.locked{color:var(--muted)}.item-status.equipped{color:var(--gold)}.inventory-item .btn{margin-top:auto;width:100%;padding:9px}.theme-current{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.theme-current div{background:var(--panel2);border-radius:12px;padding:12px}@media(max-width:850px){.collection-summary{grid-template-columns:1fr 1fr}}@media(max-width:620px){.collection-summary,.inventory-grid,.theme-current{grid-template-columns:1fr}}
+@media(max-width:850px){.shop-grid{grid-template-columns:1fr 1fr}.inventory-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:850px){.cards{grid-template-columns:1fr 1fr}.play{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
-@media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid,.shop-grid,.collection-summary,.inventory-grid,.theme-current{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
+@media(max-width:620px){.wrap{padding:8px}.grid2,.account-grid,.shop-grid,.inventory-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.topbar{grid-template-columns:1fr 1fr}.turn{grid-column:1/-1;grid-row:1}.side{grid-template-columns:1fr}.actions{grid-template-columns:repeat(4,1fr)}.action{font-size:11px;padding:9px 2px}}
 </style>
 </head>
 <body>
@@ -127,7 +109,7 @@ button,input,select{font:inherit}
   <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
   <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Moedas + loja + inventário + troféus</p>
+ <p class="small">Moedas + loja + coleção + troféus</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
@@ -165,23 +147,7 @@ button,input,select{font:inherit}
 
 <section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Loja</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards">Cartas</button><button class="shop-tab" data-shop="backgrounds">Fundos</button><button class="shop-tab" data-shop="colors">Cores</button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
 
-<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel">
-<div class="header"><h2>Coleção</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
-<div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><span class="trophy-icon">🏆</span><span id="inventoryTrophies">0</span></span></div>
-<div class="collection-summary">
- <button class="collection-category selected" data-collection="cards"><h3>Cartas</h3><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver coleção de cartas</span></button>
- <button class="collection-category" data-collection="backgrounds"><h3>Fundos</h3><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos obtidos</span></button>
- <button class="collection-category" data-collection="colors"><h3>Cores</h3><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores obtidas</span></button>
-</div>
-<div class="collection-detail">
- <div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div>
- <div id="collectionDetailGrid" class="inventory-grid"></div>
-</div>
-<div class="theme-current">
- <div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div>
- <div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div>
-</div>
-</div></div></section>
+<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Coleção</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><span class="trophy-icon">🏆</span><span id="inventoryTrophies">0</span></span></div><div class="collection-summary"><button class="collection-category selected" data-collection="cards"><h3>Cartas</h3><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver cartas</span></button><button class="collection-category" data-collection="backgrounds"><h3>Fundos</h3><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos</span></button><button class="collection-category" data-collection="colors"><h3>Cores</h3><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores</span></button></div><div class="collection-detail"><div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div><div id="collectionDetailGrid" class="inventory-grid"></div></div><div class="theme-current"><div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div><div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div></div></div></div></section>
 
 <section id="offlineSetupScreen" class="screen"><div class="wrap">
 <div class="panel">
@@ -653,84 +619,16 @@ function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-prev
 let activeShopTab="cards";
 async function changeNickname(){if(!currentUser||!currentProfile)return;const nickname=$("newNicknameInput").value.trim(),key=normalizeNickname(nickname);if(!/^[A-Za-z0-9_]{3,16}$/.test(nickname)){$("nicknameCostText").textContent="Nickname inválido.";return}const changes=currentProfile.nicknameChanges||0,cost=changes===0?0:changes*5000;if((currentProfile.coins||0)<cost){$("nicknameCostText").textContent=`Precisas de ${cost} moedas.`;return}const nr=ref(db,`usernames/${key}`),reserved=await runTransaction(nr,c=>{if(c!==null)return;return{uid:currentUser.uid,username:nickname}},{applyLocally:false});if(!reserved.committed){$("nicknameCostText").textContent="Nome ocupado.";return}const old=currentProfile.usernameKey;await updateProfile(currentUser,{displayName:nickname});await update(ref(db,`profiles/${currentUser.uid}`),{username:nickname,usernameKey:key,coins:(currentProfile.coins||0)-cost,nicknameChanges:changes+1});if(old)await set(ref(db,`usernames/${old}`),null);await loadProfile(currentUser);refreshAccountUI();showProfile()}
 function showShop(){if(!currentUser)return;$("shopMessage").textContent="";renderShop();showScreen("shopScreen")}
-function renderShop(){$("shopCoins").textContent=currentProfile?.coins||0;$("shopContent").innerHTML="";SHOP_ITEMS.filter(x=>x.type===activeShopTab).forEach(item=>{const owned=item.type==="cards"?item.items.every(x=>(currentProfile.ownedCards||[]).includes(x)):item.type==="backgrounds"?(currentProfile.ownedBackgrounds||[]).includes(item.id):(currentProfile.ownedColors||[]).includes(item.id);const d=document.createElement("div");d.className="shop-item"+(owned?" owned":"");d.innerHTML=`<h3>${item.name}</h3><p class="small">${item.description||"Personalização cosmética."}</p><div class="price"><span class="coin-icon">AS</span>${item.price}</div><button class="btn" ${owned?"disabled":""}>${owned?"OBTIDO":"COMPRAR"}</button>`;d.querySelector("button").onclick=()=>buyItem(item);$("shopContent").appendChild(d)})}
+function renderShop(){$("shopCoins").textContent=currentProfile?.coins||0;$("shopContent").innerHTML="";SHOP_ITEMS.filter(x=>x.type===activeShopTab).forEach(item=>{const owned=item.type==="cards"?item.items.every(x=>(currentProfile.ownedCards||[]).includes(x)):item.type==="backgrounds"?(currentProfile.ownedBackgrounds||[]).includes(item.id):(currentProfile.ownedColors||[]).includes(item.id);const d=document.createElement("div");d.className="shop-item"+(owned?" owned":"");d.innerHTML=`<h3>${item.name}</h3><p class="small">${item.description||"Personalização cosmética."}</p><div class="price"><span class="coin-icon">AS</span> ${item.price}</div><button class="btn" ${owned?"disabled":""}>${owned?"OBTIDO":"COMPRAR"}</button>`;d.querySelector("button").onclick=()=>buyItem(item);$("shopContent").appendChild(d)})}
 async function buyItem(item){if((currentProfile.coins||0)<item.price){$("shopMessage").textContent="Não tens moedas suficientes.";return}const res=await runTransaction(ref(db,`profiles/${currentUser.uid}`),p=>{if(!p||(p.coins||0)<item.price)return;p.coins-=item.price;if(item.type==="cards")p.ownedCards=[...new Set([...(p.ownedCards||STARTER_CARDS),...item.items])];if(item.type==="backgrounds")p.ownedBackgrounds=[...new Set([...(p.ownedBackgrounds||["default"]),item.id])];if(item.type==="colors")p.ownedColors=[...new Set([...(p.ownedColors||["default"]),item.id])];return p},{applyLocally:false});if(!res.committed)return;await loadProfile(currentUser);refreshAccountUI();$("shopMessage").textContent=`Compraste ${item.name}!`;renderShop()}
 let activeCollectionTab="cards";
 const COLLECTION_CARD_NAMES={squire:"Escudeiro",archer:"Arqueiro",knight:"Cavaleiro",assassin:"Assassino",scout:"Batedor",mage:"Mago",paladin:"Paladino",warlock:"Bruxo",berserker:"Berserker",crossbowman:"Besteiro",raider:"Saqueador",guardian:"Guardião",shieldbearer:"Portador do Escudo",healer:"Curandeira",necromancer:"Necromante",illusionist:"Ilusionista",alchemist:"Alquimista"};
-function showInventory(){
- if(!currentUser)return;
- activeCollectionTab="cards";
- document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x.dataset.collection==="cards"));
- renderInventory();
- showScreen("inventoryScreen");
-}
-function renderInventory(){
- $("inventoryCoins").textContent=currentProfile.coins||0;
- $("inventoryTrophies").textContent=currentProfile.trophies||0;
- const cards=currentProfile.ownedCards||STARTER_CARDS;
- const backgrounds=currentProfile.ownedBackgrounds||["default"];
- const colors=currentProfile.ownedColors||["default"];
- $("collectionCardsCount").textContent=`${cards.length}/${Object.keys(COLLECTION_CARD_NAMES).length}`;
- $("collectionBackgroundsCount").textContent=`${backgrounds.length}/${1+SHOP_ITEMS.filter(x=>x.type==="backgrounds").length}`;
- $("collectionColorsCount").textContent=`${colors.length}/${1+SHOP_ITEMS.filter(x=>x.type==="colors").length}`;
- $("activeBackgroundLabel").textContent=cosmeticName("backgrounds",currentProfile.activeBackground||"default");
- $("activeColorLabel").textContent=cosmeticName("colors",currentProfile.activeColor||"default");
- renderCollectionDetail();
-}
-function cosmeticName(type,id){
- if(id==="default")return"Padrão";
- return SHOP_ITEMS.find(x=>x.type===type&&x.id===id)?.name||"Padrão";
-}
-function renderCollectionDetail(){
- const grid=$("collectionDetailGrid");
- grid.innerHTML="";
- if(activeCollectionTab==="cards"){
-  const owned=currentProfile.ownedCards||STARTER_CARDS;
-  $("collectionDetailTitle").textContent="Cartas";
-  $("collectionDetailCount").textContent=`${owned.length}/${Object.keys(COLLECTION_CARD_NAMES).length} obtidas`;
-  Object.entries(COLLECTION_CARD_NAMES).forEach(([id,name])=>{
-   const has=owned.includes(id),d=document.createElement("div");
-   d.className="inventory-item"+(has?"":" locked");
-   d.innerHTML=`<strong>${name}</strong><span class="item-status ${has?"obtained":"locked"}">${has?"✔ OBTIDA":"✖ BLOQUEADA"}</span>`;
-   grid.appendChild(d);
-  });
-  return;
- }
- const type=activeCollectionTab;
- const owned=type==="backgrounds"?(currentProfile.ownedBackgrounds||["default"]):(currentProfile.ownedColors||["default"]);
- const active=type==="backgrounds"?(currentProfile.activeBackground||"default"):(currentProfile.activeColor||"default");
- const items=[{id:"default",type,name:"Padrão"},...SHOP_ITEMS.filter(x=>x.type===type)];
- $("collectionDetailTitle").textContent=type==="backgrounds"?"Fundos":"Cores";
- $("collectionDetailCount").textContent=`${owned.length}/${items.length} obtidos`;
- items.forEach(item=>{
-  const has=owned.includes(item.id),equipped=active===item.id,d=document.createElement("div");
-  d.className="inventory-item"+(has?"":" locked");
-  const status=equipped?"★ EQUIPADO":has?"✔ OBTIDO":"✖ BLOQUEADO";
-  const statusClass=equipped?"equipped":has?"obtained":"locked";
-  d.innerHTML=`<strong>${item.name}</strong><span class="item-status ${statusClass}">${status}</span>`;
-  if(has&&!equipped){
-   const b=document.createElement("button");
-   b.className="btn secondary";
-   b.textContent="USAR";
-   b.onclick=()=>equip(item);
-   d.appendChild(b);
-  }
-  grid.appendChild(d);
- });
-}
-async function equip(item){
- const field=item.type==="backgrounds"?"activeBackground":"activeColor";
- await update(ref(db,`profiles/${currentUser.uid}`),{[field]:item.id});
- await loadProfile(currentUser);
- renderInventory();
-}
-document.querySelectorAll(".collection-category").forEach(btn=>{
- btn.onclick=()=>{
-  activeCollectionTab=btn.dataset.collection;
-  document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x===btn));
-  renderCollectionDetail();
- };
-});`),{[field]:item.id});await loadProfile(currentUser);renderInventory()}
+function showInventory(){if(!currentUser)return;activeCollectionTab="cards";document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x.dataset.collection==="cards"));renderInventory();showScreen("inventoryScreen")}
+function cosmeticName(type,id){if(id==="default")return"Padrão";return SHOP_ITEMS.find(x=>x.type===type&&x.id===id)?.name||"Padrão"}
+function renderInventory(){$("inventoryCoins").textContent=currentProfile.coins||0;$("inventoryTrophies").textContent=currentProfile.trophies||0;const cards=currentProfile.ownedCards||STARTER_CARDS,bgs=currentProfile.ownedBackgrounds||["default"],colors=currentProfile.ownedColors||["default"];$("collectionCardsCount").textContent=`${cards.length}/${Object.keys(COLLECTION_CARD_NAMES).length}`;$("collectionBackgroundsCount").textContent=`${bgs.length}/${1+SHOP_ITEMS.filter(x=>x.type==="backgrounds").length}`;$("collectionColorsCount").textContent=`${colors.length}/${1+SHOP_ITEMS.filter(x=>x.type==="colors").length}`;$("activeBackgroundLabel").textContent=cosmeticName("backgrounds",currentProfile.activeBackground||"default");$("activeColorLabel").textContent=cosmeticName("colors",currentProfile.activeColor||"default");renderCollectionDetail()}
+function renderCollectionDetail(){const grid=$("collectionDetailGrid");grid.innerHTML="";if(activeCollectionTab==="cards"){const owned=currentProfile.ownedCards||STARTER_CARDS;$("collectionDetailTitle").textContent="Cartas";$("collectionDetailCount").textContent=`${owned.length}/${Object.keys(COLLECTION_CARD_NAMES).length} obtidas`;Object.entries(COLLECTION_CARD_NAMES).forEach(([id,name])=>{const has=owned.includes(id),d=document.createElement("div");d.className="inventory-item"+(has?"":" locked");d.innerHTML=`<strong>${name}</strong><span class="item-status ${has?"obtained":"locked"}">${has?"✔ OBTIDA":"✖ BLOQUEADA"}</span>`;grid.appendChild(d)});return}const type=activeCollectionTab,owned=type==="backgrounds"?(currentProfile.ownedBackgrounds||["default"]):(currentProfile.ownedColors||["default"]),active=type==="backgrounds"?(currentProfile.activeBackground||"default"):(currentProfile.activeColor||"default"),items=[{id:"default",type,name:"Padrão"},...SHOP_ITEMS.filter(x=>x.type===type)];$("collectionDetailTitle").textContent=type==="backgrounds"?"Fundos":"Cores";$("collectionDetailCount").textContent=`${owned.length}/${items.length} obtidos`;items.forEach(item=>{const has=owned.includes(item.id),equipped=active===item.id,d=document.createElement("div");d.className="inventory-item"+(has?"":" locked");const status=equipped?"★ EQUIPADO":has?"✔ OBTIDO":"✖ BLOQUEADO",cls=equipped?"equipped":has?"obtained":"locked";d.innerHTML=`<strong>${item.name}</strong><span class="item-status ${cls}">${status}</span>`;if(has&&!equipped){const b=document.createElement("button");b.className="btn secondary";b.textContent="USAR";b.onclick=()=>equip(item);d.appendChild(b)}grid.appendChild(d)})}
+async function equip(item){const field=item.type==="backgrounds"?"activeBackground":"activeColor";await update(ref(db,`profiles/${currentUser.uid}`),{[field]:item.id});await loadProfile(currentUser);renderInventory()}
+document.querySelectorAll(".collection-category").forEach(btn=>btn.onclick=()=>{activeCollectionTab=btn.dataset.collection;document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x===btn));renderCollectionDetail()});
 function applyOwnedTheme(){if(!currentProfile)return;const bg=SHOP_ITEMS.find(x=>x.type==="backgrounds"&&x.id===currentProfile.activeBackground),color=SHOP_ITEMS.find(x=>x.type==="colors"&&x.id===currentProfile.activeColor);document.body.style.background=bg?.value||"";document.documentElement.style.setProperty("--accent",color?.value||"#62e2cf")}
 document.querySelectorAll(".shop-tab").forEach(b=>b.onclick=()=>{activeShopTab=b.dataset.shop;document.querySelectorAll(".shop-tab").forEach(x=>x.classList.toggle("selected",x===b));renderShop()});
 
