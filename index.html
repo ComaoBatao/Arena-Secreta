@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — Beta 0.9.4 Audio Fix</title>
+<title>Arena Secreta — Beta 0.9.5 Purple Identity</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -159,15 +159,146 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
 @media(max-width:620px){.end-summary{grid-template-columns:1fr}.gear-btn{width:40px;height:40px}}
 
 .audio-status{position:fixed;left:12px;bottom:12px;z-index:1500;background:rgba(23,16,12,.92);border:1px solid rgba(216,173,88,.35);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px;display:none}.audio-status.show{display:block}
+
+/* 0.9.5 — Purple Identity */
+:root{
+ --bg:#070b17;
+ --panel:#151c33;
+ --panel2:#202a49;
+ --panel3:#10162b;
+ --cell:#2a365d;
+ --text:#f7f8ff;
+ --muted:#aeb8d5;
+ --accent:#62e2cf;
+ --gold:#ffd166;
+ --danger:#ff5f7c;
+ --hit:#dd4d68;
+ --miss:#53678f;
+ --scan:#a875ff;
+ --mana:#6cb7ff;
+ --move:#5ca9ff
+}
+body{
+ background:
+  radial-gradient(circle at 50% -10%,rgba(105,70,190,.34),transparent 34%),
+  radial-gradient(circle at top,#25366e 0%,#111735 38%,#070b17 78%);
+ font-family:Arial,sans-serif
+}
+.panel,.hero-card,.profile-card,.shop-item,.collection-detail,.tutorial-guide,.settings-modal-card,.end-result-card{
+ border:1px solid rgba(168,117,255,.24);
+ box-shadow:0 20px 55px rgba(0,0,0,.32);
+ background:rgba(21,28,51,.97)
+}
+.hero-card{
+ background:linear-gradient(145deg,rgba(19,24,52,.98),rgba(9,13,31,.98));
+ border-color:rgba(98,226,207,.18)
+}
+.logo,.header h2,.panel h3,.profile-name{
+ font-family:Arial,sans-serif;
+ text-shadow:none
+}
+.official-logo{
+ display:block;
+ width:min(590px,96%);
+ max-height:360px;
+ object-fit:contain;
+ margin:0 auto 4px;
+ filter:drop-shadow(0 18px 35px rgba(0,0,0,.48))
+}
+.main-tagline{
+ color:var(--gold);
+ letter-spacing:4px;
+ font-weight:900;
+ margin:4px 0 18px;
+ font-size:clamp(12px,2.5vw,17px)
+}
+.tag{color:var(--gold)}
+.btn{
+ border:0;
+ background:var(--accent);
+ color:#061814;
+ box-shadow:none;
+ font-family:Arial,sans-serif
+}
+.btn.secondary,.action,.shop-tab{
+ background:#354169;
+ color:#fff;
+ box-shadow:none
+}
+.btn.danger{background:var(--danger);box-shadow:none}
+.ranked-btn{
+ background:linear-gradient(135deg,#8c68eb,#62e2cf);
+ color:#08101e
+}
+.input,.setting-control{
+ background:var(--panel3);
+ border-color:rgba(255,255,255,.13);
+ color:#fff
+}
+.board-wrap,.tutorial-board-wrap{
+ background:var(--panel3);
+ border:1px solid rgba(168,117,255,.22)
+}
+.cell,.tutorial-cell{
+ background:linear-gradient(145deg,#35456f,#263352);
+ border:1px solid rgba(255,255,255,.05);
+ box-shadow:inset 0 1px rgba(255,255,255,.08)
+}
+.cell.player,.tutorial-cell.player{
+ background:linear-gradient(135deg,#1fae9d,#66e7d5);
+ color:#05201b
+}
+.cell.enemy-reveal,.tutorial-cell.enemy{
+ background:linear-gradient(145deg,#9b72f0,#6949b6)
+}
+.card,.hand-card,.chip,.option-card,.mode-card,.inventory-item,.collection-category,.ranked-stat,.profile-stat,.stat,.identity{
+ background:linear-gradient(145deg,#263154,#1b2442);
+ border-color:rgba(168,117,255,.17)
+}
+.card.selected,.hand-card.selected,.chip.selected,.option-card.selected,.collection-category.selected{
+ border-color:var(--accent)
+}
+.turn{
+ background:var(--accent);
+ color:#061814;
+ border:0
+}
+.card-symbol{
+ background:#111735;
+ border-color:#a875ff;
+ color:#d8c7ff
+}
+.preparation-banner{
+ background:rgba(168,117,255,.12);
+ border-color:rgba(168,117,255,.38);
+ color:#d9c9ff
+}
+.audio-status{
+ background:rgba(16,22,43,.94);
+ border-color:rgba(168,117,255,.35)
+}
+.settings-modal-card,.end-result-card{
+ background:linear-gradient(145deg,#1b2442,#0f152d);
+ border-color:rgba(168,117,255,.45)
+}
+.end-result-card.victory{
+ box-shadow:0 0 45px rgba(255,209,102,.32),0 30px 100px #000
+}
+@media(max-width:620px){
+ .official-logo{width:100%;max-height:255px}
+ .main-tagline{letter-spacing:2.5px}
+}
+
 </style>
 </head>
 <body>
 
 <section id="menuScreen" class="screen active">
 <div class="hero"><div class="hero-card">
- <h1 class="logo">ARENA<br>SECRETA</h1>
- <div class="tag">ESCONDE. PROCURA. SOBREVIVE.</div>
- <div class="version">BETA 0.9.4 — AUDIO FIX</div>
+ <img class="official-logo" src="./ARENA.png" alt="Arena Secreta — Feather Studios">
+ <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
+ 
+ <div class="version" style="opacity:.72;font-size:11px">BETA 0.9.5</div>
  <div class="identity">
   <strong id="menuName">Ghost0001</strong>
   <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
@@ -181,7 +312,7 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
   <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
   <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
  </div>
- <p class="small">Áudio desbloqueado + música de menu e batalha</p>
+ <p class="small">Identidade roxa + logo oficial Feather Studios</p>
  <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
 </div></div>
 </section>
@@ -202,6 +333,11 @@ body{background:radial-gradient(circle at 50% -15%,rgba(143,98,47,.34),transpare
 <div class="setting-row"><div><label>Modo compacto</label></div><input id="settingCompact" class="setting-check" type="checkbox"></div>
 </div>
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
+ <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
+  <strong>Arena Secreta</strong><br>
+  Beta 0.9.5 — Purple Identity<br>
+  Feather Studios · 2026
+ </div>
 </div></div></section>
 
 <section id="tutorialScreen" class="screen"><div class="wrap tutorial-shell"><div class="panel">
