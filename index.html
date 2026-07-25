@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.2.3 Icons Everywhere</title>
+<title>Arena Secreta — 1.2.4 Card Collection Album</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1317,6 +1317,167 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .tutorial-icon-image{width:18px;height:18px}
 }
 
+
+/* ==========================================================
+   VERSION 1.2.4 — CARD COLLECTION ALBUM
+   ========================================================== */
+.collection-progress-box{
+ margin:0 0 15px;
+ padding:12px 14px;
+ border-radius:13px;
+ background:linear-gradient(145deg,rgba(32,42,73,.88),rgba(12,17,42,.9));
+ border:1px solid rgba(168,117,255,.24);
+}
+.collection-progress-box.complete{
+ border-color:rgba(255,209,102,.7);
+ box-shadow:0 0 24px rgba(255,209,102,.13);
+}
+.collection-progress-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin-bottom:8px;
+}
+.collection-progress-top span{
+ color:var(--gold);
+ font-weight:1000;
+}
+.collection-progress-track{
+ height:12px;
+ overflow:hidden;
+ border-radius:999px;
+ background:#090d20;
+ border:1px solid rgba(255,255,255,.07);
+}
+.collection-progress-fill{
+ height:100%;
+ width:0;
+ border-radius:inherit;
+ background:linear-gradient(90deg,#7551d9,#62e2cf,#ffd166);
+ box-shadow:0 0 14px rgba(98,226,207,.35);
+ transition:width .45s ease;
+}
+
+.collection-card-grid{
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:16px!important;
+ align-items:start;
+}
+.collection-card-item{
+ min-width:0;
+ padding:0;
+ overflow:hidden;
+ border:2px solid rgba(168,117,255,.24);
+ border-radius:16px;
+ background:#0d122a;
+ color:#fff;
+ text-align:left;
+ cursor:pointer;
+ box-shadow:0 12px 28px rgba(0,0,0,.28);
+ transition:transform .18s,filter .18s,border-color .18s,box-shadow .18s;
+}
+.collection-card-item.owned:hover{
+ transform:translateY(-5px) scale(1.015);
+ filter:brightness(1.06);
+ border-color:var(--accent);
+ box-shadow:0 18px 36px rgba(0,0,0,.42),0 0 18px rgba(98,226,207,.12);
+}
+.collection-card-item:disabled{cursor:not-allowed}
+.collection-card-visual{
+ position:relative;
+ width:100%;
+ aspect-ratio:2/3;
+ overflow:hidden;
+ background:radial-gradient(circle,#303d70,#10162b);
+}
+.collection-card-image{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ display:block;
+}
+.collection-card-fallback{
+ position:absolute;
+ inset:0;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:12px;
+ padding:15px;
+ text-align:center;
+ background:radial-gradient(circle,#354477,#10162b);
+}
+.collection-card-fallback span{font-size:44px}
+.collection-card-fallback strong{font-size:14px}
+
+.collection-card-item.locked .collection-card-image,
+.collection-card-item.locked .collection-card-fallback{
+ filter:grayscale(1) brightness(.28);
+ transform:scale(1.02);
+}
+.collection-card-lock{
+ position:absolute;
+ inset:0;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:10px;
+ background:linear-gradient(rgba(3,5,15,.22),rgba(3,5,15,.66));
+ color:#fff;
+ letter-spacing:1.5px;
+ text-shadow:0 2px 4px #000;
+}
+.collection-card-lock img{
+ width:48px;
+ height:48px;
+ object-fit:contain;
+ filter:drop-shadow(0 0 11px rgba(168,117,255,.85));
+}
+.collection-card-lock strong{font-size:12px}
+
+.collection-card-footer{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ min-height:58px;
+ padding:10px 11px;
+ background:linear-gradient(180deg,#1b2442,#11172f);
+}
+.collection-card-footer>strong{
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ font-size:13px;
+}
+.collection-card-status{
+ flex:0 0 auto;
+ font-size:9px;
+ font-weight:1000;
+ letter-spacing:.6px;
+}
+.collection-card-status.obtained{color:var(--accent)}
+.collection-card-status.locked{color:#7c86a7}
+
+@media(max-width:1000px){
+ .collection-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+ .collection-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .collection-card-footer{padding:8px;min-height:52px}
+ .collection-card-footer>strong{font-size:11px}
+ .collection-card-status{font-size:8px}
+}
+@media(max-width:390px){
+ .collection-card-grid{grid-template-columns:1fr!important}
+ .collection-card-item{width:min(245px,100%);margin:auto}
+}
+
 </style>
 </head>
 <body>
@@ -1344,7 +1505,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.2.3</div>
+   <div class="version menu-version">VERSÃO 1.2.4</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1420,7 +1581,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.2.3 — Icons Everywhere<br>
+  Version 1.2.4 — Card Collection Album<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1483,7 +1644,14 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 
 <section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_shop.png" alt="" onerror="this.classList.add('icon-missing')"><span>Loja</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div class="wallet"><span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards"><img class="tab-icon-image" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><span>Cartas</span></button><button class="shop-tab" data-shop="backgrounds"><img class="tab-icon-image" src="./icon_background.png" alt="" onerror="this.classList.add('icon-missing')"><span>Fundos</span></button><button class="shop-tab" data-shop="colors"><img class="tab-icon-image" src="./icon_color.png" alt="" onerror="this.classList.add('icon-missing')"><span>Cores</span></button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
 
-<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><span>Coleção</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div class="wallet"><span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"><span id="inventoryTrophies">0</span></span></div><div class="collection-summary"><button class="collection-category selected" data-collection="cards"><div class="category-title"><img class="category-icon-image" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Cartas</h3></div><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver cartas</span></button><button class="collection-category" data-collection="backgrounds"><div class="category-title"><img class="category-icon-image" src="./icon_background.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Fundos</h3></div><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos</span></button><button class="collection-category" data-collection="colors"><div class="category-title"><img class="category-icon-image" src="./icon_color.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Cores</h3></div><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores</span></button></div><div class="collection-detail"><div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div><div id="collectionDetailGrid" class="inventory-grid"></div></div><div class="theme-current"><div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div><div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div></div></div></div></section>
+<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><span>Coleção</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div class="wallet"><span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"><span id="inventoryTrophies">0</span></span></div><div class="collection-summary"><button class="collection-category selected" data-collection="cards"><div class="category-title"><img class="category-icon-image" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Cartas</h3></div><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver cartas</span></button><button class="collection-category" data-collection="backgrounds"><div class="category-title"><img class="category-icon-image" src="./icon_background.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Fundos</h3></div><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos</span></button><button class="collection-category" data-collection="colors"><div class="category-title"><img class="category-icon-image" src="./icon_color.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Cores</h3></div><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores</span></button></div><div class="collection-detail">
+<div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div>
+<div id="collectionProgressBox" class="collection-progress-box">
+ <div class="collection-progress-top"><strong id="collectionProgressTitle">Progresso da coleção</strong><span id="collectionProgressPercent">0%</span></div>
+ <div class="collection-progress-track"><div id="collectionProgressFill" class="collection-progress-fill"></div></div>
+</div>
+<div id="collectionDetailGrid" class="inventory-grid"></div>
+</div><div class="theme-current"><div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div><div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div></div></div></div></section>
 
 
 <section id="rankedScreen" class="screen"><div class="wrap"><div class="panel">
@@ -2829,7 +2997,120 @@ const COLLECTION_CARD_NAMES={squire:"Escudeiro",archer:"Arqueiro",knight:"Cavale
 function showInventory(){if(!currentUser)return;activeCollectionTab="cards";document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x.dataset.collection==="cards"));renderInventory();showScreen("inventoryScreen")}
 function cosmeticName(type,id){if(id==="default")return"Padrão";return SHOP_ITEMS.find(x=>x.type===type&&x.id===id)?.name||"Padrão"}
 function renderInventory(){$("inventoryCoins").textContent=currentProfile.coins||0;$("inventoryTrophies").textContent=currentProfile.trophies||0;const cards=currentProfile.ownedCards||STARTER_CARDS,bgs=currentProfile.ownedBackgrounds||["default"],colors=currentProfile.ownedColors||["default"];$("collectionCardsCount").textContent=`${cards.length}/${Object.keys(COLLECTION_CARD_NAMES).length}`;$("collectionBackgroundsCount").textContent=`${bgs.length}/${1+SHOP_ITEMS.filter(x=>x.type==="backgrounds").length}`;$("collectionColorsCount").textContent=`${colors.length}/${1+SHOP_ITEMS.filter(x=>x.type==="colors").length}`;$("activeBackgroundLabel").textContent=cosmeticName("backgrounds",currentProfile.activeBackground||"default");$("activeColorLabel").textContent=cosmeticName("colors",currentProfile.activeColor||"default");renderCollectionDetail()}
-function renderCollectionDetail(){const grid=$("collectionDetailGrid");grid.innerHTML="";if(activeCollectionTab==="cards"){const owned=currentProfile.ownedCards||STARTER_CARDS;$("collectionDetailTitle").textContent="Cartas";$("collectionDetailCount").textContent=`${owned.length}/${Object.keys(COLLECTION_CARD_NAMES).length} obtidas`;Object.entries(COLLECTION_CARD_NAMES).forEach(([id,name])=>{const has=owned.includes(id),d=document.createElement("div");d.className="inventory-item"+(has?"":" locked");d.innerHTML=`<strong>${name}</strong><span class="item-status ${has?"obtained":"locked"}">${has?"✔ OBTIDA":"✖ BLOQUEADA"}</span>`;grid.appendChild(d)});return}const type=activeCollectionTab,owned=type==="backgrounds"?(currentProfile.ownedBackgrounds||["default"]):(currentProfile.ownedColors||["default"]),active=type==="backgrounds"?(currentProfile.activeBackground||"default"):(currentProfile.activeColor||"default"),items=[{id:"default",type,name:"Padrão"},...SHOP_ITEMS.filter(x=>x.type===type)];$("collectionDetailTitle").textContent=type==="backgrounds"?"Fundos":"Cores";$("collectionDetailCount").textContent=`${owned.length}/${items.length} obtidos`;items.forEach(item=>{const has=owned.includes(item.id),equipped=active===item.id,d=document.createElement("div");d.className="inventory-item"+(has?"":" locked");const status=equipped?"★ EQUIPADO":has?"✔ OBTIDO":"✖ BLOQUEADO",cls=equipped?"equipped":has?"obtained":"locked";d.innerHTML=`<strong>${item.name}</strong><span class="item-status ${cls}">${status}</span>`;if(has&&!equipped){const b=document.createElement("button");b.className="btn secondary";b.textContent="USAR";b.onclick=()=>equip(item);d.appendChild(b)}grid.appendChild(d)})}
+function renderCollectionDetail(){
+ const grid=$("collectionDetailGrid");
+ grid.innerHTML="";
+
+ const progressBox=$("collectionProgressBox");
+
+ if(activeCollectionTab==="cards"){
+  const owned=currentProfile.ownedCards||STARTER_CARDS;
+  const total=Object.keys(COLLECTION_CARD_NAMES).length;
+  const percent=Math.round((owned.length/total)*100);
+
+  $("collectionDetailTitle").textContent="Cartas";
+  $("collectionDetailCount").textContent=`${owned.length}/${total} obtidas`;
+  $("collectionProgressTitle").textContent=owned.length===total?"Coleção completa!":"Progresso da coleção";
+  $("collectionProgressPercent").textContent=`${percent}%`;
+  $("collectionProgressFill").style.width=`${percent}%`;
+  progressBox.classList.remove("hidden");
+  progressBox.classList.toggle("complete",owned.length===total);
+
+  grid.className="inventory-grid collection-card-grid";
+
+  Object.entries(COLLECTION_CARD_NAMES).forEach(([id,name])=>{
+   const has=owned.includes(id);
+   const card=LIBRARY.find(item=>item.id===id);
+
+   const item=document.createElement("button");
+   item.type="button";
+   item.className="collection-card-item"+(has?" owned":" locked");
+   item.setAttribute("aria-label",has?`Abrir carta ${name}`:`Carta ${name} bloqueada`);
+
+   const visual=document.createElement("div");
+   visual.className="collection-card-visual";
+
+   const image=document.createElement("img");
+   image.className="collection-card-image";
+   image.src=cardFrontPath(id);
+   image.alt=name;
+   image.loading="lazy";
+
+   const fallback=document.createElement("div");
+   fallback.className="collection-card-fallback hidden";
+   fallback.innerHTML=`<span>${cardSymbol(id)}</span><strong>${name}</strong>`;
+
+   image.onerror=()=>{
+    image.classList.add("hidden");
+    fallback.classList.remove("hidden");
+   };
+
+   visual.append(image,fallback);
+
+   if(!has){
+    const lockedOverlay=document.createElement("div");
+    lockedOverlay.className="collection-card-lock";
+    lockedOverlay.innerHTML=`<img src="./icon_lock.png" alt=""><strong>BLOQUEADA</strong>`;
+    visual.appendChild(lockedOverlay);
+   }
+
+   const footer=document.createElement("div");
+   footer.className="collection-card-footer";
+
+   const title=document.createElement("strong");
+   title.textContent=name;
+
+   const status=document.createElement("span");
+   status.className="collection-card-status "+(has?"obtained":"locked");
+   status.textContent=has?"OBTIDA":"BLOQUEADA";
+
+   footer.append(title,status);
+   item.append(visual,footer);
+
+   if(has){
+    item.onclick=event=>openVisualCard(id,event);
+   }else{
+    item.disabled=true;
+   }
+
+   grid.appendChild(item);
+  });
+  return;
+ }
+
+ progressBox.classList.add("hidden");
+ grid.className="inventory-grid";
+
+ const type=activeCollectionTab;
+ const owned=type==="backgrounds"
+  ?(currentProfile.ownedBackgrounds||["default"])
+  :(currentProfile.ownedColors||["default"]);
+ const active=type==="backgrounds"
+  ?(currentProfile.activeBackground||"default")
+  :(currentProfile.activeColor||"default");
+ const items=[{id:"default",type,name:"Padrão"},...SHOP_ITEMS.filter(x=>x.type===type)];
+
+ $("collectionDetailTitle").textContent=type==="backgrounds"?"Fundos":"Cores";
+ $("collectionDetailCount").textContent=`${owned.length}/${items.length} obtidos`;
+
+ items.forEach(item=>{
+  const has=owned.includes(item.id);
+  const equipped=active===item.id;
+  const d=document.createElement("div");
+  d.className="inventory-item"+(has?"":" locked");
+  const status=equipped?"★ EQUIPADO":has?"✔ OBTIDO":"✖ BLOQUEADO";
+  const cls=equipped?"equipped":has?"obtained":"locked";
+  d.innerHTML=`<strong>${item.name}</strong><span class="item-status ${cls}">${status}</span>`;
+  if(has&&!equipped){
+   const b=document.createElement("button");
+   b.className="btn secondary";
+   b.textContent="USAR";
+   b.onclick=()=>equip(item);
+   d.appendChild(b);
+  }
+  grid.appendChild(d);
+ });
+}
 async function equip(item){const field=item.type==="backgrounds"?"activeBackground":"activeColor";await update(ref(db,`profiles/${currentUser.uid}`),{[field]:item.id});await loadProfile(currentUser);renderInventory()}
 document.querySelectorAll(".collection-category").forEach(btn=>btn.onclick=()=>{activeCollectionTab=btn.dataset.collection;document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x===btn));renderCollectionDetail()});
 function applyOwnedTheme(){if(!currentProfile)return;const bg=SHOP_ITEMS.find(x=>x.type==="backgrounds"&&x.id===currentProfile.activeBackground),color=SHOP_ITEMS.find(x=>x.type==="colors"&&x.id===currentProfile.activeColor);document.body.style.background=bg?.value||"";document.documentElement.style.setProperty("--accent",color?.value||"#62e2cf")}
