@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.2.1 Profile Pictures</title>
+<title>Arena Secreta — 1.2.2 Custom Icons</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1208,6 +1208,78 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .leader-row .leader-rank{display:none}
 }
 
+
+/* ==========================================================
+   VERSION 1.2.2 — CUSTOM IMAGE ICONS
+   ========================================================== */
+.menu-icon-image{
+ width:32px;
+ height:32px;
+ display:block;
+ object-fit:contain;
+ pointer-events:none;
+ filter:drop-shadow(0 0 8px currentColor);
+}
+.menu-action-icon .menu-icon-image{
+ width:46px;
+ height:46px;
+}
+.menu-secondary-card>span{
+ width:30px;
+ height:30px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex:0 0 30px;
+}
+.menu-secondary-card>span .menu-icon-image{
+ width:27px;
+ height:27px;
+}
+.menu-small-icon-button{
+ display:inline-flex!important;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+}
+.menu-small-icon-button .menu-icon-image{
+ width:18px;
+ height:18px;
+ filter:none;
+}
+.wallet-icon-image{
+ width:25px;
+ height:25px;
+ object-fit:contain;
+ display:block;
+ filter:drop-shadow(0 0 5px rgba(255,255,255,.25));
+}
+.default-avatar-image{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:cover;
+ object-position:center;
+ border-radius:50%;
+ transform:rotate(-45deg);
+}
+.profile-avatar-fallback .default-avatar-image{
+ transform:rotate(-45deg);
+}
+.icon-missing{
+ visibility:hidden;
+}
+@media(max-width:620px){
+ .menu-action-icon .menu-icon-image{
+  width:36px;
+  height:36px;
+ }
+ .menu-secondary-card>span .menu-icon-image{
+  width:24px;
+  height:24px;
+ }
+}
+
 </style>
 </head>
 <body>
@@ -1235,13 +1307,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.2.1</div>
+   <div class="version menu-version">VERSÃO 1.2.2</div>
   </header>
 
   <section class="identity menu-identity">
    <div class="menu-avatar">
     <img id="menuAvatarImage" class="avatar-image hidden" alt="Foto de perfil">
-    <div id="menuAvatarFallback" class="menu-avatar-core">◆</div>
+    <div id="menuAvatarFallback" class="menu-avatar-core"><img class="default-avatar-image" src="./default_avatar.png" alt="Avatar padrão" onerror="this.style.display='none';this.parentElement.textContent='AS'"></div>
    </div>
 
    <div class="menu-account">
@@ -1250,39 +1322,39 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
    </div>
 
    <div id="menuWallet" class="wallet menu-wallet hidden">
-    <span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="menuCoins">0</span></span>
-    <span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="menuTrophies">0</span></span>
+    <span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="menuCoins">0</span></span>
+    <span class="wallet-pill trophies"><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"><span id="menuTrophies">0</span></span>
    </div>
 
    <div class="menu-user-row menu-account-actions">
-    <button id="profileMenuBtn" class="btn secondary hidden" onclick="showProfile()">PERFIL ↪</button>
-    <button id="logoutMenuBtn" class="btn danger hidden" onclick="logoutAccount()">TERMINAR SESSÃO</button>
+    <button id="profileMenuBtn" class="btn secondary hidden menu-small-icon-button" onclick="showProfile()"><img class="menu-icon-image" src="./icon_profile.png" alt="" onerror="this.classList.add('icon-missing')"><span>PERFIL</span></button>
+    <button id="logoutMenuBtn" class="btn danger hidden menu-small-icon-button" onclick="logoutAccount()"><img class="menu-icon-image" src="./icon_logout.png" alt="" onerror="this.classList.add('icon-missing')"><span>TERMINAR SESSÃO</span></button>
    </div>
   </section>
 
   <nav class="menu menu-primary-actions">
    <button class="menu-action-card menu-action-cyan" onclick="showScreen('offlineSetupScreen')">
-    <span class="menu-action-icon">⚔</span>
+    <span class="menu-action-icon"><img class="menu-icon-image" src="./icon_offline.png" alt="Offline" onerror="this.classList.add('icon-missing')"></span>
     <span><strong>JOGAR OFFLINE</strong><small>Treina e supera-te</small></span>
    </button>
    <button class="menu-action-card menu-action-cyan" onclick="showScreen('onlineScreen')">
-    <span class="menu-action-icon">◎</span>
+    <span class="menu-action-icon"><img class="menu-icon-image" src="./icon_online.png" alt="Online" onerror="this.classList.add('icon-missing')"></span>
     <span><strong>JOGAR ONLINE</strong><small>Entra na ação</small></span>
    </button>
    <button id="rankedMenuBtn" class="menu-action-card menu-action-ranked hidden" onclick="showRankedArena()">
-    <span class="menu-action-icon">♛</span>
+    <span class="menu-action-icon"><img class="menu-icon-image" src="./icon_ranked.png" alt="Ranked" onerror="this.classList.add('icon-missing')"></span>
     <span><strong>RANKED ARENA</strong><small>Sobe no ranking</small></span>
    </button>
   </nav>
 
   <nav class="menu menu-secondary-actions">
-   <button class="menu-secondary-card" onclick="startTutorial()"><span>◇</span><strong>TUTORIAL</strong></button>
-   <button class="menu-secondary-card" onclick="openSettings()"><span>⚙</span><strong>DEFINIÇÕES</strong></button>
-   <button id="leaderboardMenuBtn" class="menu-secondary-card hidden" onclick="showLeaderboard()"><span>▥</span><strong>TOP GLOBAL</strong></button>
-   <button id="shopMenuBtn" class="menu-secondary-card hidden" onclick="showShop()"><span>🛒</span><strong>LOJA</strong></button>
-   <button id="inventoryMenuBtn" class="menu-secondary-card menu-collection-card hidden" onclick="showInventory()"><span>▱</span><strong>COLEÇÃO</strong></button>
-   <button id="accountMenuBtn" class="menu-secondary-card menu-account-entry" onclick="showScreen('accountScreen')"><span>♙</span><strong>CRIAR CONTA / ENTRAR</strong></button>
-   <button id="newGhostBtn" class="menu-secondary-card" onclick="newGhost()"><span>↻</span><strong>GERAR NOVO GHOST</strong></button>
+   <button class="menu-secondary-card" onclick="startTutorial()"><span><img class="menu-icon-image" src="./icon_tutorial.png" alt="Tutorial" onerror="this.classList.add('icon-missing')"></span><strong>TUTORIAL</strong></button>
+   <button class="menu-secondary-card" onclick="openSettings()"><span><img class="menu-icon-image" src="./icon_settings.png" alt="Definições" onerror="this.classList.add('icon-missing')"></span><strong>DEFINIÇÕES</strong></button>
+   <button id="leaderboardMenuBtn" class="menu-secondary-card hidden" onclick="showLeaderboard()"><span><img class="menu-icon-image" src="./icon_leaderboard.png" alt="Top Global" onerror="this.classList.add('icon-missing')"></span><strong>TOP GLOBAL</strong></button>
+   <button id="shopMenuBtn" class="menu-secondary-card hidden" onclick="showShop()"><span><img class="menu-icon-image" src="./icon_shop.png" alt="Loja" onerror="this.classList.add('icon-missing')"></span><strong>LOJA</strong></button>
+   <button id="inventoryMenuBtn" class="menu-secondary-card menu-collection-card hidden" onclick="showInventory()"><span><img class="menu-icon-image" src="./icon_collection.png" alt="Coleção" onerror="this.classList.add('icon-missing')"></span><strong>COLEÇÃO</strong></button>
+   <button id="accountMenuBtn" class="menu-secondary-card menu-account-entry" onclick="showScreen('accountScreen')"><span><img class="menu-icon-image" src="./icon_profile.png" alt="Conta" onerror="this.classList.add('icon-missing')"></span><strong>CRIAR CONTA / ENTRAR</strong></button>
+   <button id="newGhostBtn" class="menu-secondary-card" onclick="newGhost()"><span><img class="menu-icon-image" src="./icon_refresh.png" alt="Novo Ghost" onerror="this.classList.add('icon-missing')"></span><strong>GERAR NOVO GHOST</strong></button>
   </nav>
 
   <footer class="menu-footer">
@@ -1311,7 +1383,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.2.1 — Profile Pictures<br>
+  Version 1.2.2 — Custom Icons<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1357,7 +1429,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div class="profile-avatar-section">
  <div class="profile-avatar-frame">
   <img id="profileAvatarImage" class="avatar-image hidden" alt="Foto de perfil">
-  <div id="profileAvatarFallback" class="profile-avatar-fallback">◆</div>
+  <div id="profileAvatarFallback" class="profile-avatar-fallback"><img class="default-avatar-image" src="./default_avatar.png" alt="Avatar padrão" onerror="this.style.display='none';this.parentElement.textContent='AS'"></div>
  </div>
  <div class="profile-avatar-controls">
   <strong>Foto de perfil</strong>
