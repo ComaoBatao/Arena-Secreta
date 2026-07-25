@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.6 Movement Fix</title>
+<title>Arena Secreta — 1.1.7 Root Card Images</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -733,7 +733,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.6 — Movement Fix<br>
+  Version 1.1.7 — Root Card Images<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1030,9 +1030,9 @@ const LIBRARY=[
 const CARD_SYMBOLS={squire:"⛨",archer:"➶",knight:"♞",assassin:"†",scout:"◉",mage:"✦",paladin:"✠",warlock:"☾",berserker:"⚔",crossbowman:"⌁",raider:"☠",guardian:"⬟",shieldbearer:"◈",healer:"✚",necromancer:"☠",illusionist:"◇",alchemist:"⚗"};
 function cardSymbol(id){return CARD_SYMBOLS[id]||"◆"}
 
-const CARD_IMAGE_BASE="./cards";
-function cardFrontPath(id){return`${CARD_IMAGE_BASE}/${id}_front.png`}
-function cardBackPath(id){return`${CARD_IMAGE_BASE}/${id}_back.png`}
+const CARD_IMAGE_BASE=".";
+function cardFrontPath(id){return`./${id}_front.png`}
+function cardBackPath(id){return`./${id}_back.png`}
 function cardImageElement(card,cssClass="battle-card-art"){
  const img=document.createElement("img");
  img.className=cssClass;
