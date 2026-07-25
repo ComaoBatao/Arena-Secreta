@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.3 Bot & Desktop Hotfix</title>
+<title>Arena Secreta — 1.1.4 Bot Turn Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -733,7 +733,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.3 — Bot & Desktop Hotfix<br>
+  Version 1.1.4 — Bot Turn Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1115,7 +1115,7 @@ let gameMode=null,difficulty="easy",personality="balanced";
 let roomCode="",role=null,roomData=null,roomListener=null,presenceDisconnect=null,connected=true;
 let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
 let preparationOpenedForRoom=null,startingGame=false;
-let offlineState=null,offlineLocked=false,botKnown=[],lastRecordedWinner=null;
+let offlineState=null,offlineLocked=false,botKnown=[],lastRecordedWinner=null,botTurnToken=0,botWatchdog=null;
 let rankedQueueRef=null,rankedQueueRootRef=null,rankedSearchStartedAt=0,rankedSearchTimer=null,rankedDisconnect=null,rankedMatchId=null,pendingPromotion=null;
 let endOverlayShownFor=null,lastScreenId="menuScreen",rankedForfeitProcessing=false;
 
@@ -1639,7 +1639,42 @@ async function submitAction(action){
  }
 }
 
-function submitOfflineAction(a){if(!offlineState||offlineLocked)return;const applied=applyAction(offlineState,"host",a);if(!applied){$("message").textContent="Jogada inválida.";return}offlineState=applied;if(a.kind==="summon")selectedHand=null;if(offlineState.winner){renderOfflineGame();return}offlineLocked=true;$("message").textContent="O bot está a pensar...";renderOfflineGame();setTimeout(botTurn,750)}
+function submitOfflineAction(action){
+ if(!offlineState||offlineLocked)return;
+
+ const applied=applyAction(offlineState,"host",action);
+ if(!applied){
+  $("message").textContent="Jogada inválida.";
+  return;
+ }
+
+ offlineState=applied;
+ if(action.kind==="summon")selectedHand=null;
+
+ if(offlineState.winner){
+  renderOfflineGame();
+  return;
+ }
+
+ offlineLocked=true;
+ const token=++botTurnToken;
+ $("message").textContent="O bot está a pensar...";
+ renderOfflineGame();
+
+ clearTimeout(botWatchdog);
+
+ setTimeout(()=>{
+  if(token!==botTurnToken||!offlineLocked)return;
+  runOfflineBotTurn(token);
+ },450);
+
+ botWatchdog=setTimeout(()=>{
+  if(token!==botTurnToken||!offlineLocked)return;
+  console.warn("Watchdog: turno do bot bloqueado.");
+  forceReturnTurnToPlayer("O bot demorou demasiado e perdeu o turno.");
+ },2500);
+}
+
 function applyAction(state,acting,a){
  const n=structuredClone(state),p=n.players[acting],enemyRole=acting==="host"?"guest":"host",e=n.players[enemyRole];n.marks=[];n.scanMarks=[];
  if(a.kind==="summon"){const c=p.deck[a.cardIndex];if(!c||c.summoned||!c.alive||c.cost>p.mana||p.deck.some(x=>x.alive&&x.summoned&&x.position===a.pos))return null;c.summoned=true;c.position=a.pos;p.mana-=c.cost;n.log.push(`${p.name} invocou ${c.name}.`)}
@@ -1658,146 +1693,122 @@ function startOfflineGame(){
 }
 function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
 function botData(){return{easy:{smart:.1,move:.1,scan:.1},normal:{smart:.5,move:.35,scan:.3},hard:{smart:.78,move:.6,scan:.5},impossible:{smart:.94,move:.8,scan:.7}}[difficulty]}
-function botTurn(){
- if(!offlineState||offlineState.winner){
-  finishBotTurn();
-  return;
- }
+function runOfflineBotTurn(token){
+ if(token!==botTurnToken||!offlineLocked)return;
 
  try{
-  if(offlineState.turn!=="guest"){
-   finishBotTurn();
+  if(!offlineState||offlineState.winner){
+   completeOfflineBotTurn(token);
    return;
   }
 
+  offlineState.turn="guest";
+
   const bot=offlineState.players.guest;
-  const alive=bot.deck.filter(card=>card?.alive&&card.summoned);
-  const affordable=bot.deck.filter(card=>card?.alive&&!card.summoned&&card.cost<=bot.mana);
-  let nextState=null;
+  const summoned=bot.deck.filter(card=>card.alive&&card.summoned);
 
-  // 1. Se ainda não tiver unidades na arena, tenta sempre invocar.
-  // 2. Caso já tenha unidades, a personalidade decide entre invocar e atacar.
-  const shouldSummon=
-   affordable.length>0 &&
-   (
-    alive.length===0 ||
-    personality==="defensive" ||
-    (personality==="balanced"&&Math.random()<0.42) ||
-    (personality==="aggressive"&&Math.random()<0.28) ||
-    (personality==="strategist"&&Math.random()<0.5)
-   );
+  const affordable=bot.deck
+   .map((card,index)=>({card,index}))
+   .filter(item=>item.card.alive&&!item.card.summoned&&item.card.cost<=bot.mana);
 
-  if(shouldSummon){
-   let card=affordable[Math.floor(Math.random()*affordable.length)];
+  let result=null;
 
-   if(difficulty!=="easy"){
-    card=[...affordable].sort((a,b)=>{
-     const scoreA=(a.damage||0)*2+(a.hp||0)-(a.cost||0)*0.35;
-     const scoreB=(b.damage||0)*2+(b.hp||0)-(b.cost||0)*0.35;
-     return scoreB-scoreA;
-    })[0];
-   }
+  if(affordable.length&&(summoned.length===0||Math.random()<0.6)){
+   const choice=difficulty==="easy"
+    ? affordable.sort((a,b)=>a.card.cost-b.card.cost)[0]
+    : affordable.sort((a,b)=>{
+       const scoreA=(a.card.damage||0)*2+(a.card.hp||0);
+       const scoreB=(b.card.damage||0)*2+(b.card.hp||0);
+       return scoreB-scoreA;
+      })[0];
 
    const occupied=new Set(
-    bot.deck
-     .filter(c=>c?.alive&&c.summoned&&c.position)
-     .map(c=>c.position)
+    [...offlineState.players.host.deck,...offlineState.players.guest.deck]
+     .filter(card=>card.alive&&card.summoned&&card.position)
+     .map(card=>card.position)
    );
 
-   const freeCells=[];
+   const free=[];
    for(let row=0;row<ROWS;row++){
     for(let col=0;col<COLS;col++){
-     const position=`${row}-${col}`;
-     if(!occupied.has(position))freeCells.push(position);
+     const pos=`${row}-${col}`;
+     if(!occupied.has(pos))free.push(pos);
     }
    }
 
-   if(card&&freeCells.length){
-    const position=freeCells[Math.floor(Math.random()*freeCells.length)];
-    nextState=applyAction(
+   if(choice&&free.length){
+    const pos=free[Math.floor(Math.random()*free.length)];
+    result=applyAction(
      offlineState,
      "guest",
-     {kind:"summon",cardIndex:bot.deck.indexOf(card),pos:position}
+     {kind:"summon",cardIndex:choice.index,pos}
     );
    }
   }
 
-  // Se não invocou, tenta atacar com uma unidade existente.
-  if(!nextState&&alive.length){
-   let attacker=alive[Math.floor(Math.random()*alive.length)];
-
-   if(personality==="aggressive"){
-    attacker=[...alive].sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
-   }else if(
-    personality==="strategist" &&
-    alive.some(card=>card.pattern==="scan")
-   ){
-    attacker=alive.find(card=>card.pattern==="scan");
-   }
+  if(!result&&summoned.length){
+   const attacker=[...summoned].sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
+   const attackerIndex=bot.deck.indexOf(attacker);
 
    let row=Math.floor(Math.random()*ROWS);
    let col=Math.floor(Math.random()*COLS);
 
-   const knownTargets=offlineState.players.host.deck.filter(
-    card=>card?.alive&&card.summoned&&card.wasHit&&card.position
+   const known=offlineState.players.host.deck.filter(
+    card=>card.alive&&card.summoned&&card.wasHit&&card.position
    );
 
-   const intelligence={
-    easy:0.08,
-    normal:0.42,
-    hard:0.72,
-    impossible:0.92
-   }[difficulty]??0.35;
-
-   if(knownTargets.length&&Math.random()<intelligence){
-    [row,col]=knownTargets[0].position.split("-").map(Number);
+   if(known.length&&difficulty!=="easy"){
+    [row,col]=known[0].position.split("-").map(Number);
    }
 
-   nextState=applyAction(
+   result=applyAction(
     offlineState,
     "guest",
-    {kind:"attack",cardIndex:bot.deck.indexOf(attacker),r:row,c:col}
+    {kind:"attack",cardIndex:attackerIndex,r:row,c:col}
    );
   }
 
-  // Se não conseguiu invocar nem atacar, passa.
-  if(!nextState){
-   nextState=applyAction(offlineState,"guest",{kind:"pass"});
+  if(!result){
+   result=applyAction(offlineState,"guest",{kind:"pass"});
   }
 
-  // Última proteção: nunca deixar o jogo preso no turno do bot.
-  if(nextState){
-   offlineState=nextState;
-  }else{
-   offlineState.turn="host";
-   offlineState.log=offlineState.log||[];
-   offlineState.log.push("O bot não encontrou uma jogada válida e terminou o turno.");
+  if(!result){
+   forceReturnTurnToPlayer("O bot não encontrou uma jogada válida.");
+   return;
   }
+
+  offlineState=result;
+  completeOfflineBotTurn(token);
  }catch(error){
-  console.error("Erro no turno do bot:",error);
-
-  if(offlineState&&!offlineState.winner){
-   const fallback=applyAction(offlineState,"guest",{kind:"pass"});
-
-   if(fallback){
-    offlineState=fallback;
-   }else{
-    offlineState.turn="host";
-    offlineState.log=offlineState.log||[];
-    offlineState.log.push("O bot encontrou um erro e terminou o turno automaticamente.");
-   }
-  }
- }finally{
-  finishBotTurn();
+  console.error("Erro real no turno do bot:",error);
+  forceReturnTurnToPlayer("O bot encontrou um erro e perdeu o turno.");
  }
 }
-function finishBotTurn(){
+
+function completeOfflineBotTurn(token){
+ if(token!==botTurnToken)return;
+
+ clearTimeout(botWatchdog);
+ botWatchdog=null;
  offlineLocked=false;
 
- if(offlineState&&!offlineState.winner&&offlineState.turn==="guest"){
+ if(offlineState&&!offlineState.winner){
+  offlineState.turn="host";
+ }
+
+ renderOfflineGame();
+}
+
+function forceReturnTurnToPlayer(reason){
+ clearTimeout(botWatchdog);
+ botWatchdog=null;
+ botTurnToken++;
+ offlineLocked=false;
+
+ if(offlineState&&!offlineState.winner){
   offlineState.turn="host";
   offlineState.log=offlineState.log||[];
-  offlineState.log.push("O turno do bot foi encerrado automaticamente.");
+  offlineState.log.push(reason);
  }
 
  renderOfflineGame();
@@ -2031,7 +2042,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();if(gameSettings.music)showAudioStatus("Clica ou toca uma vez para ativar a música");
 
-window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.flipVisualCard=flipVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.flipVisualCard=flipVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
