@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.7 Root Card Images</title>
+<title>Arena Secreta — 1.1.8 Front Cards Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -468,7 +468,7 @@ body{
  width:min(340px,78vw);aspect-ratio:2/3;position:relative;
  transform-style:preserve-3d;transition:transform .55s;cursor:pointer
 }
-.visual-card-flip{transform:rotateY(180deg)}
+.visual-card-flip.flipped{transform:rotateY(180deg)}
 .visual-card-face{
  position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;
  border:2px solid rgba(168,117,255,.55);box-shadow:0 30px 90px #000;
@@ -688,13 +688,25 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 }
 
 
+/* VERSION 1.1.8 — FRONT CARDS ONLY */
 .battle-card{
  background:transparent!important;
- border:0!important;
  box-shadow:none!important;
 }
-.battle-card-overlay{
- background:linear-gradient(transparent 55%,rgba(5,7,21,.92) 88%)!important;
+.battle-card:not(.selected){
+ border-color:transparent!important;
+}
+.battle-card.selected{
+ border-color:var(--gold)!important;
+}
+.visual-card-front-only{
+ transform:none!important;
+ cursor:default!important;
+}
+.visual-card-front-only .visual-card-face{
+ position:absolute;
+ transform:none!important;
+ backface-visibility:visible!important;
 }
 
 </style>
@@ -743,7 +755,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.7 — Root Card Images<br>
+  Version 1.1.8 — Front Cards Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -939,17 +951,12 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div id="visualCardModal" class="visual-card-modal hidden" onclick="closeVisualCard(event)">
  <div class="visual-card-modal-inner">
   <button class="visual-card-close" onclick="closeVisualCard(event)">×</button>
-  <div id="visualCardFlip" class="visual-card-flip" onclick="flipVisualCard(event)">
+  <div id="visualCardFlip" class="visual-card-flip visual-card-front-only">
    <div class="visual-card-face visual-card-front">
-    <img id="visualCardFrontImage" alt="Frente da carta">
+    <img id="visualCardFrontImage" alt="Carta">
     <div id="visualCardFrontFallback" class="visual-card-fallback"></div>
    </div>
-   <div class="visual-card-face visual-card-back">
-    <img id="visualCardBackImage" alt="Verso da carta">
-    <div id="visualCardBackFallback" class="visual-card-back-fallback"></div>
-   </div>
   </div>
-  <p></p>
  </div>
 </div>
 
@@ -1042,7 +1049,6 @@ function cardSymbol(id){return CARD_SYMBOLS[id]||"◆"}
 
 const CARD_IMAGE_BASE=".";
 function cardFrontPath(id){return`./${id}_front.png`}
-function cardBackPath(id){return cardFrontPath(id)}_back.png`}
 function cardImageElement(card,cssClass="battle-card-art"){
  const img=document.createElement("img");
  img.className=cssClass;
@@ -1068,20 +1074,21 @@ function openVisualCard(cardId,event){
  if(event){event.preventDefault();event.stopPropagation()}
  const card=LIBRARY.find(c=>c.id===cardId);if(!card)return;
  visualCardId=cardId;
- $("visualCardFlip").classList.remove("flipped");
- const front=$("visualCardFrontImage"),back=$("visualCardBackImage");
- const frontFallback=$("visualCardFrontFallback"),backFallback=$("visualCardBackFallback");
- front.style.display="block";frontFallback.style.display="none";
- back.style.display="block";backFallback.style.display="none";
- front.src=cardFrontPath(cardId);back.src=cardBackPath(cardId);
- front.onerror=()=>{front.style.display="none";frontFallback.style.display="flex";frontFallback.innerHTML=`<span>${cardSymbol(card.id)}</span><strong>${card.name}</strong>`};
- back.onerror=()=>{back.style.display="none";backFallback.style.display="flex";backFallback.innerHTML=`<h2>${card.name}</h2><p><b>Vida:</b> ${card.hp}</p><p><b>Dano:</b> ${card.damage}</p><p><b>Mana:</b> ${card.cost}</p><p><b>Movimento:</b> ${card.moves}</p><p><b>Ataque:</b> ${card.pattern}</p>`};
- $("visualCardModal").classList.remove("hidden")
+ const front=$("visualCardFrontImage");
+ const frontFallback=$("visualCardFrontFallback");
+ front.style.display="block";
+ frontFallback.style.display="none";
+ front.src=cardFrontPath(cardId);
+ front.onerror=()=>{
+  front.style.display="none";
+  frontFallback.style.display="flex";
+  frontFallback.innerHTML=`<span>${cardSymbol(card.id)}</span><strong>${card.name}</strong>`;
+ };
+ $("visualCardModal").classList.remove("hidden");
 }
-function flipVisualCard(event){event.stopPropagation();$("visualCardFlip").classList.toggle("flipped")}
 function closeVisualCard(event){
- if(event&&event.target.closest(".visual-card-flip"))return;
- $("visualCardModal").classList.add("hidden")
+ if(event&&event.target.closest(".visual-card-front-only")&&!event.target.closest(".visual-card-close"))return;
+ $("visualCardModal").classList.add("hidden");
 }
 function toggleBattleLog(){$("battleLogDrawer").classList.toggle("hidden")}
 
