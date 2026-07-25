@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.5 Render Fix</title>
+<title>Arena Secreta — 1.1.6 Movement Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -733,7 +733,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.5 — Render Fix<br>
+  Version 1.1.6 — Movement Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1476,6 +1476,59 @@ function createInitialState(h,g,isRanked=false){return{round:1,turn:"host",winne
 
 function createBoard(){$("board").innerHTML="";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const b=document.createElement("button");b.className="cell";b.dataset.r=r;b.dataset.c=c;b.onclick=()=>cellClick(r,c);b.onmouseenter=()=>preview(r,c);b.onmouseleave=clearPreview;$("board").appendChild(b)}}
 function patternCells(r,c,p){const o=[],add=(a,b)=>{if(a>=0&&a<ROWS&&b>=0&&b<COLS)o.push(`${a}-${b}`)};if(p==="horizontal")[-1,0,1].forEach(x=>add(r,c+x));if(p==="vertical")[-1,0,1].forEach(x=>add(r+x,c));if(p==="diagonal")[-1,0,1].forEach(x=>add(r+x,c+x));if(p==="cross")[[0,0],[-1,0],[1,0],[0,-1],[0,1]].forEach(([a,b])=>add(r+a,c+b));if(p==="scan")for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)add(r+a,c+b);return[...new Set(o)]}
+
+function movementType(card){
+ if(["knight"].includes(card.id))return"knight";
+ if(["assassin","raider","warlock"].includes(card.id))return"diagonal";
+ if(["mage","necromancer","illusionist"].includes(card.id))return"teleport";
+ return"orthogonal";
+}
+
+function validMoveCells(card,playerDeck){
+ if(!card||!card.alive||!card.summoned||!card.position)return[];
+
+ const [row,col]=card.position.split("-").map(Number);
+ const range=Math.max(1,Number(card.moves)||1);
+ const occupied=new Set(
+  playerDeck
+   .filter(other=>other.alive&&other.summoned&&other.id!==card.id&&other.position)
+   .map(other=>other.position)
+ );
+
+ const result=[];
+ const add=(r,c)=>{
+  if(r<0||r>=ROWS||c<0||c>=COLS)return;
+  const pos=`${r}-${c}`;
+  if(!occupied.has(pos))result.push(pos);
+ };
+
+ const type=movementType(card);
+
+ if(type==="knight"){
+  [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]
+   .forEach(([dr,dc])=>add(row+dr,col+dc));
+ }else if(type==="diagonal"){
+  for(let distance=1;distance<=range;distance++){
+   [[distance,distance],[distance,-distance],[-distance,distance],[-distance,-distance]]
+    .forEach(([dr,dc])=>add(row+dr,col+dc));
+  }
+ }else if(type==="teleport"){
+  for(let r=row-range;r<=row+range;r++){
+   for(let c=col-range;c<=col+range;c++){
+    if(r===row&&c===col)continue;
+    if(Math.max(Math.abs(r-row),Math.abs(c-col))<=range)add(r,c);
+   }
+  }
+ }else{
+  for(let distance=1;distance<=range;distance++){
+   [[distance,0],[-distance,0],[0,distance],[0,-distance]]
+    .forEach(([dr,dc])=>add(row+dr,col+dc));
+  }
+ }
+
+ return [...new Set(result)];
+}
+
 function setAction(a){selectedAction=a;selectedHand=null;selectedArena=null;document.querySelectorAll(".battle-action").forEach(x=>x.classList.toggle("selected",x.dataset.action===a));if(a==="pass")submitAction({kind:"pass"});else renderCurrentGame()}
 document.querySelectorAll(".battle-action").forEach(b=>b.onclick=()=>setAction(b.dataset.action));
 function cellClick(r,c){
@@ -1610,13 +1663,22 @@ function renderChips(state){
   button.disabled=!card.alive;
   button.innerHTML=
    `<span class="card-symbol">${cardSymbol(card.id)}</span>`+
-   `${card.name} ❤${card.currentHp}/${card.hp} ↔ ${card.movesLeft}`;
+   `${card.name} ❤${card.currentHp}/${card.hp} ↔ ${card.moves}`;
 
   button.onclick=()=>{
    if(!card.alive)return;
    selectedArena=index;
    selectedHand=null;
    renderCurrentGame();
+
+   if(selectedAction==="move"){
+    validMoveCells(card,me(currentState()).deck).forEach(pos=>{
+     const[row,col]=pos.split("-");
+     $("board")
+      .querySelector(`[data-r="${row}"][data-c="${col}"]`)
+      ?.classList.add("move-preview");
+    });
+   }
   };
 
   container.appendChild(button);
@@ -1652,7 +1714,7 @@ function renderSelected(state){
  container.innerHTML=
   `<strong>${cardSymbol(card.id)} ${card.name}</strong><br>`+
   `❤ ${card.currentHp}/${card.hp} · ⚔ ${card.damage} · `+
-  `↔ ${card.movesLeft}/${card.moves}<br>`+
+  `↔ ${card.moves}<br>`+
   `<span class="small">Ataque: ${card.pattern}</span>`;
 }
 
@@ -1714,12 +1776,12 @@ function submitOfflineAction(action){
 
  const applied=applyAction(offlineState,"host",action);
  if(!applied){
-  $("message").textContent="Jogada inválida.";
+  $("message").textContent=action.kind==="move"?"Essa carta não pode mover-se para essa casa.":"Jogada inválida.";
   return;
  }
 
  offlineState=applied;
- if(action.kind==="summon")selectedHand=null;
+ if(action.kind==="summon")selectedHand=null;if(action.kind==="move")selectedArena=null;
 
  if(offlineState.winner){
   renderOfflineGame();
@@ -1751,7 +1813,18 @@ function applyAction(state,acting,a){
  if(a.kind==="summon"){const c=p.deck[a.cardIndex];if(!c||c.summoned||!c.alive||c.cost>p.mana||p.deck.some(x=>x.alive&&x.summoned&&x.position===a.pos))return null;c.summoned=true;c.position=a.pos;p.mana-=c.cost;n.log.push(`${p.name} invocou ${c.name}.`)}
  else if(a.kind==="attack"){const c=p.deck[a.cardIndex];if(!c||!c.alive||!c.summoned)return null;const cells=patternCells(a.r,a.c,c.pattern);if(c.pattern==="scan"){n.scanMarks=cells;const found=e.deck.some(x=>x.alive&&x.summoned&&cells.includes(x.position));n.log.push(`${p.name} usou Scanner: ${found?"atividade detetada":"zona vazia"}.`)}
  else{let hits=0;cells.forEach(pos=>{const t=e.deck.find(x=>x.alive&&x.summoned&&x.position===pos);n.marks.push({pos,hit:!!t});if(t){t.currentHp-=c.damage+(n.round>NORMAL_TURNS?1:0);t.wasHit=true;hits++;if(t.currentHp<=0){t.currentHp=0;t.alive=false}}});n.log.push(`${p.name} atacou e ${hits?`acertou em ${hits} carta(s)`:"falhou"}.`)}}
- else if(a.kind==="move"){const c=p.deck[a.cardIndex];if(!c||!c.alive||!c.summoned||!c.wasHit||c.movesLeft<=0||n.round>NORMAL_TURNS)return null;const[r1,c1]=c.position.split("-").map(Number),[r2,c2]=a.pos.split("-").map(Number);if(Math.abs(r1-r2)+Math.abs(c1-c2)!==1||p.deck.some(x=>x.alive&&x.summoned&&x.position===a.pos))return null;c.position=a.pos;c.movesLeft--;c.wasHit=false;n.log.push(`${p.name} moveu ${c.name}.`)}
+ else if(a.kind==="move"){
+  const c=p.deck[a.cardIndex];
+  if(!c||!c.alive||!c.summoned)return null;
+
+  const valid=validMoveCells(c,p.deck);
+  if(!valid.includes(a.pos))return null;
+
+  c.position=a.pos;
+  c.wasHit=false;
+  c.movesLeft=c.moves;
+  n.log.push(`${p.name} moveu ${c.name}.`);
+ }
  else if(a.kind==="pass"){p.mana=Math.min(p.maxMana,p.mana+1);n.log.push(`${p.name} passou o turno.`)}else return null;
  const ha=n.players.host.deck.filter(x=>x.alive).length,ga=n.players.guest.deck.filter(x=>x.alive).length;if(!ha)n.winner="guest";else if(!ga)n.winner="host";
  if(!n.winner){if(acting==="guest"){n.round++;Object.values(n.players).forEach(x=>{x.maxMana=Math.min(10,3+n.round-1);x.mana=Math.min(x.maxMana,x.mana+1)});if(n.round>=REVEAL_TURN)n.reveal=true;n.marks=[];n.scanMarks=[]}n.turn=enemyRole}
@@ -1885,7 +1958,34 @@ function forceReturnTurnToPlayer(reason){
  renderOfflineGame();
 }
 
-function preview(r,c){if(!gameSettings.attackPreview)return;const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if((gameMode==="online"||gameMode==="ranked")&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
+function preview(r,c){
+ const state=currentState();
+ if(!state||selectedArena===null)return;
+ if((gameMode==="online"||gameMode==="ranked")&&state.turn!==role)return;
+
+ clearPreview();
+
+ const card=me(state).deck[selectedArena];
+ if(!card)return;
+
+ if(selectedAction==="attack"&&gameSettings.attackPreview){
+  patternCells(r,c,card.pattern).forEach(pos=>{
+   const[row,col]=pos.split("-");
+   $("board")
+    .querySelector(`[data-r="${row}"][data-c="${col}"]`)
+    ?.classList.add("preview");
+  });
+ }
+
+ if(selectedAction==="move"){
+  validMoveCells(card,me(state).deck).forEach(pos=>{
+   const[row,col]=pos.split("-");
+   $("board")
+    .querySelector(`[data-r="${row}"][data-c="${col}"]`)
+    ?.classList.add("move-preview");
+  });
+ }
+}
 function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
 
 
