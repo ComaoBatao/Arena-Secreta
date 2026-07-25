@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.9 Click Fix</title>
+<title>Arena Secreta — 1.2.0 Menu Redesign</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -709,32 +709,411 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  backface-visibility:visible!important;
 }
 
+
+/* ==========================================================
+   VERSION 1.2.0 — MENU REDESIGN
+   ========================================================== */
+#menuScreen{
+ min-height:100vh;
+ background:
+  radial-gradient(circle at 50% 10%,rgba(92,57,180,.22),transparent 33%),
+  linear-gradient(180deg,#07091a 0%,#050714 100%);
+ overflow:hidden;
+}
+.menu-page{
+ min-height:100vh;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:34px 18px;
+ isolation:isolate;
+}
+.menu-page::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ z-index:-4;
+ background:
+  radial-gradient(circle at 15% 70%,rgba(60,34,150,.35),transparent 25%),
+  radial-gradient(circle at 84% 67%,rgba(79,36,180,.25),transparent 25%),
+  linear-gradient(90deg,rgba(0,0,0,.25),transparent 24%,transparent 76%,rgba(0,0,0,.25));
+}
+.menu-atmosphere{
+ position:absolute;
+ bottom:-100px;
+ width:42vw;
+ height:58vh;
+ z-index:-3;
+ filter:blur(5px);
+ opacity:.5;
+ background:
+  radial-gradient(circle at 50% 35%,rgba(52,109,202,.32),transparent 23%),
+  radial-gradient(circle at 50% 70%,rgba(107,42,226,.55),transparent 48%);
+}
+.menu-atmosphere-left{left:-12vw}
+.menu-atmosphere-right{right:-12vw;transform:scaleX(-1)}
+.menu-particle{
+ position:absolute;
+ width:5px;height:18px;
+ background:linear-gradient(#bd82ff,transparent);
+ box-shadow:0 0 15px #8a54ff;
+ transform:rotate(34deg);
+ opacity:.8;
+ z-index:-1;
+}
+.menu-particle-1{left:9%;top:58%}
+.menu-particle-2{right:12%;top:42%}
+.menu-particle-3{right:7%;bottom:16%}
+
+.menu-shell{
+ position:relative;
+ width:min(1080px,100%);
+ padding:26px clamp(22px,4vw,64px) 20px;
+ border:1px solid rgba(142,173,255,.34);
+ border-radius:25px;
+ background:
+  linear-gradient(180deg,rgba(13,18,48,.9),rgba(5,8,25,.95)),
+  radial-gradient(circle at 50% 0%,rgba(112,70,221,.25),transparent 44%);
+ box-shadow:
+  0 40px 120px rgba(0,0,0,.65),
+  inset 0 0 45px rgba(99,71,206,.1),
+  0 0 38px rgba(80,50,168,.18);
+ backdrop-filter:blur(12px);
+}
+.menu-shell::before{
+ content:"";
+ position:absolute;
+ inset:12px;
+ pointer-events:none;
+ border:1px solid rgba(126,87,218,.13);
+ border-radius:18px;
+}
+.menu-corner{
+ position:absolute;
+ width:34px;height:34px;
+ border-color:#a65cff;
+ filter:drop-shadow(0 0 8px #7a35e5);
+ z-index:3;
+}
+.corner-tl{top:18px;left:18px;border-top:5px solid;border-left:5px solid}
+.corner-tr{top:18px;right:18px;border-top:5px solid;border-right:5px solid}
+.corner-bl{bottom:18px;left:18px;border-bottom:5px solid;border-left:5px solid}
+.corner-br{bottom:18px;right:18px;border-bottom:5px solid;border-right:5px solid}
+
+.menu-brand{text-align:center;position:relative;z-index:2}
+.menu-logo{
+ width:min(430px,72%);
+ max-height:240px;
+ margin:-38px auto -25px;
+ filter:
+  brightness(1.4)
+  contrast(1.13)
+  drop-shadow(0 0 4px rgba(255,255,255,.75))
+  drop-shadow(0 0 24px rgba(146,84,255,.88));
+}
+.menu-tagline-row{
+ display:grid;
+ grid-template-columns:1fr auto 1fr;
+ gap:14px;
+ align-items:center;
+ width:min(700px,90%);
+ margin:0 auto;
+}
+.menu-tagline-row>span{
+ height:1px;
+ background:linear-gradient(90deg,transparent,#7950d7);
+}
+.menu-tagline-row>span:last-child{background:linear-gradient(90deg,#7950d7,transparent)}
+.menu-tagline-row .main-tagline{margin:0;white-space:nowrap}
+.menu-version{margin:12px 0 12px!important;padding:5px 12px!important}
+
+.menu-identity{
+ width:100%;
+ min-height:112px;
+ display:grid;
+ grid-template-columns:auto minmax(170px,1fr) auto auto;
+ align-items:center;
+ gap:18px;
+ margin:0 auto 20px;
+ padding:14px 20px;
+ border:1px solid rgba(134,112,210,.32);
+ border-radius:15px;
+ background:linear-gradient(90deg,rgba(20,26,64,.95),rgba(12,16,43,.94));
+ box-shadow:inset 0 0 24px rgba(65,55,150,.14);
+}
+.menu-avatar{
+ width:82px;height:82px;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ background:
+  radial-gradient(circle,#211552 0 36%,#090d25 38% 55%,#574c78 57% 67%,#151a35 69%);
+ box-shadow:0 0 18px rgba(149,81,255,.5),inset 0 0 0 3px rgba(255,255,255,.08);
+}
+.menu-avatar-core{
+ color:#b966ff;
+ font-size:31px;
+ text-shadow:0 0 18px #8e3cff;
+ transform:rotate(45deg);
+}
+.menu-avatar-level{
+ position:absolute;
+ bottom:-6px;
+ width:34px;height:30px;
+ display:flex;align-items:center;justify-content:center;
+ clip-path:polygon(50% 0,95% 25%,82% 100%,18% 100%,5% 25%);
+ background:linear-gradient(#8f4fff,#4a1a98);
+ border-radius:5px;
+ color:#fff;font-weight:1000;font-size:12px;
+}
+.menu-account{text-align:left;min-width:0}
+.menu-account strong{
+ display:block;
+ color:#fff;
+ font-size:clamp(21px,2.4vw,31px);
+ line-height:1.05;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+.menu-account .small{
+ margin-top:6px;
+ font-size:13px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+.menu-wallet{
+ display:grid!important;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+ margin:0;
+}
+.menu-wallet.hidden{display:none!important}
+.menu-wallet .wallet-pill{
+ min-width:95px;
+ justify-content:center;
+ background:rgba(7,10,29,.76);
+ border:1px solid rgba(255,255,255,.07);
+}
+.menu-account-actions{
+ margin:0;
+ display:grid;
+ grid-template-columns:1fr 1.15fr;
+ gap:10px;
+}
+.menu-account-actions .btn{white-space:nowrap}
+
+.menu-primary-actions{
+ width:100%;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:18px;
+ margin:0 auto 18px;
+}
+.menu-action-card{
+ min-height:112px;
+ display:flex;
+ align-items:center;
+ gap:18px;
+ padding:20px 24px;
+ border-radius:14px;
+ color:#fff;
+ text-align:left;
+ cursor:pointer;
+ background:rgba(7,13,37,.82);
+ transition:transform .18s,filter .18s,box-shadow .18s;
+}
+.menu-action-card:hover{transform:translateY(-3px);filter:brightness(1.12)}
+.menu-action-card>span:last-child{display:flex;flex-direction:column;gap:7px}
+.menu-action-card strong{font-size:18px}
+.menu-action-card small{font-size:13px;color:#5fe7e0}
+.menu-action-icon{
+ width:55px;
+ text-align:center;
+ font-size:39px;
+ line-height:1;
+ color:#5ff2ed;
+ text-shadow:0 0 16px currentColor;
+}
+.menu-action-cyan{
+ border:1px solid #00e5dc;
+ box-shadow:inset 0 0 20px rgba(0,229,220,.08),0 0 15px rgba(0,229,220,.07);
+}
+.menu-action-ranked{
+ border:1px solid #ad58ff;
+ box-shadow:inset 0 0 25px rgba(143,63,238,.17),0 0 18px rgba(149,64,255,.3);
+ background:linear-gradient(145deg,rgba(57,22,98,.72),rgba(13,12,42,.9));
+}
+.menu-action-ranked .menu-action-icon,
+.menu-action-ranked small{color:#c884ff}
+
+.menu-secondary-actions{
+ width:92%;
+ margin:auto;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:16px;
+}
+.menu-secondary-card{
+ min-height:63px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:15px;
+ border:1px solid rgba(130,145,210,.28);
+ border-radius:12px;
+ background:linear-gradient(180deg,rgba(17,23,58,.9),rgba(8,12,34,.9));
+ color:#fff;
+ font-weight:900;
+ cursor:pointer;
+ transition:.18s;
+}
+.menu-secondary-card:hover{
+ transform:translateY(-2px);
+ border-color:#8d5ad8;
+ box-shadow:0 0 18px rgba(137,75,221,.18);
+}
+.menu-secondary-card span{
+ color:#b778ff;
+ font-size:27px;
+ text-shadow:0 0 10px currentColor;
+}
+.menu-collection-card{grid-column:2/4}
+.menu-account-entry{grid-column:1/3}
+
+.menu-footer{
+ position:relative;
+ z-index:2;
+ margin-top:20px;
+ padding-top:15px;
+ border-top:1px solid rgba(132,102,213,.18);
+ text-align:center;
+ color:var(--muted);
+ font-size:12px;
+}
+.menu-footer p{margin:0 0 9px}
+
+@media(max-width:900px){
+ .menu-shell{padding-left:24px;padding-right:24px}
+ .menu-identity{grid-template-columns:auto 1fr auto}
+ .menu-wallet{grid-column:2}
+ .menu-account-actions{grid-column:3;grid-row:1/3}
+ .menu-primary-actions{grid-template-columns:1fr}
+ .menu-action-card{min-height:86px}
+ .menu-secondary-actions{width:100%;grid-template-columns:1fr 1fr}
+ .menu-collection-card,.menu-account-entry{grid-column:auto}
+}
+@media(max-width:620px){
+ .menu-page{padding:8px}
+ .menu-shell{padding:19px 12px 16px;border-radius:15px}
+ .menu-corner{display:none}
+ .menu-logo{width:95%;margin:-12px auto -10px;max-height:180px}
+ .menu-tagline-row{width:100%;gap:7px}
+ .menu-tagline-row .main-tagline{font-size:10px;letter-spacing:2px}
+ .menu-identity{
+  grid-template-columns:auto minmax(0,1fr);
+  gap:12px;
+  padding:12px;
+ }
+ .menu-avatar{width:60px;height:60px}
+ .menu-account strong{font-size:19px}
+ .menu-wallet{grid-column:1/3;width:100%;display:flex!important}
+ .menu-account-actions{grid-column:1/3;grid-row:auto;width:100%;display:flex}
+ .menu-account-actions .btn{flex:1;padding:10px 7px;font-size:11px}
+ .menu-primary-actions{gap:10px}
+ .menu-action-card{padding:14px;min-height:78px}
+ .menu-action-card strong{font-size:15px}
+ .menu-action-icon{width:42px;font-size:30px}
+ .menu-secondary-actions{grid-template-columns:1fr}
+ .menu-secondary-card{min-height:54px}
+}
+
 </style>
 </head>
 <body>
 
 <section id="menuScreen" class="screen active">
-<div class="hero"><div class="hero-card">
- <img class="official-logo" src="./ARENA.png" alt="Arena Secreta — Feather Studios" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'"><div id="logoFallback" class="logo" style="display:none">ARENA<br>SECRETA</div>
- <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
- 
- <div class="version" style="opacity:.72;font-size:11px">VERSION 1.1</div>
- <div class="identity">
-  <strong id="menuName">Ghost0001</strong>
-  <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
-  <div id="menuWallet" class="wallet hidden"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="menuCoins">0</span></span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="menuTrophies">0</span></span></div>
-  <div class="menu-user-row"><button id="profileMenuBtn" class="btn secondary hidden" onclick="showProfile()">PERFIL</button><button id="logoutMenuBtn" class="btn danger hidden" onclick="logoutAccount()">TERMINAR SESSÃO</button></div>
- </div>
- <div class="menu">
-  <button class="btn" onclick="showScreen('offlineSetupScreen')">JOGAR OFFLINE</button><button class="btn" onclick="showScreen('onlineScreen')">JOGAR ONLINE</button>
-  <button id="rankedMenuBtn" class="btn ranked-btn hidden" onclick="showRankedArena()">RANKED ARENA</button><button class="btn secondary" onclick="startTutorial()">TUTORIAL</button><button class="btn secondary" onclick="openSettings()">DEFINIÇÕES</button>
-  <button id="leaderboardMenuBtn" class="btn secondary hidden" onclick="showLeaderboard()">TOP GLOBAL</button>
-  <button id="shopMenuBtn" class="btn secondary hidden" onclick="showShop()">LOJA</button><button id="inventoryMenuBtn" class="btn secondary hidden" onclick="showInventory()">COLEÇÃO</button>
-  <button id="accountMenuBtn" class="btn secondary" onclick="showScreen('accountScreen')">CRIAR CONTA / ENTRAR</button><button id="newGhostBtn" class="btn secondary" onclick="newGhost()">GERAR NOVO GHOST</button>
- </div>
- <p class="small">Identidade roxa + logo oficial Feather Studios</p>
- <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
-</div></div>
+<div class="menu-page">
+ <div class="menu-atmosphere menu-atmosphere-left"></div>
+ <div class="menu-atmosphere menu-atmosphere-right"></div>
+ <div class="menu-particle menu-particle-1"></div>
+ <div class="menu-particle menu-particle-2"></div>
+ <div class="menu-particle menu-particle-3"></div>
+
+ <main class="menu-shell">
+  <span class="menu-corner corner-tl"></span>
+  <span class="menu-corner corner-tr"></span>
+  <span class="menu-corner corner-bl"></span>
+  <span class="menu-corner corner-br"></span>
+
+  <header class="menu-brand">
+   <img class="official-logo menu-logo" src="./ARENA.png" alt="Arena Secreta — Feather Studios"
+    onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
+   <div id="logoFallback" class="logo" style="display:none">ARENA<br>SECRETA</div>
+   <div class="menu-tagline-row">
+    <span></span>
+    <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
+    <span></span>
+   </div>
+   <div class="version menu-version">VERSÃO 1.2</div>
+  </header>
+
+  <section class="identity menu-identity">
+   <div class="menu-avatar" aria-hidden="true">
+    <div class="menu-avatar-core">◆</div>
+    <div class="menu-avatar-level">27</div>
+   </div>
+
+   <div class="menu-account">
+    <strong id="menuName">Ghost0001</strong>
+    <div id="menuAccountType" class="small">Identidade temporária neste dispositivo</div>
+   </div>
+
+   <div id="menuWallet" class="wallet menu-wallet hidden">
+    <span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="menuCoins">0</span></span>
+    <span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="menuTrophies">0</span></span>
+   </div>
+
+   <div class="menu-user-row menu-account-actions">
+    <button id="profileMenuBtn" class="btn secondary hidden" onclick="showProfile()">PERFIL ↪</button>
+    <button id="logoutMenuBtn" class="btn danger hidden" onclick="logoutAccount()">TERMINAR SESSÃO</button>
+   </div>
+  </section>
+
+  <nav class="menu menu-primary-actions">
+   <button class="menu-action-card menu-action-cyan" onclick="showScreen('offlineSetupScreen')">
+    <span class="menu-action-icon">⚔</span>
+    <span><strong>JOGAR OFFLINE</strong><small>Treina e supera-te</small></span>
+   </button>
+   <button class="menu-action-card menu-action-cyan" onclick="showScreen('onlineScreen')">
+    <span class="menu-action-icon">◎</span>
+    <span><strong>JOGAR ONLINE</strong><small>Entra na ação</small></span>
+   </button>
+   <button id="rankedMenuBtn" class="menu-action-card menu-action-ranked hidden" onclick="showRankedArena()">
+    <span class="menu-action-icon">♛</span>
+    <span><strong>RANKED ARENA</strong><small>Sobe no ranking</small></span>
+   </button>
+  </nav>
+
+  <nav class="menu menu-secondary-actions">
+   <button class="menu-secondary-card" onclick="startTutorial()"><span>◇</span><strong>TUTORIAL</strong></button>
+   <button class="menu-secondary-card" onclick="openSettings()"><span>⚙</span><strong>DEFINIÇÕES</strong></button>
+   <button id="leaderboardMenuBtn" class="menu-secondary-card hidden" onclick="showLeaderboard()"><span>▥</span><strong>TOP GLOBAL</strong></button>
+   <button id="shopMenuBtn" class="menu-secondary-card hidden" onclick="showShop()"><span>🛒</span><strong>LOJA</strong></button>
+   <button id="inventoryMenuBtn" class="menu-secondary-card menu-collection-card hidden" onclick="showInventory()"><span>▱</span><strong>COLEÇÃO</strong></button>
+   <button id="accountMenuBtn" class="menu-secondary-card menu-account-entry" onclick="showScreen('accountScreen')"><span>♙</span><strong>CRIAR CONTA / ENTRAR</strong></button>
+   <button id="newGhostBtn" class="menu-secondary-card" onclick="newGhost()"><span>↻</span><strong>GERAR NOVO GHOST</strong></button>
+  </nav>
+
+  <footer class="menu-footer">
+   <p>Identidade roxa • logo oficial Feather Studios</p>
+   <div class="connection"><span id="firebaseLight" class="light"></span><span id="firebaseStatus">A ligar ao Firebase...</span></div>
+  </footer>
+ </main>
+</div>
 </section>
 
 
@@ -755,7 +1134,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.9 — Click Fix<br>
+  Version 1.2.0 — Menu Redesign<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1311,7 +1690,17 @@ async function recordMatchResult(win,opponentName,mode){
  if(mode==="ranked"&&win&&oldRank&&newRank&&oldRank.name!==newRank.name){pendingPromotion={oldRank:oldRank.name,newRank:newRank.name,trophyDelta};setTimeout(showPromotion,700)}
 }
 
-function showScreen(id){lastScreenId=id;document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0);updateBackgroundMusic(id)}
+function showScreen(id){
+ lastScreenId=id;
+ if(id==="menuScreen"){
+  const victory=getAudio("victorySound");
+  if(victory){victory.pause();victory.currentTime=0}
+ }
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ $(id).classList.add("active");
+ window.scrollTo(0,0);
+ updateBackgroundMusic(id)
+}
 function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
 setupOptionGroup("difficultyOptions",v=>difficulty=v);setupOptionGroup("personalityOptions",v=>personality=v);
 function randomCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join("")}
@@ -2159,6 +2548,10 @@ async function tryPlayAudio(audio){
 }
 async function updateBackgroundMusic(screenId=lastScreenId){
  desiredMusicScreen=screenId;
+ if(screenId==="menuScreen"){
+  const victory=getAudio("victorySound");
+  if(victory){victory.pause();victory.currentTime=0}
+ }
  setAudioVolume();
  if(!gameSettings.music){stopAllMusic(false);setMusicLabel("desligada");return}
  const menu=getAudio("menuMusic"),battle=getAudio("battleMusic");
