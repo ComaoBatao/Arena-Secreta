@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.2.2 Custom Icons</title>
+<title>Arena Secreta — 1.2.3 Icons Everywhere</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1280,6 +1280,43 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  }
 }
 
+
+/* VERSION 1.2.3 — ICONS ACROSS ALL SCREENS */
+.ui-icon-image,.button-icon-image,.resource-icon-image,.action-icon-image,
+.tutorial-icon-image,.tab-icon-image,.category-icon-image,.screen-title-icon,
+.rank-main-icon,.promotion-icon-image,.inline-button-icon{
+ display:block;object-fit:contain;pointer-events:none
+}
+.screen-title{display:inline-flex;align-items:center;gap:10px}
+.screen-title-icon{width:30px;height:30px;filter:drop-shadow(0 0 8px rgba(168,117,255,.8))}
+.ui-text-icon-button{display:inline-flex!important;align-items:center;justify-content:center;gap:8px}
+.inline-button-icon{width:18px;height:18px}
+.icon-button{display:flex;align-items:center;justify-content:center}
+.button-icon-image{width:23px;height:23px;filter:drop-shadow(0 0 6px rgba(168,117,255,.75))}
+.resource-icon-image{width:27px;height:27px;filter:drop-shadow(0 0 7px rgba(108,183,255,.8))}
+.action-icon-image{width:25px;height:25px;filter:drop-shadow(0 0 7px rgba(98,226,207,.55))}
+.battle-action span{display:flex;align-items:center;justify-content:center;min-height:27px}
+.tutorial-action{display:flex;align-items:center;justify-content:center;gap:8px}
+.tutorial-icon-image{width:22px;height:22px;filter:drop-shadow(0 0 6px rgba(168,117,255,.65))}
+.shop-tab{display:inline-flex;align-items:center;gap:7px}
+.tab-icon-image{width:20px;height:20px}
+.category-title{display:flex;align-items:center;gap:10px}
+.category-title h3{margin:0!important}
+.category-icon-image{width:28px;height:28px;filter:drop-shadow(0 0 7px rgba(168,117,255,.6))}
+.rank-emblem-image{position:relative;flex-direction:column;gap:2px}
+.rank-main-icon{width:42px;height:42px;filter:drop-shadow(0 0 8px rgba(98,226,207,.75))}
+.rank-emblem-text{font-size:12px;font-weight:1000}
+.promotion-burst{display:flex;justify-content:center;align-items:center}
+.promotion-icon-image{width:82px;height:82px;filter:drop-shadow(0 0 18px var(--gold))}
+.price{display:flex;align-items:center;gap:6px}
+.price .wallet-icon-image{width:22px;height:22px}
+@media(max-width:620px){
+ .screen-title-icon{width:25px;height:25px}
+ .action-icon-image{width:21px;height:21px}
+ .tutorial-action{gap:5px}
+ .tutorial-icon-image{width:18px;height:18px}
+}
+
 </style>
 </head>
 <body>
@@ -1307,7 +1344,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.2.2</div>
+   <div class="version menu-version">VERSÃO 1.2.3</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1368,7 +1405,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 
 
 <section id="settingsScreen" class="screen"><div class="wrap"><div class="panel">
-<div class="header"><h2>Definições</h2><button class="btn secondary" onclick="saveSettingsAndBack()">Voltar</button></div>
+<div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_settings.png" alt="" onerror="this.classList.add('icon-missing')"><span>Definições</span></h2><button class="btn secondary ui-text-icon-button" onclick="saveSettingsAndBack()"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div>
 <div class="settings-list">
 <div class="setting-row"><div><label>Animações</label><div class="small">Transições e efeitos visuais.</div></div><select id="settingAnimations" class="setting-control"><option value="on">Ligadas</option><option value="reduced">Reduzidas</option><option value="off">Desligadas</option></select></div>
 <div class="setting-row"><div><label>Som</label><div class="small">Efeitos dos botões e resultados.</div></div><input id="settingSound" class="setting-check" type="checkbox"></div>
@@ -1383,23 +1420,23 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.2.2 — Custom Icons<br>
+  Version 1.2.3 — Icons Everywhere<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
 
 <section id="tutorialScreen" class="screen"><div class="wrap tutorial-shell"><div class="panel">
-<div class="tutorial-top"><div><h2 style="margin:0">Tutorial da Arena</h2><div class="small">Aprende as regras passo a passo.</div></div><button class="btn danger" onclick="leaveTutorial()">Sair</button></div>
+<div class="tutorial-top"><div><h2 class="screen-title" style="margin:0"><img class="screen-title-icon" src="./icon_tutorial.png" alt="" onerror="this.classList.add('icon-missing')"><span>Tutorial da Arena</span></h2><div class="small">Aprende as regras passo a passo.</div></div><button class="btn danger ui-text-icon-button" onclick="leaveTutorial()"><img class="inline-button-icon" src="./icon_logout.png" alt="" onerror="this.classList.add('icon-missing')"><span>Sair</span></button></div>
 <div class="tutorial-progress" style="margin-top:13px"><div id="tutorialProgressFill" class="tutorial-progress-fill"></div></div>
 <div class="tutorial-card"><div><div class="tutorial-board-wrap"><div id="tutorialBoard" class="tutorial-board"></div></div><div id="tutorialHand" class="tutorial-hand"></div></div>
 <aside class="tutorial-guide"><div id="tutorialStepLabel" class="tutorial-step"></div><h2 id="tutorialTitle"></h2><p id="tutorialText"></p>
-<div id="tutorialActions" class="tutorial-actions"><button class="tutorial-action" data-tutorial-action="summon">Invocar</button><button class="tutorial-action" data-tutorial-action="attack">Atacar</button><button class="tutorial-action" data-tutorial-action="move">Mover</button><button class="tutorial-action" data-tutorial-action="pass">Passar</button></div>
-<div class="tutorial-reward"><span class="coin-icon">AS</span> Recompensa única: <strong>300 moedas</strong></div><div id="tutorialToast" class="tutorial-toast"></div>
+<div id="tutorialActions" class="tutorial-actions"><button class="tutorial-action" data-tutorial-action="summon"><img class="tutorial-icon-image" src="./icon_summon.png" alt="" onerror="this.classList.add('icon-missing')"><span>Invocar</span></button><button class="tutorial-action" data-tutorial-action="attack"><img class="tutorial-icon-image" src="./icon_attack.png" alt="" onerror="this.classList.add('icon-missing')"><span>Atacar</span></button><button class="tutorial-action" data-tutorial-action="move"><img class="tutorial-icon-image" src="./icon_move.png" alt="" onerror="this.classList.add('icon-missing')"><span>Mover</span></button><button class="tutorial-action" data-tutorial-action="pass"><img class="tutorial-icon-image" src="./icon_pass.png" alt="" onerror="this.classList.add('icon-missing')"><span>Passar</span></button></div>
+<div class="tutorial-reward"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"> Recompensa única: <strong>300 moedas</strong></div><div id="tutorialToast" class="tutorial-toast"></div>
 <button id="tutorialNextBtn" class="btn hidden" style="width:100%;margin-top:10px" onclick="tutorialNext()">Continuar</button></aside></div>
 </div></div></section>
 <section id="accountScreen" class="screen"><div class="wrap">
 <div class="panel">
- <div class="header"><h2>Conta</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_profile.png" alt="" onerror="this.classList.add('icon-missing')"><span>Conta</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div>
  <div class="account-grid">
   <div class="auth-card">
    <h3>Criar conta</h3>
@@ -1425,7 +1462,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 </div>
 </div></section>
 
-<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="profile-card">
+<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_profile.png" alt="" onerror="this.classList.add('icon-missing')"><span>Perfil</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div class="profile-card">
 <div class="profile-avatar-section">
  <div class="profile-avatar-frame">
   <img id="profileAvatarImage" class="avatar-image hidden" alt="Foto de perfil">
@@ -1442,18 +1479,18 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   <p id="avatarMessage" class="auth-message"></p>
  </div>
 </div>
-<div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><div class="ranked-stats"><div class="ranked-stat"><strong id="profileRank">BRONZE I</strong>Rank</div><div class="ranked-stat"><strong id="profileGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="profileWinStreak">0</strong>Win streak</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Coleção</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
+<div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies"><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"><span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><div class="ranked-stats"><div class="ranked-stat"><strong id="profileRank">BRONZE I</strong>Rank</div><div class="ranked-stat"><strong id="profileGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="profileWinStreak">0</strong>Win streak</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Coleção</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
 
-<section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Loja</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards">Cartas</button><button class="shop-tab" data-shop="backgrounds">Fundos</button><button class="shop-tab" data-shop="colors">Cores</button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
+<section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_shop.png" alt="" onerror="this.classList.add('icon-missing')"><span>Loja</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div class="wallet"><span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards"><img class="tab-icon-image" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><span>Cartas</span></button><button class="shop-tab" data-shop="backgrounds"><img class="tab-icon-image" src="./icon_background.png" alt="" onerror="this.classList.add('icon-missing')"><span>Fundos</span></button><button class="shop-tab" data-shop="colors"><img class="tab-icon-image" src="./icon_color.png" alt="" onerror="this.classList.add('icon-missing')"><span>Cores</span></button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
 
-<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Coleção</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="inventoryTrophies">0</span></span></div><div class="collection-summary"><button class="collection-category selected" data-collection="cards"><h3>Cartas</h3><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver cartas</span></button><button class="collection-category" data-collection="backgrounds"><h3>Fundos</h3><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos</span></button><button class="collection-category" data-collection="colors"><h3>Cores</h3><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores</span></button></div><div class="collection-detail"><div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div><div id="collectionDetailGrid" class="inventory-grid"></div></div><div class="theme-current"><div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div><div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div></div></div></div></section>
+<section id="inventoryScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><span>Coleção</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div class="wallet"><span class="wallet-pill coins"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"><span id="inventoryCoins">0</span></span><span class="wallet-pill trophies"><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"><span id="inventoryTrophies">0</span></span></div><div class="collection-summary"><button class="collection-category selected" data-collection="cards"><div class="category-title"><img class="category-icon-image" src="./icon_collection.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Cartas</h3></div><div id="collectionCardsCount" class="collection-count">8/17</div><span class="small">Ver cartas</span></button><button class="collection-category" data-collection="backgrounds"><div class="category-title"><img class="category-icon-image" src="./icon_background.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Fundos</h3></div><div id="collectionBackgroundsCount" class="collection-count">1/4</div><span class="small">Ver fundos</span></button><button class="collection-category" data-collection="colors"><div class="category-title"><img class="category-icon-image" src="./icon_color.png" alt="" onerror="this.classList.add('icon-missing')"><h3>Cores</h3></div><div id="collectionColorsCount" class="collection-count">1/4</div><span class="small">Ver cores</span></button></div><div class="collection-detail"><div class="collection-detail-header"><h3 id="collectionDetailTitle">Cartas</h3><span id="collectionDetailCount" class="small"></span></div><div id="collectionDetailGrid" class="inventory-grid"></div></div><div class="theme-current"><div><span class="small">Fundo equipado</span><br><strong id="activeBackgroundLabel">Padrão</strong></div><div><span class="small">Cor equipada</span><br><strong id="activeColorLabel">Padrão</strong></div></div></div></div></section>
 
 
 <section id="rankedScreen" class="screen"><div class="wrap"><div class="panel">
- <div class="header"><h2>Ranked Arena</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_ranked.png" alt="" onerror="this.classList.add('icon-missing')"><span>Ranked Arena</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div>
  <div id="rankedLocked" class="locked-note hidden">A Ranked Arena exige uma conta registada.</div>
  <div id="rankedDashboard">
-  <div class="rank-card"><div id="rankEmblem" class="rank-emblem">BI</div><div id="rankName" class="rank-title">BRONZE I</div><div><span class="trophy-icon">R</span> <strong id="rankTrophies">0</strong> troféus</div><div class="rank-progress"><div id="rankProgressBar" style="width:0%"></div></div><div id="rankNextText" class="small">100 para Bronze II</div>
+  <div class="rank-card"><div id="rankEmblem" class="rank-emblem rank-emblem-image"><img class="rank-main-icon" src="./icon_ranked.png" alt="Ranked" onerror="this.classList.add('icon-missing')"><span class="rank-emblem-text">BI</span></div><div id="rankName" class="rank-title">BRONZE I</div><div><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"> <strong id="rankTrophies">0</strong> troféus</div><div class="rank-progress"><div id="rankProgressBar" style="width:0%"></div></div><div id="rankNextText" class="small">100 para Bronze II</div>
    <div class="ranked-stats"><div class="ranked-stat"><strong id="rankGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="rankWinStreak">0</strong>Win streak</div><div class="ranked-stat"><strong id="rankBestStreak">0</strong>Melhor streak</div></div>
   </div>
   <button class="btn ranked-btn" style="width:100%;margin-top:14px" onclick="startRankedSearch()">PROCURAR PARTIDA RANKED</button>
@@ -1462,19 +1499,19 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 </div></div></section>
 
 <section id="rankedSearchScreen" class="screen"><div class="hero"><div class="hero-card">
- <h2>À PROCURA DE ADVERSÁRIO</h2><div class="search-spinner"></div><div id="searchRankName" class="rank-title">BRONZE I</div><p><span class="trophy-icon">R</span> <strong id="searchTrophies">0</strong></p><p class="search-range">Intervalo: ±<span id="searchRange">100</span> troféus</p><p id="searchStatus" class="small">A entrar na fila...</p><button class="btn danger" onclick="cancelRankedSearch()">CANCELAR</button>
+ <h2>À PROCURA DE ADVERSÁRIO</h2><div class="search-spinner"></div><div id="searchRankName" class="rank-title">BRONZE I</div><p><img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"> <strong id="searchTrophies">0</strong></p><p class="search-range">Intervalo: ±<span id="searchRange">100</span> troféus</p><p id="searchStatus" class="small">A entrar na fila...</p><button class="btn danger" onclick="cancelRankedSearch()">CANCELAR</button>
 </div></div></section>
 
 <section id="leaderboardScreen" class="screen"><div class="wrap"><div class="panel">
- <div class="header"><h2>Top Global</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div id="leaderboardList" class="leaderboard"></div><p id="leaderboardStatus" class="status"></p>
+ <div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_leaderboard.png" alt="" onerror="this.classList.add('icon-missing')"><span>Top Global</span></h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div><div id="leaderboardList" class="leaderboard"></div><p id="leaderboardStatus" class="status"></p>
 </div></div></section>
 
 <section id="promotionScreen" class="screen"><div class="hero"><div class="hero-card">
- <div class="promotion-burst">◆</div><h2>PROMOÇÃO!</h2><div id="promotionOldRank" class="promotion-old">BRONZE I</div><div>↓</div><div id="promotionNewRank" class="promotion-new">BRONZE II</div><p id="promotionTrophyText" class="notice">+15 troféus</p><button class="btn" onclick="closePromotion()">CONTINUAR</button>
+ <div class="promotion-burst"><img class="promotion-icon-image" src="./icon_ranked.png" alt="Promoção" onerror="this.classList.add('icon-missing')"></div><h2>PROMOÇÃO!</h2><div id="promotionOldRank" class="promotion-old">BRONZE I</div><div>↓</div><div id="promotionNewRank" class="promotion-new">BRONZE II</div><p id="promotionTrophyText" class="notice">+15 troféus</p><button class="btn" onclick="closePromotion()">CONTINUAR</button>
 </div></div></section>
 <section id="offlineSetupScreen" class="screen"><div class="wrap">
 <div class="panel">
- <div class="header"><h2>Jogar Offline</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div>
+ <div class="header"><h2>Jogar Offline</h2><button class="btn secondary ui-text-icon-button" onclick="showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div>
  <h3>Dificuldade</h3>
  <div id="difficultyOptions" class="grid2">
   <button class="option-card selected" data-value="easy"><h3>Fácil</h3><p>Ataca quase ao acaso e move-se pouco.</p></button>
@@ -1495,7 +1532,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 
 <section id="onlineScreen" class="screen"><div class="wrap">
 <div class="panel">
- <div class="header"><h2>Jogar Online</h2><button class="btn secondary" onclick="safeLeaveRoom();showScreen('menuScreen')">Voltar</button></div>
+ <div class="header"><h2>Jogar Online</h2><button class="btn secondary ui-text-icon-button" onclick="safeLeaveRoom();showScreen('menuScreen')"><img class="inline-button-icon" src="./icon_back.png" alt="" onerror="this.classList.add('icon-missing')"><span>Voltar</span></button></div>
  <div class="grid2">
   <button class="mode-card" onclick="createRoom()"><h3>Criar sala</h3><p>Cria um código privado.</p></button>
   <button class="mode-card" onclick="showJoinForm()"><h3>Entrar por código</h3><p>Entra na sala de outro jogador.</p></button>
@@ -1552,12 +1589,12 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
    </div>
   </div>
 
-  <button class="battle-gear" onclick="openGameplaySettings()" title="Definições">⚙</button>
+  <button class="battle-gear icon-button" onclick="openGameplaySettings()" title="Definições"><img class="button-icon-image" src="./icon_settings.png" alt="Definições" onerror="this.classList.add('icon-missing')"></button>
  </header>
 
  <main class="battle-stage">
   <div class="battle-resource-bar">
-   <div class="battle-resource"><span class="resource-gem">◈</span><strong id="manaText">3/3</strong><span>Mana</span></div>
+   <div class="battle-resource"><img class="resource-icon-image" src="./icon_mana.png" alt="Mana" onerror="this.classList.add('icon-missing')"><strong id="manaText">3/3</strong><span>Mana</span></div>
    <div id="battleActionStatus" class="battle-action-status">Seleciona uma ação</div>
   </div>
 
@@ -1583,10 +1620,10 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 
    <aside id="sidePanel" class="battle-command-panel hidden">
     <div class="battle-actions">
-     <button class="battle-action selected" data-action="summon"><span>✦</span>Invocar</button>
-     <button class="battle-action" data-action="attack"><span>⚔</span>Atacar</button>
-     <button class="battle-action" data-action="move"><span>↔</span>Mover</button>
-     <button class="battle-action" data-action="pass"><span>⌛</span>Passar</button>
+     <button class="battle-action selected" data-action="summon"><span><img class="action-icon-image" src="./icon_summon.png" alt="" onerror="this.classList.add('icon-missing')"></span>Invocar</button>
+     <button class="battle-action" data-action="attack"><span><img class="action-icon-image" src="./icon_attack.png" alt="" onerror="this.classList.add('icon-missing')"></span>Atacar</button>
+     <button class="battle-action" data-action="move"><span><img class="action-icon-image" src="./icon_move.png" alt="" onerror="this.classList.add('icon-missing')"></span>Mover</button>
+     <button class="battle-action" data-action="pass"><span><img class="action-icon-image" src="./icon_pass.png" alt="" onerror="this.classList.add('icon-missing')"></span>Passar</button>
     </div>
     <div id="selectedInfo" class="battle-selected-info">Nenhuma carta selecionada.</div>
     <div id="chips" class="battle-units"></div>
@@ -2785,7 +2822,7 @@ function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-prev
 let activeShopTab="cards";
 async function changeNickname(){if(!currentUser||!currentProfile)return;const nickname=$("newNicknameInput").value.trim(),key=normalizeNickname(nickname);if(!/^[A-Za-z0-9_]{3,16}$/.test(nickname)){$("nicknameCostText").textContent="Nickname inválido.";return}const changes=currentProfile.nicknameChanges||0,cost=changes===0?0:changes*5000;if((currentProfile.coins||0)<cost){$("nicknameCostText").textContent=`Precisas de ${cost} moedas.`;return}const nr=ref(db,`usernames/${key}`),reserved=await runTransaction(nr,c=>{if(c!==null)return;return{uid:currentUser.uid,username:nickname}},{applyLocally:false});if(!reserved.committed){$("nicknameCostText").textContent="Nome ocupado.";return}const old=currentProfile.usernameKey;await updateProfile(currentUser,{displayName:nickname});await update(ref(db,`profiles/${currentUser.uid}`),{username:nickname,usernameKey:key,coins:(currentProfile.coins||0)-cost,nicknameChanges:changes+1});if(old)await set(ref(db,`usernames/${old}`),null);await loadProfile(currentUser);refreshAccountUI();showProfile()}
 function showShop(){if(!currentUser)return;$("shopMessage").textContent="";renderShop();showScreen("shopScreen")}
-function renderShop(){$("shopCoins").textContent=currentProfile?.coins||0;$("shopContent").innerHTML="";SHOP_ITEMS.filter(x=>x.type===activeShopTab).forEach(item=>{const owned=item.type==="cards"?item.items.every(x=>(currentProfile.ownedCards||[]).includes(x)):item.type==="backgrounds"?(currentProfile.ownedBackgrounds||[]).includes(item.id):(currentProfile.ownedColors||[]).includes(item.id);const d=document.createElement("div");d.className="shop-item"+(owned?" owned":"");d.innerHTML=`<h3>${item.name}</h3><p class="small">${item.description||"Personalização cosmética."}</p><div class="price"><span class="coin-icon">AS</span> ${item.price}</div><button class="btn" ${owned?"disabled":""}>${owned?"OBTIDO":"COMPRAR"}</button>`;d.querySelector("button").onclick=()=>buyItem(item);$("shopContent").appendChild(d)})}
+function renderShop(){$("shopCoins").textContent=currentProfile?.coins||0;$("shopContent").innerHTML="";SHOP_ITEMS.filter(x=>x.type===activeShopTab).forEach(item=>{const owned=item.type==="cards"?item.items.every(x=>(currentProfile.ownedCards||[]).includes(x)):item.type==="backgrounds"?(currentProfile.ownedBackgrounds||[]).includes(item.id):(currentProfile.ownedColors||[]).includes(item.id);const d=document.createElement("div");d.className="shop-item"+(owned?" owned":"");d.innerHTML=`<h3>${item.name}</h3><p class="small">${item.description||"Personalização cosmética."}</p><div class="price"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"> ${item.price}</div><button class="btn" ${owned?"disabled":""}>${owned?"OBTIDO":"COMPRAR"}</button>`;d.querySelector("button").onclick=()=>buyItem(item);$("shopContent").appendChild(d)})}
 async function buyItem(item){if((currentProfile.coins||0)<item.price){$("shopMessage").textContent="Não tens moedas suficientes.";return}const res=await runTransaction(ref(db,`profiles/${currentUser.uid}`),p=>{if(!p||(p.coins||0)<item.price)return;p.coins-=item.price;if(item.type==="cards")p.ownedCards=[...new Set([...(p.ownedCards||STARTER_CARDS),...item.items])];if(item.type==="backgrounds")p.ownedBackgrounds=[...new Set([...(p.ownedBackgrounds||["default"]),item.id])];if(item.type==="colors")p.ownedColors=[...new Set([...(p.ownedColors||["default"]),item.id])];return p},{applyLocally:false});if(!res.committed)return;await loadProfile(currentUser);refreshAccountUI();$("shopMessage").textContent=`Compraste ${item.name}!`;renderShop()}
 let activeCollectionTab="cards";
 const COLLECTION_CARD_NAMES={squire:"Escudeiro",archer:"Arqueiro",knight:"Cavaleiro",assassin:"Assassino",scout:"Batedor",mage:"Mago",paladin:"Paladino",warlock:"Bruxo",berserker:"Berserker",crossbowman:"Besteiro",raider:"Saqueador",guardian:"Guardião",shieldbearer:"Portador do Escudo",healer:"Curandeira",necromancer:"Necromante",illusionist:"Ilusionista",alchemist:"Alquimista"};
@@ -2841,7 +2878,7 @@ async function showLeaderboard(){
   player.append(name,wins);
 
   const trophies=document.createElement("div");
-  trophies.innerHTML=`<span class="trophy-icon">R</span> ${p.trophies||0}`;
+  trophies.innerHTML=`<img class="wallet-icon-image" src="./icon_rank.png" alt="Rank" onerror="this.classList.add('icon-missing')"> ${p.trophies||0}`;
 
   const rank=document.createElement("div");
   rank.className="leader-rank";
