@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.8 Front Cards Fix</title>
+<title>Arena Secreta — 1.1.9 Click Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -755,7 +755,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.8 — Front Cards Fix<br>
+  Version 1.1.9 — Click Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -2230,7 +2230,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();if(gameSettings.music)showAudioStatus("Clica ou toca uma vez para ativar a música");
 
-window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.flipVisualCard=flipVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
