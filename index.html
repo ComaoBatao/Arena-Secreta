@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.2 Invocation Hotfix</title>
+<title>Arena Secreta — 1.1.3 Bot & Desktop Hotfix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -603,6 +603,90 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .battle-selected-info{min-height:52px}
 }
 
+
+/* VERSION 1.1.3 — BOT & DESKTOP HOTFIX */
+.battle-shell{
+ --battle-max:1320px;
+ align-items:stretch
+}
+.battle-header{
+ position:sticky;
+ width:100%;
+ max-width:100%;
+ grid-template-columns:
+  minmax(180px,1fr)
+  minmax(300px,1.4fr)
+  minmax(180px,1fr)
+  46px;
+ padding-left:max(18px,calc((100vw - var(--battle-max))/2));
+ padding-right:max(18px,calc((100vw - var(--battle-max))/2));
+ box-sizing:border-box
+}
+.battle-stage{
+ width:100%;
+ max-width:100%;
+ box-sizing:border-box;
+ display:flex;
+ flex-direction:column;
+ align-items:center
+}
+.battle-resource-bar,
+.battle-arena-frame,
+.battle-deck-panel,
+.battle-controls{
+ width:min(var(--battle-max),calc(100vw - 36px))!important;
+ max-width:var(--battle-max)!important;
+ margin-left:auto!important;
+ margin-right:auto!important
+}
+.battle-arena-frame{
+ aspect-ratio:15/6.25;
+ min-height:430px
+}
+.battle-board{
+ width:94%!important;
+ max-width:1240px!important
+}
+.battle-player-enemy{
+ justify-self:end;
+ max-width:220px
+}
+.battle-player-me{
+ max-width:220px
+}
+.battle-center{
+ min-width:280px
+}
+.battle-command-panel{
+ align-self:stretch
+}
+@media(min-width:821px){
+ .battle-controls{
+  grid-template-columns:minmax(0,1fr) 310px!important
+ }
+ .battle-actions{
+  grid-template-columns:1fr 1fr!important
+ }
+}
+@media(max-width:1200px) and (min-width:821px){
+ .battle-shell{--battle-max:1080px}
+ .battle-arena-frame{min-height:360px}
+}
+@media(max-width:820px){
+ .battle-header{
+  padding-left:7px;
+  padding-right:7px
+ }
+ .battle-resource-bar,
+ .battle-arena-frame,
+ .battle-deck-panel,
+ .battle-controls{
+  width:100%!important;
+  max-width:100%!important
+ }
+ .battle-arena-frame{min-height:0}
+}
+
 </style>
 </head>
 <body>
@@ -649,7 +733,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.2 — Invocation Hotfix<br>
+  Version 1.1.3 — Bot & Desktop Hotfix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -799,7 +883,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   </div>
 
   <div class="battle-arena-frame">
-   <img class="battle-arena-art" src="./arena-bg.png" alt="">
+   <img class="battle-arena-art" src="./arena-bg.png" alt="" onerror="this.style.display='none'">
    <div class="battle-arena-vignette"></div>
    <div id="board" class="board battle-board"></div>
   </div>
@@ -1436,7 +1520,7 @@ function myRole(){return gameMode==="online"||gameMode==="ranked"?role:"host"}fu
 function me(s=currentState()){return s?.players?.[myRole()]}function opponent(s=currentState()){return s?.players?.[enemyRole()]}
 function renderCurrentGame(){gameMode==="online"||gameMode==="ranked"?renderOnlineGame():renderOfflineGame()}
 function renderOnlineGame(){renderGame(roomData.state,roomData.state.turn===role&&!roomData.state.winner)}
-function renderOfflineGame(){renderGame(offlineState,!offlineLocked&&!offlineState?.winner)}
+function renderOfflineGame(){renderGame(offlineState,!offlineLocked&&!offlineState?.winner&&offlineState?.turn==="host")}
 
 function showMatchEnd(state){
  const key=`${gameMode}:${roomCode||"offline"}:${state.winner}:${state.forfeit?"forfeit":"normal"}`;
@@ -1555,7 +1639,7 @@ async function submitAction(action){
  }
 }
 
-function submitOfflineAction(a){if(!offlineState||offlineLocked)return;const applied=applyAction(offlineState,"host",a);if(!applied){$("message").textContent="Jogada inválida.";return}offlineState=applied;if(a.kind==="summon")selectedHand=null;if(offlineState.winner){renderOfflineGame();return}offlineLocked=true;renderOfflineGame();setTimeout(botTurn,600)}
+function submitOfflineAction(a){if(!offlineState||offlineLocked)return;const applied=applyAction(offlineState,"host",a);if(!applied){$("message").textContent="Jogada inválida.";return}offlineState=applied;if(a.kind==="summon")selectedHand=null;if(offlineState.winner){renderOfflineGame();return}offlineLocked=true;$("message").textContent="O bot está a pensar...";renderOfflineGame();setTimeout(botTurn,750)}
 function applyAction(state,acting,a){
  const n=structuredClone(state),p=n.players[acting],enemyRole=acting==="host"?"guest":"host",e=n.players[enemyRole];n.marks=[];n.scanMarks=[];
  if(a.kind==="summon"){const c=p.deck[a.cardIndex];if(!c||c.summoned||!c.alive||c.cost>p.mana||p.deck.some(x=>x.alive&&x.summoned&&x.position===a.pos))return null;c.summoned=true;c.position=a.pos;p.mana-=c.cost;n.log.push(`${p.name} invocou ${c.name}.`)}
@@ -1575,15 +1659,149 @@ function startOfflineGame(){
 function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
 function botData(){return{easy:{smart:.1,move:.1,scan:.1},normal:{smart:.5,move:.35,scan:.3},hard:{smart:.78,move:.6,scan:.5},impossible:{smart:.94,move:.8,scan:.7}}[difficulty]}
 function botTurn(){
- if(!offlineState||offlineState.winner)return;const d=botData(),bot=offlineState.players.guest,alive=bot.deck.filter(c=>c.alive&&c.summoned),hand=bot.deck.filter(c=>c.alive&&!c.summoned&&c.cost<=bot.mana);
- if(hand.length&&(!alive.length||Math.random()<(personality==="aggressive"?.5:.38))){let card=hand[Math.floor(Math.random()*hand.length)];if(difficulty!=="easy")card=[...hand].sort((a,b)=>(b.damage+b.hp*.4)-(a.damage+a.hp*.4))[0];const used=new Set(alive.map(x=>x.position));let pos;do{pos=`${Math.floor(Math.random()*ROWS)}-${Math.floor(Math.random()*COLS)}`}while(used.has(pos));offlineState=applyAction(offlineState,"guest",{kind:"summon",cardIndex:bot.deck.indexOf(card),pos});finishBotTurn();return}
- const movable=alive.filter(c=>c.wasHit&&c.movesLeft>0&&offlineState.round<=NORMAL_TURNS);if(movable.length&&Math.random()<d.move){const c=movable[0],[r,col]=c.position.split("-").map(Number),opts=[[r-1,col],[r+1,col],[r,col-1],[r,col+1]].filter(([a,b])=>a>=0&&a<ROWS&&b>=0&&b<COLS&&!alive.some(x=>x.position===`${a}-${b}`));if(opts.length){const q=opts[Math.floor(Math.random()*opts.length)];offlineState=applyAction(offlineState,"guest",{kind:"move",cardIndex:bot.deck.indexOf(c),pos:`${q[0]}-${q[1]}`});finishBotTurn();return}}
- if(alive.length){let attacker=alive[Math.floor(Math.random()*alive.length)];if(personality==="aggressive")attacker=[...alive].sort((a,b)=>b.damage-a.damage)[0];if(personality==="strategist"&&alive.some(c=>c.pattern==="scan")&&Math.random()<d.scan)attacker=alive.find(c=>c.pattern==="scan");
- let target={r:Math.floor(Math.random()*ROWS),c:Math.floor(Math.random()*COLS)};if(Math.random()<d.smart){const known=offlineState.players.host.deck.filter(c=>c.alive&&c.summoned&&c.wasHit);if(known.length){const[r,c]=known[0].position.split("-").map(Number);target={r,c}}}
- offlineState=applyAction(offlineState,"guest",{kind:"attack",cardIndex:bot.deck.indexOf(attacker),r:target.r,c:target.c})}else offlineState=applyAction(offlineState,"guest",{kind:"pass"});
- finishBotTurn()
+ if(!offlineState||offlineState.winner){
+  finishBotTurn();
+  return;
+ }
+
+ try{
+  if(offlineState.turn!=="guest"){
+   finishBotTurn();
+   return;
+  }
+
+  const bot=offlineState.players.guest;
+  const alive=bot.deck.filter(card=>card?.alive&&card.summoned);
+  const affordable=bot.deck.filter(card=>card?.alive&&!card.summoned&&card.cost<=bot.mana);
+  let nextState=null;
+
+  // 1. Se ainda não tiver unidades na arena, tenta sempre invocar.
+  // 2. Caso já tenha unidades, a personalidade decide entre invocar e atacar.
+  const shouldSummon=
+   affordable.length>0 &&
+   (
+    alive.length===0 ||
+    personality==="defensive" ||
+    (personality==="balanced"&&Math.random()<0.42) ||
+    (personality==="aggressive"&&Math.random()<0.28) ||
+    (personality==="strategist"&&Math.random()<0.5)
+   );
+
+  if(shouldSummon){
+   let card=affordable[Math.floor(Math.random()*affordable.length)];
+
+   if(difficulty!=="easy"){
+    card=[...affordable].sort((a,b)=>{
+     const scoreA=(a.damage||0)*2+(a.hp||0)-(a.cost||0)*0.35;
+     const scoreB=(b.damage||0)*2+(b.hp||0)-(b.cost||0)*0.35;
+     return scoreB-scoreA;
+    })[0];
+   }
+
+   const occupied=new Set(
+    bot.deck
+     .filter(c=>c?.alive&&c.summoned&&c.position)
+     .map(c=>c.position)
+   );
+
+   const freeCells=[];
+   for(let row=0;row<ROWS;row++){
+    for(let col=0;col<COLS;col++){
+     const position=`${row}-${col}`;
+     if(!occupied.has(position))freeCells.push(position);
+    }
+   }
+
+   if(card&&freeCells.length){
+    const position=freeCells[Math.floor(Math.random()*freeCells.length)];
+    nextState=applyAction(
+     offlineState,
+     "guest",
+     {kind:"summon",cardIndex:bot.deck.indexOf(card),pos:position}
+    );
+   }
+  }
+
+  // Se não invocou, tenta atacar com uma unidade existente.
+  if(!nextState&&alive.length){
+   let attacker=alive[Math.floor(Math.random()*alive.length)];
+
+   if(personality==="aggressive"){
+    attacker=[...alive].sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
+   }else if(
+    personality==="strategist" &&
+    alive.some(card=>card.pattern==="scan")
+   ){
+    attacker=alive.find(card=>card.pattern==="scan");
+   }
+
+   let row=Math.floor(Math.random()*ROWS);
+   let col=Math.floor(Math.random()*COLS);
+
+   const knownTargets=offlineState.players.host.deck.filter(
+    card=>card?.alive&&card.summoned&&card.wasHit&&card.position
+   );
+
+   const intelligence={
+    easy:0.08,
+    normal:0.42,
+    hard:0.72,
+    impossible:0.92
+   }[difficulty]??0.35;
+
+   if(knownTargets.length&&Math.random()<intelligence){
+    [row,col]=knownTargets[0].position.split("-").map(Number);
+   }
+
+   nextState=applyAction(
+    offlineState,
+    "guest",
+    {kind:"attack",cardIndex:bot.deck.indexOf(attacker),r:row,c:col}
+   );
+  }
+
+  // Se não conseguiu invocar nem atacar, passa.
+  if(!nextState){
+   nextState=applyAction(offlineState,"guest",{kind:"pass"});
+  }
+
+  // Última proteção: nunca deixar o jogo preso no turno do bot.
+  if(nextState){
+   offlineState=nextState;
+  }else{
+   offlineState.turn="host";
+   offlineState.log=offlineState.log||[];
+   offlineState.log.push("O bot não encontrou uma jogada válida e terminou o turno.");
+  }
+ }catch(error){
+  console.error("Erro no turno do bot:",error);
+
+  if(offlineState&&!offlineState.winner){
+   const fallback=applyAction(offlineState,"guest",{kind:"pass"});
+
+   if(fallback){
+    offlineState=fallback;
+   }else{
+    offlineState.turn="host";
+    offlineState.log=offlineState.log||[];
+    offlineState.log.push("O bot encontrou um erro e terminou o turno automaticamente.");
+   }
+  }
+ }finally{
+  finishBotTurn();
+ }
 }
-function finishBotTurn(){offlineLocked=false;renderOfflineGame()}
+function finishBotTurn(){
+ offlineLocked=false;
+
+ if(offlineState&&!offlineState.winner&&offlineState.turn==="guest"){
+  offlineState.turn="host";
+  offlineState.log=offlineState.log||[];
+  offlineState.log.push("O turno do bot foi encerrado automaticamente.");
+ }
+
+ renderOfflineGame();
+}
 
 function preview(r,c){if(!gameSettings.attackPreview)return;const s=currentState();if(!s||selectedAction!=="attack"||selectedArena===null)return;if((gameMode==="online"||gameMode==="ranked")&&s.turn!==role)return;clearPreview();patternCells(r,c,me(s).deck[selectedArena].pattern).forEach(pos=>{const[a,b]=pos.split("-");$("board").querySelector(`[data-r="${a}"][data-c="${b}"]`)?.classList.add("preview")})}
 function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-preview").forEach(x=>x.classList.remove("preview","move-preview"))}
