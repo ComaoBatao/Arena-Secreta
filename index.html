@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.2.0 Menu Redesign</title>
+<title>Arena Secreta — 1.2.1 Profile Pictures</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1031,6 +1031,183 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .menu-secondary-card{min-height:54px}
 }
 
+
+/* ==========================================================
+   VERSION 1.2.1 — PROFILE PICTURES
+   ========================================================== */
+.avatar-image{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:cover;
+ object-position:center;
+}
+.menu-avatar{
+ overflow:hidden;
+ flex-shrink:0;
+}
+.menu-avatar .avatar-image{
+ position:absolute;
+ inset:7px;
+ width:calc(100% - 14px);
+ height:calc(100% - 14px);
+ border-radius:50%;
+ z-index:2;
+}
+.menu-avatar-core{
+ position:relative;
+ z-index:1;
+}
+
+.profile-avatar-section{
+ display:flex;
+ align-items:center;
+ gap:20px;
+ margin-bottom:20px;
+ padding:17px;
+ border:1px solid rgba(168,117,255,.24);
+ border-radius:15px;
+ background:linear-gradient(145deg,#202a49,#10162b);
+}
+.profile-avatar-frame{
+ position:relative;
+ flex:0 0 124px;
+ width:124px;
+ height:124px;
+ overflow:hidden;
+ border-radius:50%;
+ border:4px solid #8d5ad8;
+ background:radial-gradient(circle,#302061,#0b1028 68%);
+ box-shadow:0 0 25px rgba(168,117,255,.42);
+}
+.profile-avatar-fallback{
+ width:100%;
+ height:100%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#b966ff;
+ font-size:52px;
+ text-shadow:0 0 20px #8e3cff;
+ transform:rotate(45deg);
+}
+.profile-avatar-controls{
+ flex:1;
+ min-width:0;
+ display:flex;
+ flex-direction:column;
+ align-items:flex-start;
+ gap:7px;
+}
+.profile-avatar-controls>strong{font-size:20px}
+.profile-avatar-buttons{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ margin-top:5px;
+}
+.profile-avatar-controls .auth-message{
+ margin:0;
+ min-height:18px;
+}
+
+.battle-player{
+ display:flex!important;
+ flex-direction:row!important;
+ align-items:center;
+ gap:10px;
+}
+.battle-player-enemy{
+ justify-content:flex-end;
+}
+.battle-player-text{
+ min-width:0;
+ display:flex;
+ flex-direction:column;
+ gap:2px;
+}
+.battle-player-enemy .battle-player-text{text-align:right}
+.battle-player-avatar-wrap{
+ position:relative;
+ flex:0 0 48px;
+ width:48px;
+ height:48px;
+ border-radius:50%;
+ overflow:hidden;
+ border:2px solid rgba(168,117,255,.68);
+ background:radial-gradient(circle,#302061,#0b1028);
+ box-shadow:0 0 13px rgba(168,117,255,.35);
+}
+.battle-player-avatar{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+.battle-player-avatar-fallback{
+ width:100%;
+ height:100%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#b966ff;
+ font-size:20px;
+ transform:rotate(45deg);
+}
+
+.leader-row{
+ grid-template-columns:55px 48px minmax(0,1fr) auto auto!important;
+}
+.leader-avatar{
+ width:42px;
+ height:42px;
+ overflow:hidden;
+ border-radius:50%;
+ border:2px solid rgba(168,117,255,.58);
+ background:radial-gradient(circle,#302061,#0b1028);
+ box-shadow:0 0 10px rgba(168,117,255,.2);
+}
+.leader-avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+.leader-avatar-fallback{
+ width:100%;
+ height:100%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#b966ff;
+ font-size:17px;
+ transform:rotate(45deg);
+}
+
+@media(max-width:620px){
+ .profile-avatar-section{
+  flex-direction:column;
+  text-align:center;
+ }
+ .profile-avatar-controls{align-items:center}
+ .profile-avatar-frame{
+  width:105px;
+  height:105px;
+  flex-basis:105px;
+ }
+ .battle-player-avatar-wrap{
+  width:36px;
+  height:36px;
+  flex-basis:36px;
+ }
+ .leader-row{
+  grid-template-columns:38px 38px minmax(0,1fr) auto!important;
+ }
+ .leader-avatar{
+  width:34px;
+  height:34px;
+ }
+ .leader-row .leader-rank{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -1058,13 +1235,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.2</div>
+   <div class="version menu-version">VERSÃO 1.2.1</div>
   </header>
 
   <section class="identity menu-identity">
-   <div class="menu-avatar" aria-hidden="true">
-    <div class="menu-avatar-core">◆</div>
-    <div class="menu-avatar-level">27</div>
+   <div class="menu-avatar">
+    <img id="menuAvatarImage" class="avatar-image hidden" alt="Foto de perfil">
+    <div id="menuAvatarFallback" class="menu-avatar-core">◆</div>
    </div>
 
    <div class="menu-account">
@@ -1134,7 +1311,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.2.0 — Menu Redesign<br>
+  Version 1.2.1 — Profile Pictures<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1176,7 +1353,24 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 </div>
 </div></section>
 
-<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="profile-card"><div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><div class="ranked-stats"><div class="ranked-stat"><strong id="profileRank">BRONZE I</strong>Rank</div><div class="ranked-stat"><strong id="profileGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="profileWinStreak">0</strong>Win streak</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Coleção</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
+<section id="profileScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Perfil</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="profile-card">
+<div class="profile-avatar-section">
+ <div class="profile-avatar-frame">
+  <img id="profileAvatarImage" class="avatar-image hidden" alt="Foto de perfil">
+  <div id="profileAvatarFallback" class="profile-avatar-fallback">◆</div>
+ </div>
+ <div class="profile-avatar-controls">
+  <strong>Foto de perfil</strong>
+  <span class="small">JPG, PNG ou WEBP. A imagem será ajustada automaticamente.</span>
+  <div class="profile-avatar-buttons">
+   <button class="btn" onclick="openAvatarPicker()">ALTERAR FOTO</button>
+   <button id="removeAvatarBtn" class="btn danger hidden" onclick="removeProfileAvatar()">REMOVER</button>
+  </div>
+  <input id="avatarFileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden">
+  <p id="avatarMessage" class="auth-message"></p>
+ </div>
+</div>
+<div id="profileName" class="profile-name">Jogador</div><div id="profileEmail" class="profile-email"></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="profileCoins">0</span> moedas</span><span class="wallet-pill trophies"><span class="trophy-icon">R</span><span id="profileTrophies">0</span> troféus</span></div><div class="profile-stats"><div class="profile-stat"><strong id="profileWins">0</strong>Vitórias</div><div class="profile-stat"><strong id="profileLosses">0</strong>Derrotas</div><div class="profile-stat"><strong id="profileWinrate">0%</strong>Win rate</div></div><div class="ranked-stats"><div class="ranked-stat"><strong id="profileRank">BRONZE I</strong>Rank</div><div class="ranked-stat"><strong id="profileGlobalPosition">—</strong>Top global</div><div class="ranked-stat"><strong id="profileWinStreak">0</strong>Win streak</div></div><p>Cartas: <strong id="profileCards">8</strong></p><p>Conta criada em: <strong id="profileCreatedAt">—</strong></p><div class="name-change-box"><input id="newNicknameInput" class="input" maxlength="16" placeholder="Novo nickname"><button class="btn" onclick="changeNickname()">Alterar nome</button></div><div id="nicknameCostText" class="small">Primeira alteração gratuita.</div><div class="profile-actions"><button class="btn secondary" onclick="showInventory()">Coleção</button><button class="btn secondary" onclick="showShop()">Loja</button></div></div></div></div></section>
 
 <section id="shopScreen" class="screen"><div class="wrap"><div class="panel"><div class="header"><h2>Loja</h2><button class="btn secondary" onclick="showScreen('menuScreen')">Voltar</button></div><div class="wallet"><span class="wallet-pill coins"><span class="coin-icon">AS</span><span id="shopCoins">0</span> moedas</span></div><div class="shop-tabs"><button class="shop-tab selected" data-shop="cards">Cartas</button><button class="shop-tab" data-shop="backgrounds">Fundos</button><button class="shop-tab" data-shop="colors">Cores</button></div><div id="shopContent" class="shop-grid"></div><p id="shopMessage" class="auth-message"></p></div></div></section>
 
@@ -1258,9 +1452,15 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <section id="gameScreen" class="screen battle-screen"><div class="battle-shell">
  <header class="battle-header">
   <div class="battle-player battle-player-me">
-   <span class="battle-player-label">TU</span>
-   <strong id="battleMyName">Jogador</strong>
-   <span><span id="myRemaining">5</span> cartas vivas</span>
+   <div class="battle-player-avatar-wrap">
+    <img id="battleMyAvatar" class="battle-player-avatar hidden" alt="">
+    <div id="battleMyAvatarFallback" class="battle-player-avatar-fallback">◆</div>
+   </div>
+   <div class="battle-player-text">
+    <span class="battle-player-label">TU</span>
+    <strong id="battleMyName">Jogador</strong>
+    <span><span id="myRemaining">5</span> cartas vivas</span>
+   </div>
   </div>
 
   <div class="battle-center">
@@ -1269,9 +1469,15 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   </div>
 
   <div class="battle-player battle-player-enemy">
-   <span class="battle-player-label">RIVAL</span>
-   <strong id="battleEnemyName">Adversário</strong>
-   <span><span id="enemyRemaining">5</span> cartas vivas</span>
+   <div class="battle-player-text">
+    <span class="battle-player-label">RIVAL</span>
+    <strong id="battleEnemyName">Adversário</strong>
+    <span><span id="enemyRemaining">5</span> cartas vivas</span>
+   </div>
+   <div class="battle-player-avatar-wrap">
+    <img id="battleEnemyAvatar" class="battle-player-avatar hidden" alt="">
+    <div id="battleEnemyAvatarFallback" class="battle-player-avatar-fallback">◆</div>
+   </div>
   </div>
 
   <button class="battle-gear" onclick="openGameplaySettings()" title="Definições">⚙</button>
@@ -1503,7 +1709,103 @@ const SHOP_ITEMS=[
 {id:"bg_crimson",type:"backgrounds",name:"Reino Carmesim",price:1200,value:"radial-gradient(circle at top,#6a2836 0%,#31141c 42%,#070b17 78%)"},
 {id:"color_gold",type:"colors",name:"Dourado Real",price:700,value:"#ffd166"},{id:"color_purple",type:"colors",name:"Roxo Arcano",price:700,value:"#a875ff"},{id:"color_blue",type:"colors",name:"Azul Glacial",price:700,value:"#6cb7ff"}
 ];
+
 const $=id=>document.getElementById(id);
+
+function setAvatarElement(imageId,fallbackId,avatar){
+ const image=$(imageId),fallback=$(fallbackId);
+ if(!image||!fallback)return;
+ if(avatar){
+  image.src=avatar;
+  image.classList.remove("hidden");
+  fallback.classList.add("hidden");
+ }else{
+  image.removeAttribute("src");
+  image.classList.add("hidden");
+  fallback.classList.remove("hidden");
+ }
+}
+
+function avatarData(){
+ return currentProfile?.avatar||"";
+}
+
+function openAvatarPicker(){
+ if(!currentUser||!currentProfile)return;
+ $("avatarMessage").textContent="";
+ $("avatarFileInput").click();
+}
+
+function loadImageFile(file){
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+  reader.onerror=()=>reject(new Error("Não foi possível ler a imagem."));
+  reader.onload=()=>{
+   const image=new Image();
+   image.onerror=()=>reject(new Error("O ficheiro não é uma imagem válida."));
+   image.onload=()=>resolve(image);
+   image.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+ });
+}
+
+async function compressAvatar(file){
+ if(!file||!file.type.startsWith("image/"))throw new Error("Escolhe um ficheiro de imagem.");
+ if(file.size>8*1024*1024)throw new Error("A imagem original não pode ultrapassar 8 MB.");
+ const image=await loadImageFile(file);
+ const size=192;
+ const canvas=document.createElement("canvas");
+ canvas.width=size;canvas.height=size;
+ const ctx=canvas.getContext("2d");
+ const sourceSize=Math.min(image.naturalWidth,image.naturalHeight);
+ const sx=(image.naturalWidth-sourceSize)/2;
+ const sy=(image.naturalHeight-sourceSize)/2;
+ ctx.drawImage(image,sx,sy,sourceSize,sourceSize,0,0,size,size);
+ let result=canvas.toDataURL("image/webp",.78);
+ if(result.length>110000)result=canvas.toDataURL("image/jpeg",.68);
+ if(result.length>140000)throw new Error("Não foi possível reduzir suficientemente esta imagem.");
+ return result;
+}
+
+async function saveProfileAvatar(file){
+ if(!currentUser||!currentProfile)return;
+ const message=$("avatarMessage");
+ try{
+  message.textContent="A preparar imagem...";
+  const avatar=await compressAvatar(file);
+  message.textContent="A guardar no Firebase...";
+  await update(ref(db,`profiles/${currentUser.uid}`),{avatar,avatarUpdatedAt:Date.now()});
+  currentProfile={...currentProfile,avatar,avatarUpdatedAt:Date.now()};
+  refreshAccountUI();
+  setAvatarElement("profileAvatarImage","profileAvatarFallback",avatar);
+  $("removeAvatarBtn").classList.remove("hidden");
+  message.textContent="Foto de perfil atualizada!";
+ }catch(error){
+  console.error(error);
+  message.textContent=error.message||"Não foi possível guardar a imagem.";
+ }finally{
+  $("avatarFileInput").value="";
+ }
+}
+
+async function removeProfileAvatar(){
+ if(!currentUser||!currentProfile)return;
+ const message=$("avatarMessage");
+ try{
+  message.textContent="A remover...";
+  await update(ref(db,`profiles/${currentUser.uid}`),{avatar:null,avatarUpdatedAt:Date.now()});
+  delete currentProfile.avatar;
+  refreshAccountUI();
+  setAvatarElement("profileAvatarImage","profileAvatarFallback","");
+  $("removeAvatarBtn").classList.add("hidden");
+  message.textContent="Foto removida.";
+ }catch(error){
+  console.error(error);
+  message.textContent="Não foi possível remover a foto.";
+ }
+}
+
 const clientId=sessionStorage.getItem("arenaClientId")||crypto.randomUUID();sessionStorage.setItem("arenaClientId",clientId);
 
 let identity=getGhostIdentity(),currentUser=null,currentProfile=null;
@@ -1664,11 +1966,15 @@ function refreshAccountUI(){
  $("profileMenuBtn").classList.toggle("hidden",!registered);$("logoutMenuBtn").classList.toggle("hidden",!registered);$("rankedMenuBtn").classList.toggle("hidden",!registered);
  $("leaderboardMenuBtn").classList.toggle("hidden",!registered);
  $("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
+ setAvatarElement("menuAvatarImage","menuAvatarFallback",registered?avatarData():"");
 }
 async function showProfile(){
  if(!currentUser||!currentProfile)return;
  $("profileName").textContent=currentProfile.username;
  $("profileEmail").textContent=currentProfile.email||currentUser.email||"";
+ setAvatarElement("profileAvatarImage","profileAvatarFallback",avatarData());
+ $("removeAvatarBtn").classList.toggle("hidden",!avatarData());
+ $("avatarMessage").textContent="";
  const wins=currentProfile.wins||0,losses=currentProfile.losses||0,total=wins+losses;
  $("profileWins").textContent=wins;
  $("profileLosses").textContent=losses;
@@ -1703,6 +2009,10 @@ function showScreen(id){
 }
 function setupOptionGroup(id,setter){$(id).querySelectorAll(".option-card").forEach(b=>b.onclick=()=>{$(id).querySelectorAll(".option-card").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");setter(b.dataset.value)})}
 setupOptionGroup("difficultyOptions",v=>difficulty=v);setupOptionGroup("personalityOptions",v=>personality=v);
+$("avatarFileInput").addEventListener("change",event=>{
+ const file=event.target.files?.[0];
+ if(file)saveProfileAvatar(file);
+});
 function randomCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join("")}
 function roomCollection(){return gameMode==="ranked"?"rankedRooms":"rooms"}function roomPath(code=""){return`${roomCollection()}/${code}`}function playerPath(which){return`${roomPath(roomCode)}/players/${which}`}
 function firebaseErrorMessage(e){const c=e?.code||"erro-desconhecido";return c.includes("permission")?"O Firebase bloqueou o acesso. Confirma o modo de teste.":`Erro Firebase: ${c}`}
@@ -1711,7 +2021,7 @@ function showJoinForm(){$("joinForm").classList.remove("hidden");$("onlineStatus
 async function createRoom(){
  gameMode="online";await leaveRoom(false);gameMode="online";$("onlineStatus").textContent="A criar sala...";
  for(let i=0;i<8;i++){const code=randomCode(),r=ref(db,roomPath(code));
-  try{const result=await runTransaction(r,current=>{if(current!==null)return;return{version:"0.9",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:clientId,name:identity.name,online:true,ready:false}}}},{applyLocally:false});
+  try{const result=await runTransaction(r,current=>{if(current!==null)return;return{version:"0.9",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:clientId,name:identity.name,avatar:avatarData(),online:true,ready:false}}}},{applyLocally:false});
    if(result.committed){roomCode=code;role="host";gameMode="online";await setupPresence();listenRoom();$("roomCodeText").textContent=code;showScreen("lobbyScreen");return}
   }catch(e){$("onlineStatus").textContent=firebaseErrorMessage(e);return}
  }
@@ -1723,7 +2033,7 @@ async function joinRoom(){
  try{const r=ref(db,roomPath(code)),snap=await get(r);if(!snap.exists()){$("onlineStatus").textContent="Essa sala não existe.";return}
   const room=snap.val();if(room.status!=="lobby"){$("onlineStatus").textContent="Essa partida já começou ou terminou.";return}
   const guestRef=ref(db,`${roomPath(code)}/players/guest`);
-  const result=await runTransaction(guestRef,current=>{if(current&&current.id!==clientId)return;return{id:clientId,name:identity.name,online:true,ready:false,joinedAt:Date.now()}},{applyLocally:false});
+  const result=await runTransaction(guestRef,current=>{if(current&&current.id!==clientId)return;return{id:clientId,name:identity.name,avatar:avatarData(),online:true,ready:false,joinedAt:Date.now()}},{applyLocally:false});
   if(!result.committed){$("onlineStatus").textContent="A sala já está cheia.";return}
   roomCode=code;role="guest";gameMode="online";preparationOpenedForRoom=null;await setupPresence();listenRoom();$("roomCodeText").textContent=code;openDeckSelection("online");preparationOpenedForRoom=roomCode
  }catch(e){$("onlineStatus").textContent=firebaseErrorMessage(e)}
@@ -1878,7 +2188,7 @@ async function tryStartOnlineGame(){
  await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="lobby")return;const h=current.players?.host,g=current.players?.guest;if(!h?.ready||!g?.ready||!Array.isArray(h.deck)||!Array.isArray(g.deck)||h.deck.length!==5||g.deck.length!==5)return;current.status="game";current.updatedAt=Date.now();current.state=createInitialState(h,g,current.mode==="ranked"||gameMode==="ranked");return current},{applyLocally:false})
 }
 function cloneCard(id){const c=LIBRARY.find(x=>x.id===id);return{...c,currentHp:c.hp,movesLeft:c.moves,alive:true,summoned:false,position:null,wasHit:false}}
-function createInitialState(h,g,isRanked=false){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:[isRanked?"A partida ranked começou!":"A partida online começou!"]}}
+function createInitialState(h,g,isRanked=false){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,avatar:h.avatar||"",mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,avatar:g.avatar||"",mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:[isRanked?"A partida ranked começou!":"A partida online começou!"]}}
 
 function createBoard(){$("board").innerHTML="";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const b=document.createElement("button");b.className="cell";b.dataset.r=r;b.dataset.c=c;b.onclick=()=>cellClick(r,c);b.onmouseenter=()=>preview(r,c);b.onmouseleave=clearPreview;$("board").appendChild(b)}}
 function patternCells(r,c,p){const o=[],add=(a,b)=>{if(a>=0&&a<ROWS&&b>=0&&b<COLS)o.push(`${a}-${b}`)};if(p==="horizontal")[-1,0,1].forEach(x=>add(r,c+x));if(p==="vertical")[-1,0,1].forEach(x=>add(r+x,c));if(p==="diagonal")[-1,0,1].forEach(x=>add(r+x,c+x));if(p==="cross")[[0,0],[-1,0],[1,0],[0,-1],[0,1]].forEach(([a,b])=>add(r+a,c+b));if(p==="scan")for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)add(r+a,c+b);return[...new Set(o)]}
@@ -2015,7 +2325,12 @@ function renderGame(state,canAct){
   const won=state.winner===myRole();
   if(!state.forfeit)recordMatchResult(won,opponent(state)?.name,gameMode).catch(console.warn);
  }$("deckPanel").classList.add("hidden");$("playPanel").classList.remove("hidden");$("sidePanel").classList.remove("hidden");$("confirmDeckBtn").classList.add("hidden");$("battleLogToggle").classList.remove("hidden");
- const mine=me(state),enemy=opponent(state);$("battleMyName").textContent=mine.name||identity.name;$("battleEnemyName").textContent=enemy.name||"Adversário";$("manaText").textContent=`${mine.mana}/${mine.maxMana}`;$("myRemaining").textContent=mine.deck.filter(c=>c.alive).length;$("enemyRemaining").textContent=enemy.deck.filter(c=>c.alive).length;
+ const mine=me(state),enemy=opponent(state);
+ $("battleMyName").textContent=mine.name||identity.name;
+ $("battleEnemyName").textContent=enemy.name||"Adversário";
+ setAvatarElement("battleMyAvatar","battleMyAvatarFallback",mine.avatar||avatarData());
+ setAvatarElement("battleEnemyAvatar","battleEnemyAvatarFallback",enemy.avatar||"");
+ $("manaText").textContent=`${mine.mana}/${mine.maxMana}`;$("myRemaining").textContent=mine.deck.filter(c=>c.alive).length;$("enemyRemaining").textContent=enemy.deck.filter(c=>c.alive).length;
  $("turnBadge").textContent=state.winner?(state.winner===myRole()?"VITÓRIA!":"DERROTA"):canAct?`TUA VEZ · TURNO ${state.round}`:`VEZ DE ${enemy.name}`;
  $("message").textContent=state.winner?(state.winner===myRole()?"🏆 Venceste!":"💥 Perdeste."):canAct?"Escolhe uma ação.":"A aguardar a jogada do adversário...";$("battleActionStatus").textContent=state.winner?"Partida terminada":canAct?(selectedAction==="summon"?"Escolhe uma carta da mão e uma casa vazia":selectedAction==="attack"?"Seleciona uma carta na arena e a zona de ataque":selectedAction==="move"?"Seleciona uma carta na arena e uma casa válida":"Terminar o turno"):"Jogada do adversário";
  document.querySelectorAll(".battle-action").forEach(x=>x.disabled=!canAct);
@@ -2239,7 +2554,7 @@ function applyAction(state,acting,a){
 
 function startOfflineGame(){
  lastRecordedWinner=null;endOverlayShownFor=null;$("matchEndOverlay").classList.add("hidden");
- const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
+ const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,avatar:avatarData(),mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
 }
 function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
 function botData(){return{easy:{smart:.1,move:.1,scan:.1},normal:{smart:.5,move:.35,scan:.3},hard:{smart:.78,move:.6,scan:.5},impossible:{smart:.94,move:.8,scan:.7}}[difficulty]}
@@ -2418,11 +2733,56 @@ async function showRankedArena(){
  if(!currentUser||!currentProfile){showScreen("accountScreen");return}const info=rankInfo(currentProfile.trophies||0);$("rankName").textContent=info.name;$("rankEmblem").textContent=info.short;$("rankTrophies").textContent=currentProfile.trophies||0;$("rankProgressBar").style.width=info.progress+"%";$("rankNextText").textContent=info.next?`${info.next-(currentProfile.trophies||0)} para ${rankInfo(info.next).name}`:"Rank máximo";$("rankWinStreak").textContent=currentProfile.winStreak||0;$("rankBestStreak").textContent=currentProfile.bestWinStreak||0;$("rankGlobalPosition").textContent="...";getGlobalPosition(currentUser.uid).then(p=>$("rankGlobalPosition").textContent=p?`#${p}`:"—");showScreen("rankedScreen");
 }
 async function showLeaderboard(){
- if(!currentUser){showScreen("accountScreen");return}showScreen("leaderboardScreen");$("leaderboardStatus").textContent="A carregar ranking...";const list=await getSortedProfiles();$("leaderboardList").innerHTML="";list.slice(0,100).forEach((p,i)=>{const row=document.createElement("div");row.className="leader-row"+(p.uid===currentUser.uid?" me":"");row.innerHTML=`<div class="leader-pos">#${i+1}</div><div><strong>${p.username}</strong><div class="small">${p.rankedWins||0} vitórias ranked</div></div><div><span class="trophy-icon">R</span> ${p.trophies||0}</div><div class="leader-rank">${rankInfo(p.trophies||0).name}</div>`;$("leaderboardList").appendChild(row)});$("leaderboardStatus").textContent=list.length?`${Math.min(100,list.length)} jogadores apresentados.`:"Ainda não existem jogadores no ranking.";
+ if(!currentUser){showScreen("accountScreen");return}
+ showScreen("leaderboardScreen");
+ $("leaderboardStatus").textContent="A carregar ranking...";
+ const list=await getSortedProfiles();
+ $("leaderboardList").innerHTML="";
+ list.slice(0,100).forEach((p,i)=>{
+  const row=document.createElement("div");
+  row.className="leader-row"+(p.uid===currentUser.uid?" me":"");
+
+  const position=document.createElement("div");
+  position.className="leader-pos";
+  position.textContent=`#${i+1}`;
+
+  const avatar=document.createElement("div");
+  avatar.className="leader-avatar";
+  if(p.avatar){
+   const image=document.createElement("img");
+   image.src=p.avatar;
+   image.alt="";
+   avatar.appendChild(image);
+  }else{
+   const fallback=document.createElement("div");
+   fallback.className="leader-avatar-fallback";
+   fallback.textContent="◆";
+   avatar.appendChild(fallback);
+  }
+
+  const player=document.createElement("div");
+  const name=document.createElement("strong");
+  name.textContent=p.username||"Jogador";
+  const wins=document.createElement("div");
+  wins.className="small";
+  wins.textContent=`${p.rankedWins||0} vitórias ranked`;
+  player.append(name,wins);
+
+  const trophies=document.createElement("div");
+  trophies.innerHTML=`<span class="trophy-icon">R</span> ${p.trophies||0}`;
+
+  const rank=document.createElement("div");
+  rank.className="leader-rank";
+  rank.textContent=rankInfo(p.trophies||0).name;
+
+  row.append(position,avatar,player,trophies,rank);
+  $("leaderboardList").appendChild(row);
+ });
+ $("leaderboardStatus").textContent=list.length?`${Math.min(100,list.length)} jogadores apresentados.`:"Ainda não existem jogadores no ranking.";
 }
 async function startRankedSearch(){
  if(!currentUser||!currentProfile){showScreen("accountScreen");return}await cleanupRankedQueue();gameMode="ranked";rankedSearchStartedAt=Date.now();const info=rankInfo(currentProfile.trophies||0);$("searchRankName").textContent=info.name;$("searchTrophies").textContent=currentProfile.trophies||0;$("searchRange").textContent="100";$("searchStatus").textContent="A entrar na fila...";showScreen("rankedSearchScreen");
- rankedQueueRef=ref(db,`rankedQueue/${currentUser.uid}`);await set(rankedQueueRef,{uid:currentUser.uid,name:identity.name,trophies:currentProfile.trophies||0,joinedAt:Date.now(),online:true,status:"searching"});rankedDisconnect=onDisconnect(rankedQueueRef);await rankedDisconnect.remove();
+ rankedQueueRef=ref(db,`rankedQueue/${currentUser.uid}`);await set(rankedQueueRef,{uid:currentUser.uid,name:identity.name,avatar:avatarData(),trophies:currentProfile.trophies||0,joinedAt:Date.now(),online:true,status:"searching"});rankedDisconnect=onDisconnect(rankedQueueRef);await rankedDisconnect.remove();
  onValue(rankedQueueRef,s=>{if(!s.exists())return;const q=s.val();if(q.status==="matched"&&q.matchId)enterRankedMatch(q.matchId,q.role)});
  rankedQueueRootRef=ref(db,"rankedQueue");onValue(rankedQueueRootRef,()=>attemptRankedMatch());rankedSearchTimer=setInterval(()=>{const range=Math.min(500,100+Math.floor((Date.now()-rankedSearchStartedAt)/10000)*100);$("searchRange").textContent=range;attemptRankedMatch()},3000);$("searchStatus").textContent="À procura de um jogador próximo dos teus troféus...";
 }
@@ -2442,7 +2802,7 @@ async function attemptRankedMatch(){
  },{applyLocally:false});
  if(!claim.committed)return;
  try{
-  const room={version:"0.9.2",mode:"ranked",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:currentUser.uid,name:identity.name,trophies:mine,online:true,ready:false},guest:{id:other.uid,name:other.name,trophies:other.trophies||0,online:true,ready:false}}};
+  const room={version:"0.9.2",mode:"ranked",status:"lobby",createdAt:Date.now(),updatedAt:Date.now(),players:{host:{id:currentUser.uid,name:identity.name,avatar:avatarData(),trophies:mine,online:true,ready:false},guest:{id:other.uid,name:other.name,avatar:other.avatar||"",trophies:other.trophies||0,online:true,ready:false}}};
   await set(ref(db,`rankedRooms/${matchId}`),room);
   await update(ref(db),{[`rankedQueue/${currentUser.uid}/status`]:"matched",[`rankedQueue/${other.uid}/status`]:"matched"});
  }catch(error){
@@ -2623,7 +2983,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();if(gameSettings.music)showAudioStatus("Clica ou toca uma vez para ativar a música");
 
-window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.openAvatarPicker=openAvatarPicker;window.removeProfileAvatar=removeProfileAvatar;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
