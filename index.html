@@ -468,7 +468,7 @@ body{
  width:min(340px,78vw);aspect-ratio:2/3;position:relative;
  transform-style:preserve-3d;transition:transform .55s;cursor:pointer
 }
-.visual-card-flip.flipped{transform:rotateY(180deg)}
+.visual-card-flip{transform:rotateY(180deg)}
 .visual-card-face{
  position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;overflow:hidden;
  border:2px solid rgba(168,117,255,.55);box-shadow:0 30px 90px #000;
@@ -685,6 +685,16 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   max-width:100%!important
  }
  .battle-arena-frame{min-height:0}
+}
+
+
+.battle-card{
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+}
+.battle-card-overlay{
+ background:linear-gradient(transparent 55%,rgba(5,7,21,.92) 88%)!important;
 }
 
 </style>
@@ -939,7 +949,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div id="visualCardBackFallback" class="visual-card-back-fallback"></div>
    </div>
   </div>
-  <p>Toca na carta para virar</p>
+  <p></p>
  </div>
 </div>
 
@@ -1032,7 +1042,7 @@ function cardSymbol(id){return CARD_SYMBOLS[id]||"◆"}
 
 const CARD_IMAGE_BASE=".";
 function cardFrontPath(id){return`./${id}_front.png`}
-function cardBackPath(id){return`./${id}_back.png`}
+function cardBackPath(id){return cardFrontPath(id)}_back.png`}
 function cardImageElement(card,cssClass="battle-card-art"){
  const img=document.createElement("img");
  img.className=cssClass;
