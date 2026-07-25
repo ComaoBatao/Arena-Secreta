@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.2.4 Card Collection Album</title>
+<title>Arena Secreta — 1.3.0 Arena do Circo</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1478,6 +1478,9 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .collection-card-item{width:min(245px,100%);margin:auto}
 }
 
+/* 1.3.0 ARENA DO CIRCO */
+.menu-circus-card{grid-column:1/4;position:relative;border-color:rgba(255,209,102,.45)!important;background:linear-gradient(180deg,rgba(49,22,74,.94),rgba(15,12,39,.96))!important}.menu-circus-card small{color:var(--gold);font-size:10px;margin-left:5px}.circus-wrap{width:min(1050px,100%);padding-top:24px}.circus-panel{background:radial-gradient(circle at 50% 5%,rgba(116,52,190,.28),transparent 30%),linear-gradient(180deg,#17112e,#080b1c 70%)}.circus-stage{position:relative;min-height:650px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:30px 22px;overflow:hidden;border:1px solid rgba(255,209,102,.26);border-radius:20px;background:radial-gradient(circle at 50% 110%,rgba(150,41,95,.24),transparent 42%),linear-gradient(180deg,#140d2e,#07091a)}.circus-lights{position:absolute;top:0;left:0;right:0;height:18px;background:radial-gradient(circle,#ffd166 0 3px,transparent 4px) 0 0/38px 18px repeat-x;filter:drop-shadow(0 0 6px #ffd166)}.circus-title-block{text-align:center}.circus-kicker{color:var(--gold);font-size:11px;font-weight:1000;letter-spacing:3px}.circus-title-block h1{margin:8px 0 7px;font-size:clamp(32px,5vw,54px);text-transform:uppercase}.circus-title-block p{margin:0;color:var(--muted)}.circus-prize{display:flex;align-items:center;gap:9px;padding:9px 16px;border:1px solid rgba(255,209,102,.4);border-radius:999px;background:rgba(5,7,22,.74)}.circus-prize img{width:30px;height:30px}.circus-prize strong{font-size:25px;color:var(--gold)}.circus-prize span{font-size:10px;font-weight:1000}.circus-cards{width:min(710px,100%);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,3vw,28px);perspective:1300px}.circus-card{position:relative;padding:0;aspect-ratio:2/3;border:0;background:transparent;cursor:pointer;perspective:1000px}.circus-card-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .65s}.circus-card.revealed .circus-card-inner{transform:rotateY(180deg)}.circus-card-front,.circus-card-back{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:2px solid rgba(255,209,102,.48);border-radius:18px;backface-visibility:hidden;box-shadow:0 18px 40px rgba(0,0,0,.45)}.circus-card-front{background:linear-gradient(145deg,#241346,#0c0f29)}.circus-card-front img{width:56%;max-height:43%;object-fit:contain}.circus-card-back{transform:rotateY(180deg);background:linear-gradient(145deg,#211637,#0b1026)}.circus-card-back.winner{border-color:var(--gold);box-shadow:0 0 32px rgba(255,209,102,.55)}.circus-card-back.loser{filter:grayscale(.8);opacity:.76}.circus-result-icon{width:58px;height:58px;object-fit:contain}.circus-card.shuffling{animation:circusShuffle .58s ease-in-out}.circus-card.shuffling:nth-child(2){animation-delay:.08s}.circus-card.shuffling:nth-child(3){animation-delay:.16s}@keyframes circusShuffle{0%{transform:translateX(0)}35%{transform:translateX(45%) rotate(7deg)}70%{transform:translateX(-45%) rotate(-7deg)}100%{transform:translateX(0)}}.circus-message{min-height:24px;text-align:center;color:var(--gold);font-weight:900}.circus-start-btn{min-width:220px;background:linear-gradient(135deg,#ffd166,#b77aff);color:#171025}.circus-cooldown{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 18px;border-radius:12px;background:rgba(7,10,29,.76)}.circus-cooldown strong{color:var(--gold);font-size:22px}@media(max-width:900px){.menu-circus-card{grid-column:1/3}}@media(max-width:620px){.menu-circus-card{grid-column:auto}.circus-stage{min-height:600px;padding:25px 10px}.circus-cards{gap:8px}.circus-card-front,.circus-card-back{border-radius:11px}.circus-result-icon{width:38px;height:38px}}
+
 </style>
 </head>
 <body>
@@ -1505,7 +1508,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.2.4</div>
+   <div class="version menu-version">VERSÃO 1.3.0</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1551,6 +1554,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
    <button id="leaderboardMenuBtn" class="menu-secondary-card hidden" onclick="showLeaderboard()"><span><img class="menu-icon-image" src="./icon_leaderboard.png" alt="Top Global" onerror="this.classList.add('icon-missing')"></span><strong>TOP GLOBAL</strong></button>
    <button id="shopMenuBtn" class="menu-secondary-card hidden" onclick="showShop()"><span><img class="menu-icon-image" src="./icon_shop.png" alt="Loja" onerror="this.classList.add('icon-missing')"></span><strong>LOJA</strong></button>
    <button id="inventoryMenuBtn" class="menu-secondary-card menu-collection-card hidden" onclick="showInventory()"><span><img class="menu-icon-image" src="./icon_collection.png" alt="Coleção" onerror="this.classList.add('icon-missing')"></span><strong>COLEÇÃO</strong></button>
+<button id="circusMenuBtn" class="menu-secondary-card menu-circus-card hidden" onclick="showCircusArena()"><span><img class="menu-icon-image" src="./icon_circus.png" alt=""></span><strong>ARENA DO CIRCO</strong><small id="circusMenuStatus">Disponível</small></button>
    <button id="accountMenuBtn" class="menu-secondary-card menu-account-entry" onclick="showScreen('accountScreen')"><span><img class="menu-icon-image" src="./icon_profile.png" alt="Conta" onerror="this.classList.add('icon-missing')"></span><strong>CRIAR CONTA / ENTRAR</strong></button>
    <button id="newGhostBtn" class="menu-secondary-card" onclick="newGhost()"><span><img class="menu-icon-image" src="./icon_refresh.png" alt="Novo Ghost" onerror="this.classList.add('icon-missing')"></span><strong>GERAR NOVO GHOST</strong></button>
   </nav>
@@ -1581,7 +1585,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.2.4 — Card Collection Album<br>
+  Version 1.3.0 — Arena do Circo<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1810,6 +1814,16 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 
 
 
+<section id="circusScreen" class="screen"><div class="wrap circus-wrap"><div class="panel circus-panel">
+<div class="header"><h2 class="screen-title"><img class="screen-title-icon" src="./icon_circus.png" alt=""><span>Arena do Circo</span></h2><button class="btn secondary ui-text-icon-button" onclick="leaveCircusArena()"><img class="inline-button-icon" src="./icon_back.png" alt=""><span>Voltar</span></button></div>
+<div class="circus-stage"><div class="circus-lights"></div><div class="circus-title-block"><span class="circus-kicker">O JOGO DAS TRÊS CARTAS</span><h1>Encontra o prémio!</h1><p>Segue a carta que esconde as moedas.</p></div>
+<div class="circus-prize"><img src="./icon_coin.png" alt=""><strong>500</strong><span>MOEDAS</span></div>
+<div id="circusCards" class="circus-cards">
+<button class="circus-card" data-circus-card="0" onclick="chooseCircusCard(0)" disabled><div class="circus-card-inner"><div class="circus-card-front"><img src="./icon_circus.png" alt=""><strong>ARENA</strong></div><div class="circus-card-back"><img class="circus-result-icon" src="./icon_coin.png" alt=""><strong class="circus-result-text"></strong></div></div></button>
+<button class="circus-card" data-circus-card="1" onclick="chooseCircusCard(1)" disabled><div class="circus-card-inner"><div class="circus-card-front"><img src="./icon_circus.png" alt=""><strong>SECRETA</strong></div><div class="circus-card-back"><img class="circus-result-icon" src="./icon_coin.png" alt=""><strong class="circus-result-text"></strong></div></div></button>
+<button class="circus-card" data-circus-card="2" onclick="chooseCircusCard(2)" disabled><div class="circus-card-inner"><div class="circus-card-front"><img src="./icon_circus.png" alt=""><strong>CIRCO</strong></div><div class="circus-card-back"><img class="circus-result-icon" src="./icon_coin.png" alt=""><strong class="circus-result-text"></strong></div></div></button>
+</div><div id="circusMessage" class="circus-message">Podes jogar uma vez por hora.</div><button id="circusStartBtn" class="btn circus-start-btn" onclick="startCircusRound()">COMEÇAR JOGO</button><div id="circusCooldownBox" class="circus-cooldown hidden"><span>PRÓXIMA TENTATIVA</span><strong id="circusCooldownText">01:00:00</strong></div>
+</div></div></div></section>
 <div id="visualCardModal" class="visual-card-modal hidden" onclick="closeVisualCard(event)">
  <div class="visual-card-modal-inner">
   <button class="visual-card-close" onclick="closeVisualCard(event)">×</button>
@@ -2006,6 +2020,19 @@ function setAvatarElement(imageId,fallbackId,avatar){
 function avatarData(){
  return currentProfile?.avatar||"";
 }
+const CIRCUS_COOLDOWN_MS=60*60*1000,CIRCUS_REWARD=500;
+let circusPrizeIndex=-1,circusRoundActive=false,circusRoundResolved=false,circusTimerInterval=null;
+function circusLastPlayed(){return Number(currentProfile?.circusLastPlayed||0)}
+function circusRemainingMs(){return Math.max(0,CIRCUS_COOLDOWN_MS-(Date.now()-circusLastPlayed()))}
+function formatCircusTime(ms){const t=Math.ceil(ms/1000),h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;return[h,m,s].map(v=>String(v).padStart(2,"0")).join(":")}
+function updateCircusAvailability(){const ok=!!(currentUser&&currentProfile&&!currentProfile.isGhost),b=$("circusMenuBtn");if(b)b.classList.toggle("hidden",!ok);if(!ok)return;const r=circusRemainingMs(),s=$("circusMenuStatus");if(s)s.textContent=r?`Disponível em ${formatCircusTime(r)}`:"Disponível agora";if($("circusScreen")?.classList.contains("active"))renderCircusAvailability()}
+function resetCircusCards(){document.querySelectorAll(".circus-card").forEach(c=>{c.classList.remove("revealed","shuffling");c.disabled=true;const b=c.querySelector(".circus-card-back"),i=c.querySelector(".circus-result-icon"),r=c.querySelector(".circus-result-text");b.classList.remove("winner","loser");i.src="./icon_coin.png";r.textContent=""})}
+function renderCircusAvailability(){if(!currentUser||!currentProfile||currentProfile.isGhost){$("circusMessage").textContent="Cria uma conta para entrares.";return}const r=circusRemainingMs();if(r&&!circusRoundActive){$("circusStartBtn").classList.add("hidden");$("circusCooldownBox").classList.remove("hidden");$("circusCooldownText").textContent=formatCircusTime(r);$("circusMessage").textContent="A Arena do Circo está a preparar um novo desafio."}else if(!circusRoundActive){$("circusStartBtn").classList.remove("hidden");$("circusStartBtn").disabled=false;$("circusCooldownBox").classList.add("hidden");$("circusMessage").textContent="Podes jogar uma vez por hora."}}
+function showCircusArena(){if(!currentUser||!currentProfile||currentProfile.isGhost){showScreen("accountScreen");return}circusRoundActive=false;circusRoundResolved=false;resetCircusCards();showScreen("circusScreen");renderCircusAvailability();clearInterval(circusTimerInterval);circusTimerInterval=setInterval(updateCircusAvailability,1000)}
+function leaveCircusArena(){clearInterval(circusTimerInterval);circusTimerInterval=null;circusRoundActive=false;showScreen("menuScreen");updateCircusAvailability()}
+async function startCircusRound(){if(!currentUser||!currentProfile||currentProfile.isGhost||circusRemainingMs())return renderCircusAvailability();const b=$("circusStartBtn");b.disabled=true;resetCircusCards();$("circusMessage").textContent="Observa bem onde está o prémio...";const playedAt=Date.now();try{await update(ref(db,`profiles/${currentUser.uid}`),{circusLastPlayed:playedAt});currentProfile={...currentProfile,circusLastPlayed:playedAt}}catch(e){console.error(e);$("circusMessage").textContent="Erro ao iniciar.";b.disabled=false;return}circusRoundActive=true;circusRoundResolved=false;circusPrizeIndex=Math.floor(Math.random()*3);const cards=[...document.querySelectorAll(".circus-card")];cards.forEach((c,i)=>{const back=c.querySelector(".circus-card-back"),icon=c.querySelector(".circus-result-icon"),rt=c.querySelector(".circus-result-text");if(i===circusPrizeIndex){back.classList.add("winner");rt.textContent="+500 MOEDAS"}else{back.classList.add("loser");icon.src="./icon_circus.png";rt.textContent="VAZIA"}});const prize=document.querySelector(`[data-circus-card="${circusPrizeIndex}"]`);prize.classList.add("revealed");await new Promise(r=>setTimeout(r,1000));prize.classList.remove("revealed");$("circusMessage").textContent="A embaralhar...";cards.forEach(c=>c.classList.add("shuffling"));await new Promise(r=>setTimeout(r,1000));cards.forEach(c=>c.classList.remove("shuffling"));[...cards].sort(()=>Math.random()-.5).forEach(c=>$("circusCards").appendChild(c));cards.forEach(c=>c.disabled=false);$("circusMessage").textContent="Escolhe uma carta!";b.classList.add("hidden");updateCircusAvailability()}
+async function chooseCircusCard(index){if(!circusRoundActive||circusRoundResolved)return;circusRoundResolved=true;const cards=[...document.querySelectorAll(".circus-card")];cards.forEach(c=>{c.disabled=true;c.classList.add("revealed")});if(index===circusPrizeIndex){$("circusMessage").textContent="ACERTASTE! Ganhaste 500 moedas!";try{const coins=(currentProfile.coins||0)+CIRCUS_REWARD;await update(ref(db,`profiles/${currentUser.uid}`),{coins,circusWins:(currentProfile.circusWins||0)+1});currentProfile={...currentProfile,coins,circusWins:(currentProfile.circusWins||0)+1};refreshAccountUI()}catch(e){console.error(e);$("circusMessage").textContent="Acertaste, mas houve erro ao guardar."}}else $("circusMessage").textContent="Não foi desta!";circusRoundActive=false;setTimeout(renderCircusAvailability,900);updateCircusAvailability()}
+
 
 function openAvatarPicker(){
  if(!currentUser||!currentProfile)return;
@@ -2244,6 +2271,7 @@ function refreshAccountUI(){
  $("leaderboardMenuBtn").classList.toggle("hidden",!registered);
  $("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
  setAvatarElement("menuAvatarImage","menuAvatarFallback",registered?avatarData():"");
+ updateCircusAvailability();
 }
 async function showProfile(){
  if(!currentUser||!currentProfile)return;
@@ -3373,7 +3401,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();if(gameSettings.music)showAudioStatus("Clica ou toca uma vez para ativar a música");
 
-window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showProfile=showProfile;window.openAvatarPicker=openAvatarPicker;window.removeProfileAvatar=removeProfileAvatar;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.showCircusArena=showCircusArena;window.leaveCircusArena=leaveCircusArena;window.startCircusRound=startCircusRound;window.chooseCircusCard=chooseCircusCard;window.showProfile=showProfile;window.openAvatarPicker=openAvatarPicker;window.removeProfileAvatar=removeProfileAvatar;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
