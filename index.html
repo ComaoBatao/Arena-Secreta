@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.1.4 Bot Turn Fix</title>
+<title>Arena Secreta — 1.1.5 Render Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -733,7 +733,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.1.4 — Bot Turn Fix<br>
+  Version 1.1.5 — Render Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1561,7 +1561,11 @@ function renderGame(state,canAct){
  $("message").textContent=state.winner?(state.winner===myRole()?"🏆 Venceste!":"💥 Perdeste."):canAct?"Escolhe uma ação.":"A aguardar a jogada do adversário...";$("battleActionStatus").textContent=state.winner?"Partida terminada":canAct?(selectedAction==="summon"?"Escolhe uma carta da mão e uma casa vazia":selectedAction==="attack"?"Seleciona uma carta na arena e a zona de ataque":selectedAction==="move"?"Seleciona uma carta na arena e uma casa válida":"Terminar o turno"):"Jogada do adversário";
  document.querySelectorAll(".battle-action").forEach(x=>x.disabled=!canAct);
  $("quitMatchBtn").classList.toggle("hidden",gameMode==="offline"||!!state.winner);
- renderBoard(state);renderHand(state);renderChips(state);renderLog(state);renderSelected(state);
+ renderBoard(state);
+ renderHand(state);
+ try{renderChips(state)}catch(error){console.error("Erro em renderChips:",error)}
+ try{renderLog(state)}catch(error){console.error("Erro em renderLog:",error)}
+ try{renderSelected(state)}catch(error){console.error("Erro em renderSelected:",error)};
  if(state.winner)setTimeout(()=>showMatchEnd(state),350)
 }
 function renderBoard(state){const mine=me(state),enemy=opponent(state);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const cell=$("board").querySelector(`[data-r="${r}"][data-c="${c}"]`),id=`${r}-${c}`;cell.className="cell";cell.textContent="";
@@ -1584,6 +1588,72 @@ function renderHand(state){
   };
   $("hand").appendChild(b)
  })
+}
+
+
+function renderChips(state){
+ const mine=me(state);
+ const container=$("chips");
+ if(!container)return;
+
+ container.innerHTML="";
+
+ mine.deck.forEach((card,index)=>{
+  if(!card.summoned)return;
+
+  const button=document.createElement("button");
+  button.className=
+   "chip"+
+   (selectedArena===index?" selected":"")+
+   (!card.alive?" dead":"");
+
+  button.disabled=!card.alive;
+  button.innerHTML=
+   `<span class="card-symbol">${cardSymbol(card.id)}</span>`+
+   `${card.name} ❤${card.currentHp}/${card.hp} ↔ ${card.movesLeft}`;
+
+  button.onclick=()=>{
+   if(!card.alive)return;
+   selectedArena=index;
+   selectedHand=null;
+   renderCurrentGame();
+  };
+
+  container.appendChild(button);
+ });
+}
+
+function renderLog(state){
+ const container=$("log");
+ if(!container)return;
+
+ container.innerHTML="";
+ const entries=Array.isArray(state.log)?state.log:[];
+
+ entries.slice(-30).reverse().forEach(entry=>{
+  const item=document.createElement("li");
+  item.textContent=entry;
+  container.appendChild(item);
+ });
+}
+
+function renderSelected(state){
+ const container=$("selectedInfo");
+ if(!container)return;
+
+ const mine=me(state);
+ const card=selectedArena!==null?mine.deck[selectedArena]:null;
+
+ if(!card){
+  container.textContent="Nenhuma carta selecionada.";
+  return;
+ }
+
+ container.innerHTML=
+  `<strong>${cardSymbol(card.id)} ${card.name}</strong><br>`+
+  `❤ ${card.currentHp}/${card.hp} · ⚔ ${card.damage} · `+
+  `↔ ${card.movesLeft}/${card.moves}<br>`+
+  `<span class="small">Ataque: ${card.pattern}</span>`;
 }
 
 async function submitAction(action){
@@ -1659,7 +1729,6 @@ function submitOfflineAction(action){
  offlineLocked=true;
  const token=++botTurnToken;
  $("message").textContent="O bot está a pensar...";
- renderOfflineGame();
 
  clearTimeout(botWatchdog);
 
@@ -1673,6 +1742,8 @@ function submitOfflineAction(action){
   console.warn("Watchdog: turno do bot bloqueado.");
   forceReturnTurnToPlayer("O bot demorou demasiado e perdeu o turno.");
  },2500);
+
+ renderOfflineGame();
 }
 
 function applyAction(state,acting,a){
