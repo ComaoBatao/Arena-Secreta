@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.3.5 Button Recovery Fix</title>
+<title>Arena Secreta — 1.3.6 Firebase Status Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1699,7 +1699,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.3.5</div>
+   <div class="version menu-version">VERSÃO 1.3.6</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1776,7 +1776,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.3.5 — Button Recovery Fix<br>
+  Version 1.3.6 — Firebase Status Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -2153,6 +2153,45 @@ const firebaseConfig={
  measurementId:"G-MZ2H1EP75R"
 };
 const app=initializeApp(firebaseConfig),db=getDatabase(app),auth=getAuth(app);
+
+/* FIREBASE STATUS FIX — starts before the rest of the game */
+let firebaseConnectionListenerStarted=false;
+function startFirebaseConnectionListener(){
+ if(firebaseConnectionListenerStarted)return;
+ firebaseConnectionListenerStarted=true;
+
+ const statusElement=document.getElementById("firebaseStatus");
+ const lightElement=document.getElementById("firebaseLight");
+
+ try{
+  onValue(
+   ref(db,".info/connected"),
+   snapshot=>{
+    connected=snapshot.val()===true;
+    if(lightElement)lightElement.classList.toggle("ok",connected);
+    if(statusElement)statusElement.textContent=connected?"Firebase ligado":"Firebase desligado";
+   },
+   error=>{
+    console.error("Erro no estado do Firebase:",error);
+    if(lightElement)lightElement.classList.remove("ok");
+    if(statusElement)statusElement.textContent="Erro ao ligar ao Firebase";
+   }
+  );
+ }catch(error){
+  console.error("Erro ao iniciar listener Firebase:",error);
+  if(lightElement)lightElement.classList.remove("ok");
+  if(statusElement)statusElement.textContent="Erro ao ligar ao Firebase";
+ }
+}
+startFirebaseConnectionListener();
+
+/* Fallback visual: nunca fica eternamente em 'A ligar...' */
+setTimeout(()=>{
+ const status=document.getElementById("firebaseStatus");
+ if(status&&status.textContent.trim()==="A ligar ao Firebase..."){
+  status.textContent=navigator.onLine?"Firebase a tentar reconectar":"Sem ligação à internet";
+ }
+},5000);
 const ROWS=5,COLS=15,DECK_SIZE=5,NORMAL_TURNS=15,REVEAL_TURN=20;
 const LIBRARY=[
 {id:"squire",name:"Escudeiro",rarity:"Comum",hp:4,damage:1,moves:3,cost:1,pattern:"horizontal"},
@@ -4109,25 +4148,20 @@ if(gameSettings.music){
 }
 
 onAuthStateChanged(auth,async user=>{
+ currentUser=user;
  try{
-  currentUser=user;
   await loadProfile(user);
   refreshAccountUI();
   updateCircusAvailability();
  }catch(error){
-  reportStartupError("Firebase",error);
+  console.error("Erro ao carregar perfil:",error);
+  currentProfile=null;
+  try{refreshAccountUI()}catch(uiError){console.error(uiError)}
+  const status=$("firebaseStatus");
+  if(status&&connected)status.textContent="Firebase ligado — erro ao carregar perfil";
  }
 });
 
-onValue(ref(db,".info/connected"),snapshot=>{
- try{
-  connected=snapshot.val()===true;
-  $("firebaseLight")?.classList.toggle("ok",connected);
-  if($("firebaseStatus"))$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado";
- }catch(error){
-  reportStartupError("estado da ligação",error);
- }
-});
 
 
 document.addEventListener("click",event=>{
