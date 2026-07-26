@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.3.3 Shop Timer Ultra Fix</title>
+<title>Arena Secreta — 1.3.4 Offline Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1667,6 +1667,11 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .shop-confirm-actions{grid-template-columns:1fr}
 }
 
+
+/* VERSION 1.3.4 — OFFLINE STABILITY */
+#difficultyOptions .ultra-option{grid-column:1/-1}
+.offline-error{color:var(--danger);font-weight:900}
+
 </style>
 </head>
 <body>
@@ -1694,7 +1699,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.3.3</div>
+   <div class="version menu-version">VERSÃO 1.3.4</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1771,7 +1776,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.3.3 — Shop Timer Ultra Fix<br>
+  Version 1.3.4 — Offline Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -2851,7 +2856,19 @@ async function tryStartOnlineGame(){
  if(!roomCode)return;
  await runTransaction(ref(db,roomPath(roomCode)),current=>{if(!current||current.status!=="lobby")return;const h=current.players?.host,g=current.players?.guest;if(!h?.ready||!g?.ready||!Array.isArray(h.deck)||!Array.isArray(g.deck)||h.deck.length!==5||g.deck.length!==5)return;current.status="game";current.updatedAt=Date.now();current.state=createInitialState(h,g,current.mode==="ranked"||gameMode==="ranked");return current},{applyLocally:false})
 }
-function cloneCard(id){const c=LIBRARY.find(x=>x.id===id);return{...c,currentHp:c.hp,movesLeft:c.moves,alive:true,summoned:false,position:null,wasHit:false}}
+function cloneCard(id){
+ const card=typeof id==="string"?LIBRARY.find(item=>item.id===id):id;
+ if(!card)throw new Error(`Carta inválida: ${id}`);
+ return{
+  ...card,
+  currentHp:Number(card.hp||1),
+  movesLeft:Number(card.moves||1),
+  alive:true,
+  summoned:false,
+  position:null,
+  wasHit:false
+ };
+}
 function createInitialState(h,g,isRanked=false){return{round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:h.name,avatar:h.avatar||"",mana:3,maxMana:3,deck:h.deck.map(cloneCard)},guest:{name:g.name,avatar:g.avatar||"",mana:3,maxMana:3,deck:g.deck.map(cloneCard)}},log:[isRanked?"A partida ranked começou!":"A partida online começou!"]}}
 
 function createBoard(){$("board").innerHTML="";for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const b=document.createElement("button");b.className="cell";b.dataset.r=r;b.dataset.c=c;b.onclick=()=>cellClick(r,c);b.onmouseenter=()=>preview(r,c);b.onmouseleave=clearPreview;$("board").appendChild(b)}}
@@ -3157,9 +3174,27 @@ async function submitAction(action){
 }
 
 function submitOfflineAction(action){
- if(!offlineState||offlineLocked)return;
+ if(!offlineState){
+  $("message").textContent="A partida offline não foi iniciada.";
+  return;
+ }
+ if(offlineLocked){
+  $("message").textContent="Espera pela jogada do bot.";
+  return;
+ }
+ if(offlineState.turn!=="host"){
+  $("message").textContent="Ainda não é a tua vez.";
+  return;
+ }
 
- const applied=applyAction(offlineState,"host",action);
+ let applied=null;
+ try{
+  applied=applyAction(offlineState,"host",action);
+ }catch(error){
+  console.error("Erro na jogada offline:",error);
+  $("message").textContent="Ocorreu um erro ao executar a jogada.";
+  return;
+ }
  if(!applied){
   $("message").textContent=action.kind==="move"?"Essa carta não pode mover-se para essa casa.":"Jogada inválida.";
   return;
@@ -3188,7 +3223,7 @@ function submitOfflineAction(action){
   if(token!==botTurnToken||!offlineLocked)return;
   console.warn("Watchdog: turno do bot bloqueado.");
   forceReturnTurnToPlayer("O bot demorou demasiado e perdeu o turno.");
- },2500);
+ },6000);
 
  renderOfflineGame();
 }
@@ -3217,27 +3252,99 @@ function applyAction(state,acting,a){
 }
 
 function startOfflineGame(){
- lastRecordedWinner=null;endOverlayShownFor=null;$("matchEndOverlay").classList.add("hidden");
- const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,avatar:avatarData(),mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:difficulty==="ultra"?"BOT ULTRA":`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[difficulty==="ultra"?`Partida ULTRA iniciada — o bot tem ${enemyDeck.length} cartas.`:`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
+ try{
+  if(!Array.isArray(chosen)||chosen.length!==5){
+   $("message").textContent="Escolhe exatamente cinco cartas.";
+   $("confirmDeckBtn").disabled=false;
+   return;
+  }
+
+  const playerDeck=chosen.map(id=>cloneCard(id));
+  const enemyDeck=createBotDeck();
+
+  if(!playerDeck.length||!enemyDeck.length){
+   throw new Error("Não foi possível criar os baralhos.");
+  }
+
+  clearTimeout(botWatchdog);
+  botWatchdog=null;
+  botTurnToken++;
+  offlineLocked=false;
+  selectedAction="summon";
+  selectedHand=null;
+  selectedArena=null;
+  lastRecordedWinner=null;
+  endOverlayShownFor=null;
+  $("matchEndOverlay").classList.add("hidden");
+
+  offlineState={
+   round:1,
+   turn:"host",
+   winner:null,
+   reveal:false,
+   marks:[],
+   scanMarks:[],
+   players:{
+    host:{
+     name:identity.name||"Jogador",
+     avatar:avatarData(),
+     mana:3,
+     maxMana:3,
+     deck:playerDeck
+    },
+    guest:{
+     name:difficulty==="ultra"?"BOT ULTRA":`Bot ${personality}`,
+     avatar:"",
+     mana:3,
+     maxMana:3,
+     deck:enemyDeck
+    }
+   },
+   log:[
+    difficulty==="ultra"
+     ?`Partida ULTRA iniciada — o bot possui ${enemyDeck.length} cartas.`
+     :`Partida offline iniciada — ${difficulty}, ${personality}.`
+   ]
+  };
+
+  renderOfflineGame();
+ }catch(error){
+  console.error("Erro ao iniciar modo offline:",error);
+  offlineState=null;
+  offlineLocked=false;
+  $("confirmDeckBtn").disabled=false;
+  $("message").textContent="Erro ao iniciar o modo offline. Volta a escolher o baralho.";
+ }
 }
 function createBotDeck(){
- let pool=[...LIBRARY];
+ const pool=LIBRARY.filter(Boolean).map(card=>({...card}));
+
  if(["hard","impossible","ultra"].includes(difficulty)){
-  pool.sort((a,b)=>(b.damage+b.hp*.5+b.moves*.25)-(a.damage+a.hp*.5+a.moves*.25));
+  pool.sort((a,b)=>{
+   const scoreA=Number(a.damage||0)*2+Number(a.hp||0)+Number(a.moves||0)*.4;
+   const scoreB=Number(b.damage||0)*2+Number(b.hp||0)+Number(b.moves||0)*.4;
+   return scoreB-scoreA;
+  });
  }else{
-  pool.sort(()=>Math.random()-.5);
+  for(let i=pool.length-1;i>0;i--){
+   const j=Math.floor(Math.random()*(i+1));
+   [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
  }
+
  const selected=difficulty==="ultra"?pool:pool.slice(0,5);
- return selected.map(card=>cloneCard(card.id));
+ return selected.map(card=>cloneCard(card));
 }
+
 function botData(){
- return{
-  easy:{smart:.1,move:.1,scan:.1},
-  normal:{smart:.5,move:.35,scan:.3},
-  hard:{smart:.78,move:.6,scan:.5},
-  impossible:{smart:.94,move:.8,scan:.7},
-  ultra:{smart:1,move:1,scan:.95}
- }[difficulty]||{smart:.5,move:.35,scan:.3};
+ const settings={
+  easy:{smart:.12,move:.15,scan:.1,summon:.58},
+  normal:{smart:.5,move:.38,scan:.32,summon:.62},
+  hard:{smart:.8,move:.62,scan:.52,summon:.67},
+  impossible:{smart:.95,move:.82,scan:.72,summon:.72},
+  ultra:{smart:1,move:1,scan:1,summon:.78}
+ };
+ return settings[difficulty]||settings.normal;
 }
 function runOfflineBotTurn(token){
  if(token!==botTurnToken||!offlineLocked)return;
@@ -3249,27 +3356,39 @@ function runOfflineBotTurn(token){
   }
 
   offlineState.turn="guest";
+  const state=offlineState;
+  const bot=state.players.guest;
+  const player=state.players.host;
+  const ai=botData();
 
-  const bot=offlineState.players.guest;
-  const summoned=bot.deck.filter(card=>card.alive&&card.summoned);
+  if(!bot||!Array.isArray(bot.deck)){
+   throw new Error("Baralho do bot inválido.");
+  }
+
+  let next=null;
+
+  const aliveSummoned=bot.deck
+   .map((card,index)=>({card,index}))
+   .filter(item=>item.card.alive&&item.card.summoned);
 
   const affordable=bot.deck
    .map((card,index)=>({card,index}))
-   .filter(item=>item.card.alive&&!item.card.summoned&&item.card.cost<=bot.mana);
+   .filter(item=>
+    item.card.alive &&
+    !item.card.summoned &&
+    Number(item.card.cost||0)<=Number(bot.mana||0)
+   );
 
-  let result=null;
-
-  if(affordable.length&&(summoned.length===0||Math.random()<0.6)){
-   const choice=difficulty==="easy"
-    ? affordable.sort((a,b)=>a.card.cost-b.card.cost)[0]
-    : affordable.sort((a,b)=>{
-       const scoreA=(a.card.damage||0)*2+(a.card.hp||0);
-       const scoreB=(b.card.damage||0)*2+(b.card.hp||0);
-       return scoreB-scoreA;
-      })[0];
+  // 1. Invocar
+  if(affordable.length&&(aliveSummoned.length===0||Math.random()<ai.summon)){
+   affordable.sort((a,b)=>{
+    const valueA=Number(a.card.damage||0)*2+Number(a.card.hp||0)-Number(a.card.cost||0)*.25;
+    const valueB=Number(b.card.damage||0)*2+Number(b.card.hp||0)-Number(b.card.cost||0)*.25;
+    return difficulty==="easy"?Number(a.card.cost||0)-Number(b.card.cost||0):valueB-valueA;
+   });
 
    const occupied=new Set(
-    [...offlineState.players.host.deck,...offlineState.players.guest.deck]
+    [...player.deck,...bot.deck]
      .filter(card=>card.alive&&card.summoned&&card.position)
      .map(card=>card.position)
    );
@@ -3277,57 +3396,75 @@ function runOfflineBotTurn(token){
    const free=[];
    for(let row=0;row<ROWS;row++){
     for(let col=0;col<COLS;col++){
-     const pos=`${row}-${col}`;
-     if(!occupied.has(pos))free.push(pos);
+     const position=`${row}-${col}`;
+     if(!occupied.has(position))free.push(position);
     }
    }
 
-   if(choice&&free.length){
-    const pos=free[Math.floor(Math.random()*free.length)];
-    result=applyAction(
-     offlineState,
-     "guest",
-     {kind:"summon",cardIndex:choice.index,pos}
-    );
+   if(free.length){
+    const position=free[Math.floor(Math.random()*free.length)];
+    next=applyAction(state,"guest",{
+     kind:"summon",
+     cardIndex:affordable[0].index,
+     pos:position
+    });
    }
   }
 
-  if(!result&&summoned.length){
-   const attacker=[...summoned].sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
-   const attackerIndex=bot.deck.indexOf(attacker);
+  // 2. Atacar
+  if(!next&&aliveSummoned.length){
+   aliveSummoned.sort((a,b)=>Number(b.card.damage||0)-Number(a.card.damage||0));
+   const attacker=aliveSummoned[0];
 
    let row=Math.floor(Math.random()*ROWS);
    let col=Math.floor(Math.random()*COLS);
 
-   const known=offlineState.players.host.deck.filter(
-    card=>card.alive&&card.summoned&&card.wasHit&&card.position
+   const visibleTargets=player.deck.filter(card=>
+    card.alive&&card.summoned&&card.position&&(state.reveal||card.wasHit)
    );
 
-   if(known.length&&difficulty!=="easy"){
-    [row,col]=known[0].position.split("-").map(Number);
+   if(visibleTargets.length&&Math.random()<ai.smart){
+    const target=visibleTargets[Math.floor(Math.random()*visibleTargets.length)];
+    [row,col]=target.position.split("-").map(Number);
    }
 
-   result=applyAction(
-    offlineState,
-    "guest",
-    {kind:"attack",cardIndex:attackerIndex,r:row,c:col}
-   );
+   next=applyAction(state,"guest",{
+    kind:"attack",
+    cardIndex:attacker.index,
+    r:row,
+    c:col
+   });
   }
 
-  if(!result){
-   result=applyAction(offlineState,"guest",{kind:"pass"});
+  // 3. Mover
+  if(!next&&aliveSummoned.length&&Math.random()<ai.move){
+   for(const unit of aliveSummoned){
+    const valid=validMoveCells(unit.card,bot.deck);
+    if(valid.length){
+     next=applyAction(state,"guest",{
+      kind:"move",
+      cardIndex:unit.index,
+      pos:valid[Math.floor(Math.random()*valid.length)]
+     });
+     if(next)break;
+    }
+   }
   }
 
-  if(!result){
-   forceReturnTurnToPlayer("O bot não encontrou uma jogada válida.");
-   return;
+  // 4. Passar
+  if(!next){
+   next=applyAction(state,"guest",{kind:"pass"});
   }
 
-  offlineState=result;
+  if(!next){
+   throw new Error("O bot não encontrou nenhuma ação válida.");
+  }
+
+  offlineState=next;
   completeOfflineBotTurn(token);
  }catch(error){
-  console.error("Erro real no turno do bot:",error);
-  forceReturnTurnToPlayer("O bot encontrou um erro e perdeu o turno.");
+  console.error("Erro no turno offline do bot:",error);
+  forceReturnTurnToPlayer("O bot encontrou um erro e o turno voltou para ti.");
  }
 }
 
