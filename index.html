@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.3.2 Circus Reset Fix</title>
+<title>Arena Secreta — 1.3.3 Shop Timer Ultra Fix</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1602,6 +1602,71 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  .circus-reset-actions{grid-template-columns:1fr}
 }
 
+
+/* VERSION 1.3.3 — SHOP, TIMER AND ULTRA */
+.ultra-option{
+ grid-column:1/3;
+ border-color:rgba(255,209,102,.48)!important;
+ background:
+  radial-gradient(circle at 50% 130%,rgba(255,209,102,.18),transparent 48%),
+  linear-gradient(145deg,#442260,#1a1238)!important;
+ box-shadow:0 0 18px rgba(168,117,255,.18);
+}
+.ultra-option h3{
+ color:var(--gold);
+ letter-spacing:2px;
+}
+.shop-item{
+ position:relative;
+ overflow:hidden;
+ border:1px solid rgba(168,117,255,.22);
+ transition:transform .18s,filter .18s,border-color .18s;
+}
+.shop-item:not(.owned):hover{
+ transform:translateY(-3px);
+ border-color:var(--accent);
+}
+.shop-item.unaffordable{
+ opacity:.72;
+}
+.shop-item-status{
+ min-height:18px;
+ margin:7px 0;
+ color:var(--muted);
+ font-size:11px;
+}
+.shop-item-status.can-buy{color:var(--accent)}
+.shop-item-status.no-coins{color:#ff9caf}
+.shop-item-status.owned{color:var(--gold)}
+.shop-confirm-card{width:min(500px,100%)}
+.shop-confirm-price{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ margin:18px 0;
+ padding:13px;
+ border-radius:13px;
+ background:#10162b;
+}
+.shop-confirm-price img{width:30px;height:30px}
+.shop-confirm-price strong{font-size:28px;color:var(--gold)}
+.shop-confirm-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+.circus-menu-ready{
+ color:var(--accent)!important;
+}
+.circus-menu-cooldown{
+ color:var(--gold)!important;
+}
+@media(max-width:620px){
+ .ultra-option{grid-column:auto}
+ .shop-confirm-actions{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -1629,7 +1694,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.3.2</div>
+   <div class="version menu-version">VERSÃO 1.3.3</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1706,7 +1771,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.3.2 — Circus Reset Fix<br>
+  Version 1.3.3 — Shop Timer Ultra Fix<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -1811,6 +1876,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   <button class="option-card" data-value="normal"><h3>Normal</h3><p>Usa deteção, memória e decisões equilibradas.</p></button>
   <button class="option-card" data-value="hard"><h3>Difícil</h3><p>Persegue pistas, protege cartas e gere recursos.</p></button>
   <button class="option-card" data-value="impossible"><h3>Impossível</h3><p>Estratégia avançada sem saber posições secretas.</p></button>
+  <button class="option-card ultra-option" data-value="ultra"><h3>ULTRA</h3><p>O bot usa todas as cartas do jogo e joga com inteligência máxima.</p></button>
  </div>
  <h3>Personalidade</h3>
  <div id="personalityOptions" class="grid2">
@@ -1964,6 +2030,28 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
  </button>
 </div>
 </div></div></div></section>
+<div id="shopConfirmModal" class="settings-modal hidden">
+ <div class="settings-modal-card shop-confirm-card">
+  <div class="header">
+   <h2>Confirmar compra</h2>
+   <button class="btn secondary" onclick="closeShopConfirm()">Fechar</button>
+  </div>
+  <h3 id="shopConfirmName">Item</h3>
+  <p id="shopConfirmDescription" class="small"></p>
+  <div class="shop-confirm-price">
+   <img src="./icon_coin.png" alt="">
+   <strong id="shopConfirmPrice">0</strong>
+   <span>moedas</span>
+  </div>
+  <p>Saldo depois da compra: <strong id="shopConfirmRemaining">0</strong></p>
+  <div class="shop-confirm-actions">
+   <button class="btn secondary" onclick="closeShopConfirm()">CANCELAR</button>
+   <button id="shopConfirmBuyBtn" class="btn" onclick="confirmShopPurchase()">COMPRAR</button>
+  </div>
+  <p id="shopConfirmMessage" class="auth-message"></p>
+ </div>
+</div>
+
 <div id="circusResetModal" class="settings-modal hidden">
  <div class="settings-modal-card circus-reset-modal-card">
   <div class="header">
@@ -2193,7 +2281,11 @@ function updateCircusAvailability(){
 
  const remaining=circusRemainingMs();
  const status=$("circusMenuStatus");
- if(status)status.textContent=remaining>0?`Disponível em ${formatCircusTime(remaining)}`:"Disponível agora";
+ if(status){
+  status.textContent=remaining>0?`Disponível em ${formatCircusTime(remaining)}`:"Disponível agora";
+  status.classList.toggle("circus-menu-cooldown",remaining>0);
+  status.classList.toggle("circus-menu-ready",remaining<=0);
+ }
 
  if($("circusScreen")?.classList.contains("active"))renderCircusAvailability();
 }
@@ -2236,8 +2328,9 @@ function leaveCircusArena(){clearInterval(circusTimerInterval);circusTimerInterv
 function startCircusGlobalTimer(){
  if(circusGlobalTimerInterval)return;
  updateCircusAvailability();
- startCircusGlobalTimer();
- circusGlobalTimerInterval=setInterval(updateCircusAvailability,1000);
+ circusGlobalTimerInterval=setInterval(()=>{
+  updateCircusAvailability();
+ },1000);
 }
 function openCircusResetConfirm(){
  if(!currentUser||!currentProfile||currentProfile.isGhost)return;
@@ -2537,6 +2630,7 @@ function refreshAccountUI(){
  $("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
  setAvatarElement("menuAvatarImage","menuAvatarFallback",registered?avatarData():"");
  updateCircusAvailability();
+ startCircusGlobalTimer();
 }
 async function showProfile(){
  if(!currentUser||!currentProfile)return;
@@ -2551,7 +2645,7 @@ async function showProfile(){
  $("profileWinrate").textContent=total?Math.round(wins/total*100)+"%":"0%";$("profileCoins").textContent=currentProfile.coins||0;$("profileTrophies").textContent=currentProfile.trophies||0;$("profileCards").textContent=(currentProfile.ownedCards||STARTER_CARDS).length;$("profileCreatedAt").textContent=currentProfile.createdAt?new Date(currentProfile.createdAt).toLocaleDateString("pt-PT"):"—";
  const info=rankInfo(currentProfile.trophies||0);$("profileRank").textContent=info.name;$("profileWinStreak").textContent=currentProfile.winStreak||0;getGlobalPosition(currentUser.uid).then(p=>$("profileGlobalPosition").textContent=p?`#${p}`:"—");const changes=currentProfile.nicknameChanges||0;$("nicknameCostText").textContent=changes===0?"Primeira alteração gratuita.":`Próxima alteração: ${changes*5000} moedas.`;showScreen("profileScreen");
 }
-function rewardForMatch(win,mode){if(!win)return 0;if(mode==="online")return 500;if(mode==="ranked")return 600;if(mode==="offline")return{easy:50,normal:70,hard:90,impossible:100}[difficulty]||50;return 0}
+function rewardForMatch(win,mode){if(!win)return 0;if(mode==="online")return 500;if(mode==="ranked")return 600;if(mode==="offline")return{easy:50,normal:70,hard:90,impossible:100,ultra:150}[difficulty]||50;return 0}
 async function claimMatchResult(mode){
  if(!currentUser||!roomCode||!["online","ranked"].includes(mode))return true;
  const claimRef=ref(db,`matchResults/${mode}/${roomCode}/${currentUser.uid}`);const result=await runTransaction(claimRef,current=>current===null?{claimedAt:Date.now()}:undefined,{applyLocally:false});return result.committed;
@@ -3124,10 +3218,27 @@ function applyAction(state,acting,a){
 
 function startOfflineGame(){
  lastRecordedWinner=null;endOverlayShownFor=null;$("matchEndOverlay").classList.add("hidden");
- const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,avatar:avatarData(),mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
+ const enemyDeck=createBotDeck();offlineState={round:1,turn:"host",winner:null,reveal:false,marks:[],scanMarks:[],players:{host:{name:identity.name,avatar:avatarData(),mana:3,maxMana:3,deck:chosen.map(cloneCard)},guest:{name:difficulty==="ultra"?"BOT ULTRA":`Bot ${personality}`,mana:3,maxMana:3,deck:enemyDeck}},log:[difficulty==="ultra"?`Partida ULTRA iniciada — o bot tem ${enemyDeck.length} cartas.`:`Partida offline iniciada — ${difficulty}, ${personality}.`]};offlineLocked=false;renderOfflineGame()
 }
-function createBotDeck(){let pool=[...LIBRARY];if(["hard","impossible"].includes(difficulty))pool.sort((a,b)=>(b.damage+b.hp*.5)-(a.damage+a.hp*.5));else pool.sort(()=>Math.random()-.5);return pool.slice(0,5).map(c=>cloneCard(c.id))}
-function botData(){return{easy:{smart:.1,move:.1,scan:.1},normal:{smart:.5,move:.35,scan:.3},hard:{smart:.78,move:.6,scan:.5},impossible:{smart:.94,move:.8,scan:.7}}[difficulty]}
+function createBotDeck(){
+ let pool=[...LIBRARY];
+ if(["hard","impossible","ultra"].includes(difficulty)){
+  pool.sort((a,b)=>(b.damage+b.hp*.5+b.moves*.25)-(a.damage+a.hp*.5+a.moves*.25));
+ }else{
+  pool.sort(()=>Math.random()-.5);
+ }
+ const selected=difficulty==="ultra"?pool:pool.slice(0,5);
+ return selected.map(card=>cloneCard(card.id));
+}
+function botData(){
+ return{
+  easy:{smart:.1,move:.1,scan:.1},
+  normal:{smart:.5,move:.35,scan:.3},
+  hard:{smart:.78,move:.6,scan:.5},
+  impossible:{smart:.94,move:.8,scan:.7},
+  ultra:{smart:1,move:1,scan:.95}
+ }[difficulty]||{smart:.5,move:.35,scan:.3};
+}
 function runOfflineBotTurn(token){
  if(token!==botTurnToken||!offlineLocked)return;
 
@@ -3281,10 +3392,169 @@ function clearPreview(){document.querySelectorAll(".cell.preview,.cell.move-prev
 
 
 let activeShopTab="cards";
-async function changeNickname(){if(!currentUser||!currentProfile)return;const nickname=$("newNicknameInput").value.trim(),key=normalizeNickname(nickname);if(!/^[A-Za-z0-9_]{3,16}$/.test(nickname)){$("nicknameCostText").textContent="Nickname inválido.";return}const changes=currentProfile.nicknameChanges||0,cost=changes===0?0:changes*5000;if((currentProfile.coins||0)<cost){$("nicknameCostText").textContent=`Precisas de ${cost} moedas.`;return}const nr=ref(db,`usernames/${key}`),reserved=await runTransaction(nr,c=>{if(c!==null)return;return{uid:currentUser.uid,username:nickname}},{applyLocally:false});if(!reserved.committed){$("nicknameCostText").textContent="Nome ocupado.";return}const old=currentProfile.usernameKey;await updateProfile(currentUser,{displayName:nickname});await update(ref(db,`profiles/${currentUser.uid}`),{username:nickname,usernameKey:key,coins:(currentProfile.coins||0)-cost,nicknameChanges:changes+1});if(old)await set(ref(db,`usernames/${old}`),null);await loadProfile(currentUser);refreshAccountUI();showProfile()}
-function showShop(){if(!currentUser)return;$("shopMessage").textContent="";renderShop();showScreen("shopScreen")}
-function renderShop(){$("shopCoins").textContent=currentProfile?.coins||0;$("shopContent").innerHTML="";SHOP_ITEMS.filter(x=>x.type===activeShopTab).forEach(item=>{const owned=item.type==="cards"?item.items.every(x=>(currentProfile.ownedCards||[]).includes(x)):item.type==="backgrounds"?(currentProfile.ownedBackgrounds||[]).includes(item.id):(currentProfile.ownedColors||[]).includes(item.id);const d=document.createElement("div");d.className="shop-item"+(owned?" owned":"");d.innerHTML=`<h3>${item.name}</h3><p class="small">${item.description||"Personalização cosmética."}</p><div class="price"><img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas" onerror="this.classList.add('icon-missing')"> ${item.price}</div><button class="btn" ${owned?"disabled":""}>${owned?"OBTIDO":"COMPRAR"}</button>`;d.querySelector("button").onclick=()=>buyItem(item);$("shopContent").appendChild(d)})}
-async function buyItem(item){if((currentProfile.coins||0)<item.price){$("shopMessage").textContent="Não tens moedas suficientes.";return}const res=await runTransaction(ref(db,`profiles/${currentUser.uid}`),p=>{if(!p||(p.coins||0)<item.price)return;p.coins-=item.price;if(item.type==="cards")p.ownedCards=[...new Set([...(p.ownedCards||STARTER_CARDS),...item.items])];if(item.type==="backgrounds")p.ownedBackgrounds=[...new Set([...(p.ownedBackgrounds||["default"]),item.id])];if(item.type==="colors")p.ownedColors=[...new Set([...(p.ownedColors||["default"]),item.id])];return p},{applyLocally:false});if(!res.committed)return;await loadProfile(currentUser);refreshAccountUI();$("shopMessage").textContent=`Compraste ${item.name}!`;renderShop()}
+let pendingShopItem=null;
+
+function ownedShopItem(item){
+ const profile=currentProfile||{};
+ if(item.type==="cards"){
+  const owned=profile.ownedCards||STARTER_CARDS;
+  return item.items.every(id=>owned.includes(id));
+ }
+ if(item.type==="backgrounds"){
+  return (profile.ownedBackgrounds||["default"]).includes(item.id);
+ }
+ return (profile.ownedColors||["default"]).includes(item.id);
+}
+
+function showShop(){
+ if(!currentUser||!currentProfile){
+  showScreen("accountScreen");
+  return;
+ }
+ activeShopTab="cards";
+ document.querySelectorAll(".shop-tab").forEach(tab=>{
+  tab.classList.toggle("selected",tab.dataset.shop==="cards");
+ });
+ $("shopMessage").textContent="";
+ renderShop();
+ showScreen("shopScreen");
+}
+
+function renderShop(){
+ const coins=Number(currentProfile?.coins||0);
+ $("shopCoins").textContent=coins;
+ $("shopContent").innerHTML="";
+
+ const items=SHOP_ITEMS.filter(item=>item.type===activeShopTab);
+
+ if(!items.length){
+  $("shopContent").innerHTML='<div class="notice">Ainda não existem itens nesta categoria.</div>';
+  return;
+ }
+
+ items.forEach(item=>{
+  const owned=ownedShopItem(item);
+  const affordable=coins>=item.price;
+
+  const card=document.createElement("div");
+  card.className="shop-item"+(owned?" owned":affordable?"":" unaffordable");
+
+  const title=document.createElement("h3");
+  title.textContent=item.name;
+
+  const description=document.createElement("p");
+  description.className="small";
+  description.textContent=item.description||(
+   item.type==="backgrounds"?"Um fundo cosmético para o jogo.":"Uma nova cor para a interface."
+  );
+
+  const price=document.createElement("div");
+  price.className="price";
+  price.innerHTML=`<img class="wallet-icon-image" src="./icon_coin.png" alt="Moedas"> <strong>${item.price}</strong>`;
+
+  const status=document.createElement("div");
+  status.className="shop-item-status "+(owned?"owned":affordable?"can-buy":"no-coins");
+  status.textContent=owned
+   ?"Já pertence à tua coleção."
+   :affordable
+    ?`Ficas com ${coins-item.price} moedas.`
+    :`Faltam ${item.price-coins} moedas.`;
+
+  const button=document.createElement("button");
+  button.className="btn";
+  button.disabled=owned||!affordable;
+  button.textContent=owned?"OBTIDO":affordable?"COMPRAR":"SEM MOEDAS";
+  button.onclick=()=>openShopConfirm(item);
+
+  card.append(title,description,price,status,button);
+  $("shopContent").appendChild(card);
+ });
+}
+
+function openShopConfirm(item){
+ if(!currentUser||!currentProfile||ownedShopItem(item))return;
+ pendingShopItem=item;
+ const coins=Number(currentProfile.coins||0);
+ $("shopConfirmName").textContent=item.name;
+ $("shopConfirmDescription").textContent=item.description||"Personalização para a tua conta.";
+ $("shopConfirmPrice").textContent=item.price;
+ $("shopConfirmRemaining").textContent=Math.max(0,coins-item.price);
+ $("shopConfirmMessage").textContent=coins<item.price?"Não tens moedas suficientes.":"";
+ $("shopConfirmBuyBtn").disabled=coins<item.price;
+ $("shopConfirmModal").classList.remove("hidden");
+}
+
+function closeShopConfirm(){
+ pendingShopItem=null;
+ $("shopConfirmModal").classList.add("hidden");
+}
+
+async function confirmShopPurchase(){
+ const item=pendingShopItem;
+ if(!item||!currentUser||!currentProfile)return;
+
+ const button=$("shopConfirmBuyBtn");
+ const message=$("shopConfirmMessage");
+ button.disabled=true;
+ message.textContent="A guardar compra...";
+
+ try{
+  const result=await runTransaction(
+   ref(db,`profiles/${currentUser.uid}`),
+   profile=>{
+    if(!profile)return;
+    const coins=Number(profile.coins||0);
+    if(coins<item.price)return;
+
+    const ownedCards=Array.isArray(profile.ownedCards)?profile.ownedCards:[...STARTER_CARDS];
+    const ownedBackgrounds=Array.isArray(profile.ownedBackgrounds)?profile.ownedBackgrounds:["default"];
+    const ownedColors=Array.isArray(profile.ownedColors)?profile.ownedColors:["default"];
+
+    if(item.type==="cards"){
+     if(item.items.every(id=>ownedCards.includes(id)))return;
+     profile.ownedCards=[...new Set([...ownedCards,...item.items])];
+    }else if(item.type==="backgrounds"){
+     if(ownedBackgrounds.includes(item.id))return;
+     profile.ownedBackgrounds=[...new Set([...ownedBackgrounds,item.id])];
+    }else{
+     if(ownedColors.includes(item.id))return;
+     profile.ownedColors=[...new Set([...ownedColors,item.id])];
+    }
+
+    profile.coins=coins-item.price;
+    profile.lastPurchase={
+     id:item.id,
+     type:item.type,
+     price:item.price,
+     purchasedAt:Date.now()
+    };
+    return profile;
+   },
+   {applyLocally:false}
+  );
+
+  if(!result.committed){
+   message.textContent="A compra não foi concluída. Verifica o saldo ou se já tens o item.";
+   button.disabled=false;
+   return;
+  }
+
+  currentProfile=result.snapshot.val();
+  refreshAccountUI();
+  applyOwnedTheme();
+  closeShopConfirm();
+  $("shopMessage").textContent=`Compraste ${item.name}!`;
+  renderShop();
+ }catch(error){
+  console.error(error);
+  message.textContent="Erro ao guardar a compra no Firebase.";
+  button.disabled=false;
+ }
+}
+
+async function buyItem(item){
+ openShopConfirm(item);
+}
 let activeCollectionTab="cards";
 const COLLECTION_CARD_NAMES={squire:"Escudeiro",archer:"Arqueiro",knight:"Cavaleiro",assassin:"Assassino",scout:"Batedor",mage:"Mago",paladin:"Paladino",warlock:"Bruxo",berserker:"Berserker",crossbowman:"Besteiro",raider:"Saqueador",guardian:"Guardião",shieldbearer:"Portador do Escudo",healer:"Curandeira",necromancer:"Necromante",illusionist:"Ilusionista",alchemist:"Alquimista"};
 function showInventory(){if(!currentUser)return;activeCollectionTab="cards";document.querySelectorAll(".collection-category").forEach(x=>x.classList.toggle("selected",x.dataset.collection==="cards"));renderInventory();showScreen("inventoryScreen")}
@@ -3666,7 +3936,7 @@ onAuthStateChanged(auth,async user=>{
 onValue(ref(db,".info/connected"),s=>{connected=s.val()===true;$("firebaseLight").classList.toggle("ok",connected);$("firebaseStatus").textContent=connected?"Firebase ligado":"Firebase desligado"});
 refreshAccountUI();createBoard();if(gameSettings.music)showAudioStatus("Clica ou toca uma vez para ativar a música");
 
-window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.openCircusResetConfirm=openCircusResetConfirm;window.closeCircusResetConfirm=closeCircusResetConfirm;window.confirmCircusPaidReset=confirmCircusPaidReset;window.showCircusArena=showCircusArena;window.leaveCircusArena=leaveCircusArena;window.startCircusRound=startCircusRound;window.chooseCircusCard=chooseCircusCard;window.showProfile=showProfile;window.openAvatarPicker=openAvatarPicker;window.removeProfileAvatar=removeProfileAvatar;window.changeNickname=changeNickname;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
+window.runOfflineBotTurn=runOfflineBotTurn;window.forceReturnTurnToPlayer=forceReturnTurnToPlayer;window.submitAction=submitAction;window.openVisualCard=openVisualCard;window.closeVisualCard=closeVisualCard;window.toggleBattleLog=toggleBattleLog;window.openGameplaySettings=openGameplaySettings;window.closeGameplaySettings=closeGameplaySettings;window.saveGameplaySettings=saveGameplaySettings;window.returnAfterMatch=returnAfterMatch;window.openSettings=openSettings;window.saveSettingsAndBack=saveSettingsAndBack;window.resetSettings=resetSettings;window.startTutorial=startTutorial;window.tutorialNext=tutorialNext;window.leaveTutorial=leaveTutorial;window.showScreen=showScreen;window.showRankedArena=showRankedArena;window.startRankedSearch=startRankedSearch;window.cancelRankedSearch=cancelRankedSearch;window.showLeaderboard=showLeaderboard;window.closePromotion=closePromotion;window.newGhost=newGhost;window.registerAccount=registerAccount;window.loginAccount=loginAccount;window.loginGoogle=loginGoogle;window.resetPassword=resetPassword;window.logoutAccount=logoutAccount;window.openCircusResetConfirm=openCircusResetConfirm;window.closeCircusResetConfirm=closeCircusResetConfirm;window.confirmCircusPaidReset=confirmCircusPaidReset;window.showCircusArena=showCircusArena;window.leaveCircusArena=leaveCircusArena;window.startCircusRound=startCircusRound;window.chooseCircusCard=chooseCircusCard;window.showProfile=showProfile;window.openAvatarPicker=openAvatarPicker;window.removeProfileAvatar=removeProfileAvatar;window.changeNickname=changeNickname;window.openShopConfirm=openShopConfirm;window.closeShopConfirm=closeShopConfirm;window.confirmShopPurchase=confirmShopPurchase;window.showShop=showShop;window.showInventory=showInventory;window.startOfflineDeck=startOfflineDeck;window.showJoinForm=showJoinForm;window.createRoom=createRoom;window.joinRoom=joinRoom;window.safeLeaveRoom=safeLeaveRoom;window.openDeckSelection=openDeckSelection;window.quitCurrentMatch=quitCurrentMatch;window.finishCancellation=finishCancellation;
 </script>
 </body>
 </html>
