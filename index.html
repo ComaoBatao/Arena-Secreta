@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arena Secreta — 1.3.6 Firebase Status Fix</title>
+<title>Arena Secreta — 1.3.7 Account Recovery</title>
 <style>
 :root{
  --bg:#070b17;--panel:#151c33;--panel2:#202a49;--panel3:#10162b;
@@ -1699,7 +1699,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
     <div class="main-tagline">ESCONDE. PROCURA. SOBREVIVE.</div>
     <span></span>
    </div>
-   <div class="version menu-version">VERSÃO 1.3.6</div>
+   <div class="version menu-version">VERSÃO 1.3.7</div>
   </header>
 
   <section class="identity menu-identity">
@@ -1776,7 +1776,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px"><button class="btn" onclick="saveSettingsAndBack()">Guardar</button><button class="btn danger" onclick="resetSettings()">Repor</button></div>
  <div class="small" style="text-align:center;margin-top:18px;line-height:1.7">
   <strong>Arena Secreta</strong><br>
-  Version 1.3.6 — Firebase Status Fix<br>
+  Version 1.3.7 — Account Recovery<br>
   Feather Studios · 2026
  </div>
 </div></div></section>
@@ -2437,7 +2437,7 @@ async function chooseCircusCard(index){if(!circusRoundActive||circusRoundResolve
 
 
 function openAvatarPicker(){
- if(!currentUser||!currentProfile)return;
+ if(!currentUser||!currentProfile){const status=$("firebaseStatus");if(status)status.textContent="A conta ainda está a carregar.";return;}
  $("avatarMessage").textContent="";
  $("avatarFileInput").click();
 }
@@ -2514,7 +2514,7 @@ async function removeProfileAvatar(){
 
 const clientId=sessionStorage.getItem("arenaClientId")||crypto.randomUUID();sessionStorage.setItem("arenaClientId",clientId);
 
-let identity=getGhostIdentity(),currentUser=null,currentProfile=null;
+let identity=getGhostIdentity(),currentUser=null,currentProfile=null,authProfileLoading=false;
 let gameMode=null,difficulty="easy",personality="balanced";
 let roomCode="",role=null,roomData=null,roomListener=null,presenceDisconnect=null,connected=true;
 let chosen=[],selectedAction="summon",selectedHand=null,selectedArena=null;
@@ -2611,8 +2611,12 @@ async function registerAccount(){
 async function loginAccount(){
  try{
   $("authMessage").textContent="A iniciar sessão...";
-  await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value);
-  $("authMessage").textContent="Sessão iniciada!";
+  await signInWithEmailAndPassword(
+   auth,
+   $("loginEmail").value.trim(),
+   $("loginPassword").value
+  );
+  $("authMessage").textContent="Sessão iniciada. A carregar perfil...";
   showScreen("menuScreen");
  }catch(error){
   $("authMessage").textContent=authErrorMessage(error);
@@ -2656,23 +2660,133 @@ async function resetPassword(){
  }
 }
 async function logoutAccount(){
- await signOut(auth);
- showScreen("menuScreen");
+ try{
+  await signOut(auth);
+ }finally{
+  currentUser=null;
+  currentProfile=null;
+  authProfileLoading=false;
+  refreshAccountUI();
+  showScreen("menuScreen");
+ }
 }
 async function loadProfile(user){
- if(!user){currentProfile=null;return}
- const pRef=ref(db,`profiles/${user.uid}`),snap=await get(pRef);currentProfile=snap.exists()?snap.val():null;
- if(currentProfile){const patch={};if(currentProfile.coins==null)patch.coins=0;if(currentProfile.trophies==null)patch.trophies=0;if(!Array.isArray(currentProfile.ownedCards))patch.ownedCards=STARTER_CARDS;if(!Array.isArray(currentProfile.ownedBackgrounds))patch.ownedBackgrounds=["default"];if(!Array.isArray(currentProfile.ownedColors))patch.ownedColors=["default"];if(!currentProfile.activeBackground)patch.activeBackground="default";if(!currentProfile.activeColor)patch.activeColor="default";if(currentProfile.nicknameChanges==null)patch.nicknameChanges=0;if(Object.keys(patch).length){await update(pRef,patch);currentProfile={...currentProfile,...patch}}applyOwnedTheme()}
+ if(!user){
+  currentProfile=null;
+  return null;
+ }
+
+ const profileRef=ref(db,`profiles/${user.uid}`);
+ const snapshot=await get(profileRef);
+
+ if(snapshot.exists()){
+  currentProfile=snapshot.val();
+ }else{
+  const fallbackName=(
+   user.displayName||
+   user.email?.split("@")[0]||
+   "Player"
+  ).replace(/[^A-Za-z0-9_]/g,"").slice(0,16)||"Player";
+
+  currentProfile={
+   uid:user.uid,
+   username:fallbackName,
+   usernameKey:normalizeNickname(fallbackName),
+   email:user.email||"",
+   wins:0,
+   losses:0,
+   coins:0,
+   trophies:0,
+   rankedWins:0,
+   rankedLosses:0,
+   winStreak:0,
+   bestWinStreak:0,
+   ownedCards:[...STARTER_CARDS],
+   ownedBackgrounds:["default"],
+   ownedColors:["default"],
+   activeBackground:"default",
+   activeColor:"default",
+   nicknameChanges:0,
+   createdAt:Date.now(),
+   lastMatch:null
+  };
+
+  await set(profileRef,currentProfile);
+ }
+
+ const patch={};
+ if(currentProfile.coins==null)patch.coins=0;
+ if(currentProfile.trophies==null)patch.trophies=0;
+ if(!Array.isArray(currentProfile.ownedCards))patch.ownedCards=[...STARTER_CARDS];
+ if(!Array.isArray(currentProfile.ownedBackgrounds))patch.ownedBackgrounds=["default"];
+ if(!Array.isArray(currentProfile.ownedColors))patch.ownedColors=["default"];
+ if(!currentProfile.activeBackground)patch.activeBackground="default";
+ if(!currentProfile.activeColor)patch.activeColor="default";
+ if(currentProfile.nicknameChanges==null)patch.nicknameChanges=0;
+ if(!currentProfile.username)patch.username=user.displayName||user.email?.split("@")[0]||"Player";
+ if(!currentProfile.email&&user.email)patch.email=user.email;
+
+ if(Object.keys(patch).length){
+  await update(profileRef,patch);
+  currentProfile={...currentProfile,...patch};
+ }
+
+ applyOwnedTheme();
+ return currentProfile;
 }
 function refreshAccountUI(){
- const registered=!!currentUser;
- identity=registered?{name:currentProfile?.username||currentUser.displayName||"Player",type:"account"}:getGhostIdentity();
- $("menuName").textContent=identity.name;
- $("menuAccountType").textContent=registered?(currentUser.email||"Conta Firebase"):"Identidade temporária neste dispositivo";
- $("profileMenuBtn").classList.toggle("hidden",!registered);$("logoutMenuBtn").classList.toggle("hidden",!registered);$("rankedMenuBtn").classList.toggle("hidden",!registered);
- $("leaderboardMenuBtn").classList.toggle("hidden",!registered);
- $("shopMenuBtn").classList.toggle("hidden",!registered);$("inventoryMenuBtn").classList.toggle("hidden",!registered);$("menuWallet").classList.toggle("hidden",!registered);$("accountMenuBtn").classList.toggle("hidden",registered);$("newGhostBtn").classList.toggle("hidden",registered);$("menuCoins").textContent=currentProfile?.coins||0;$("menuTrophies").textContent=currentProfile?.trophies||0;
- setAvatarElement("menuAvatarImage","menuAvatarFallback",registered?avatarData():"");
+ const authenticated=!!currentUser;
+ const registered=!!(currentUser&&currentProfile&&!currentProfile.isGhost);
+
+ if(authProfileLoading&&authenticated){
+  identity={name:"A carregar conta...",type:"loading"};
+ }else if(registered){
+  identity={
+   name:currentProfile.username||currentUser.displayName||"Player",
+   type:"account"
+  };
+ }else{
+  identity=getGhostIdentity();
+ }
+
+ const setText=(id,value)=>{
+  const element=$(id);
+  if(element)element.textContent=value;
+ };
+ const toggleHidden=(id,hidden)=>{
+  const element=$(id);
+  if(element)element.classList.toggle("hidden",hidden);
+ };
+
+ setText("menuName",identity.name);
+ setText(
+  "menuAccountType",
+  authProfileLoading&&authenticated
+   ?"A carregar o teu perfil..."
+   :registered
+    ?(currentProfile.email||currentUser.email||"Conta Firebase")
+    :"Identidade temporária neste dispositivo"
+ );
+
+ toggleHidden("profileMenuBtn",!registered);
+ toggleHidden("logoutMenuBtn",!authenticated);
+ toggleHidden("rankedMenuBtn",!registered);
+ toggleHidden("leaderboardMenuBtn",!registered);
+ toggleHidden("shopMenuBtn",!registered);
+ toggleHidden("inventoryMenuBtn",!registered);
+ toggleHidden("menuWallet",!registered);
+ toggleHidden("accountMenuBtn",authenticated);
+ toggleHidden("newGhostBtn",authenticated);
+
+ setText("menuCoins",registered?(currentProfile.coins||0):0);
+ setText("menuTrophies",registered?(currentProfile.trophies||0):0);
+
+ setAvatarElement(
+  "menuAvatarImage",
+  "menuAvatarFallback",
+  registered?avatarData():""
+ );
+
  updateCircusAvailability();
  startCircusGlobalTimer();
 }
@@ -4149,16 +4263,39 @@ if(gameSettings.music){
 
 onAuthStateChanged(auth,async user=>{
  currentUser=user;
+ authProfileLoading=!!user;
+ currentProfile=null;
+
  try{
-  await loadProfile(user);
+  refreshAccountUI();
+
+  if(user){
+   await loadProfile(user);
+  }
+
+  authProfileLoading=false;
   refreshAccountUI();
   updateCircusAvailability();
- }catch(error){
-  console.error("Erro ao carregar perfil:",error);
-  currentProfile=null;
-  try{refreshAccountUI()}catch(uiError){console.error(uiError)}
+
   const status=$("firebaseStatus");
-  if(status&&connected)status.textContent="Firebase ligado — erro ao carregar perfil";
+  if(status&&connected){
+   status.textContent=user?"Firebase ligado — conta carregada":"Firebase ligado";
+  }
+ }catch(error){
+  console.error("Erro ao carregar conta:",error);
+  authProfileLoading=false;
+
+  try{refreshAccountUI()}catch(uiError){console.error(uiError)}
+
+  const status=$("firebaseStatus");
+  if(status){
+   status.textContent="Firebase ligado — erro ao carregar conta";
+  }
+
+  const message=$("authMessage");
+  if(message){
+   message.textContent="A sessão iniciou, mas o perfil não carregou. Atualiza a página.";
+  }
  }
 });
 
